@@ -224,13 +224,13 @@ button:focus {
   padding: 20px 20px;
   border-radius: 3px;
   background: var(--white);
-  border-top: 3px solid var(--primary);
+  border-top: 3px solid rgb(138, 138, 138);
   -webkit-box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);
   box-shadow: 0 2px 48px 0 rgba(0, 0, 0, 0.08);
 }
 .alert-info p {
   font-weight: 500;
-  color: var(--primary);
+  color:rgb(138, 138, 138);
   text-shadow: var(--primary-shadow);
 }
 .alert-info p a {
@@ -259,13 +259,15 @@ button:focus {
   color: var(--chalk);
 }
 .breadcrumb-item a:hover {
-  color: var(--primary);
+  color: rgb(124, 125, 126);
   text-decoration: underline;
 }
 .breadcrumb-item + .breadcrumb-item::before {
   color: var(--white);
   padding: 0px 8px;
 }
+
+/**xử lý nút trở lại đầu trang header.htmml**/
 .backdrop {
   position: fixed;
   top: 0px;
@@ -289,9 +291,9 @@ button:focus {
   text-align: center;
   display: none;
   border-radius: 50%;
-  background: var(--primary);
-  -webkit-box-shadow: 0px 0px 15px 3px rgba(71, 254, 126, 0.5);
-  box-shadow: 0px 0px 15px 3px rgba(71, 254, 126, 0.5);
+  background: rgb(138, 138, 138);
+  -webkit-box-shadow: 0px 0px 15px 3px rgb(138, 138, 138);
+  box-shadow: 0px 0px 15px 3px rgb(138, 138, 138);
   -webkit-animation: mahmud 2s infinite;
   animation: mahmud 2s infinite;
   transition: all linear 0.3s;
@@ -332,6 +334,7 @@ button:focus {
     bottom: 55px;
   }
 }
+/****/
 .btn {
   border: none;
   font-size: 15px;
@@ -339,7 +342,7 @@ button:focus {
   text-transform: uppercase;
   padding: 14px 32px;
   border-radius: 6px;
-  border: 2px solid var(--primary);
+  border: 2px solid rgb(138, 138, 138);
 }
 .btn:focus {
   -webkit-box-shadow: none !important;
@@ -350,19 +353,19 @@ button:focus {
 }
 .btn-inline {
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 .btn-inline:hover {
-  color: var(--primary);
+  color: rgb(138, 138, 138);
   background: var(--white);
 }
 .btn-outline {
-  color: var(--primary);
+  color: rgb(138, 138, 138);
   background: var(--white);
 }
 .btn-outline:hover {
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 .menu-badge {
   font-size: 10px;
@@ -382,7 +385,7 @@ button:focus {
   padding-right: 18px !important;
 }
 .dropdown-arrow:hover::before {
-  color: var(--primary);
+  color: rgb(138, 138, 138);
 }
 .dropdown-arrow::before {
   position: absolute;
@@ -539,7 +542,7 @@ button:focus {
   -o-transition: all linear 0.3s;
 }
 .dropdown-position-list li a:hover {
-  color: var(--primary);
+  color: rgb(138, 138, 138);
   background: var(--chalk);
 }
 .dropdown-megamenu {
@@ -660,7 +663,7 @@ button:focus {
 }
 .form-control:focus-within {
   background: var(--chalk);
-  border-color: var(--primary);
+  border-color: rgb(138, 138, 138);
   -webkit-box-shadow: none;
   box-shadow: none;
   outline: 0;
@@ -724,7 +727,7 @@ button:focus {
   position: relative;
 }
 .form-input-group:focus-within i {
-  color: var(--primary);
+  color: rgb(138, 138, 138);
 }
 .form-input-group input {
   padding: 0px 20px 2px 45px;
@@ -754,7 +757,7 @@ button:focus {
   text-align: center;
   text-transform: uppercase;
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 .form-btn-group i {
   font-size: 15px;
@@ -848,7 +851,7 @@ button:focus {
 }
 .page-item .active {
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 .page-link {
   width: 40px;
@@ -863,8 +866,8 @@ button:focus {
   background: var(--white);
 }
 .page-link:hover {
-  color: var(--white);
-  background: var(--primary);
+  color: rgb(138, 138, 138);
+  background: #ffff;
 }
 .page-link:focus {
   -webkit-box-shadow: none;
@@ -942,7 +945,7 @@ button:focus {
   line-height: 45px;
   text-align: center;
   border-radius: 50%;
-  color: var(--primary);
+  color: rgb(138, 138, 138);
   background: var(--white);
   text-shadow: var(--primary-tshadow);
   -webkit-box-shadow: var(--primary-bshadow);
@@ -960,7 +963,7 @@ button:focus {
 .dandik:hover,
 .bamdik:hover {
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 .dandik {
   right: -10px;
@@ -1125,7 +1128,7 @@ button:focus {
   width: 100%;
 }
 thead tr {
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 thead tr th {
   font-size: 17px;
@@ -1210,11 +1213,11 @@ tbody tr td:last-child {
 }
 .table-shop .product-add {
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 .table-shop .product-add1 {
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 .table-shop .action-plus i,
 .table-shop .action-minus i {
@@ -1236,12 +1239,12 @@ tbody tr td:last-child {
   -o-transition: all linear 0.3s;
 }
 .table-action .view i {
-  color: var(--green);
+  color: rgb(138, 138, 138);
   background: var(--white);
 }
 .table-action .view i:hover {
   color: var(--white);
-  background: var(--green);
+  background: rgb(138, 138, 138);
 }
 .table-action .wish i {
   color: var(--green);
@@ -1521,7 +1524,7 @@ tbody tr td:last-child {
   -o-transition: all linear 0.3s;
 }
 .suggest-card:hover::before {
-  background: rgba(17, 151, 68, 0.9);
+  background: rgb(138, 138, 138,0.8);
 }
 .suggest-card img {
   width: 100%;
@@ -1570,7 +1573,7 @@ tbody tr td:last-child {
   -o-transition: all linear 0.3s;
 }
 .product-card:hover {
-  border-color: var(--primary);
+  border-color: rgb(138, 138, 138);
   -webkit-box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.1);
   box-shadow: 0px 8px 15px 0px rgba(0, 0, 0, 0.1);
 }
@@ -1580,11 +1583,11 @@ tbody tr td:last-child {
 }
 .product-card:hover .product-add {
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 .product-card:hover .product-add1 {
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 .product-media {
   position: relative;
@@ -1672,7 +1675,7 @@ tbody tr td:last-child {
   text-align: center;
   border-radius: 8px;
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
   text-shadow: var(-primary-tshadow);
   -webkit-box-shadow: 0px 7px 12px 0px rgba(0, 0, 0, 0.12);
   box-shadow: 0px 7px 12px 0px rgba(0, 0, 0, 0.12);
@@ -2974,7 +2977,7 @@ tbody tr td:last-child {
   left: 0px;
   width: 50px;
   height: 2px;
-  background: var(--primary);
+  background:rgb(138, 138, 138);
 }
 .account-title h4 {
   text-transform: capitalize;
@@ -3186,10 +3189,10 @@ tbody tr td:last-child {
   -o-transition: all linear 0.3s;
 }
 .contact-card:hover {
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 .contact-card:hover i {
-  color: var(--primary);
+  color: rgb(138, 138, 138);
   background: var(--white);
 }
 .contact-card:hover h4,
@@ -3207,7 +3210,7 @@ tbody tr td:last-child {
   text-align: center;
   display: inline-block;
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
   text-shadow: var(--primary-tshadow);
   -webkit-box-shadow: var(--primary-bshadow);
   box-shadow: var(--primary-bshadow);
@@ -3265,7 +3268,7 @@ tbody tr td:last-child {
   position: relative;
 }
 .branch-card:hover::before {
-  background: rgba(17, 151, 68, 0.85);
+  background: rgb(138, 138, 138,0.8);
 }
 .branch-card:hover .branch-overlay {
   top: 50%;
@@ -3421,9 +3424,10 @@ tbody tr td:last-child {
     margin: 0px auto 50px;
   }
 }
+/** file header.html**/
 .header-top {
   padding: 8px 0px;
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 .header-top-welcome p {
   font-size: 14px;
@@ -3549,7 +3553,7 @@ tbody tr td:last-child {
   background: var(--primary);
 }
 .header-part.active .header-widget sup {
-  border-color: var(--white);
+  border-color: rgb(138, 138, 138);
 }
 .header-part.active .header-form {
   background: var(--white);
@@ -3615,11 +3619,11 @@ tbody tr td:last-child {
 }
 .header-widget:hover i {
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
   text-shadow: var(--primary-tshadow);
 }
 .header-widget:hover span {
-  color: var(--primary);
+  color: rgb(138, 138, 138);
 }
 .header-widget img {
   width: 40px;
@@ -3675,7 +3679,7 @@ tbody tr td:last-child {
   border-radius: 50%;
   text-align: center;
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
   border: 2px solid var(--white);
   text-shadow: var(--primary-tshadow);
 }
@@ -3708,7 +3712,7 @@ tbody tr td:last-child {
 }
 .header-form:focus-within {
   background: var(--white);
-  border-color: var(--primary);
+  border-color: rgb(138, 138, 138);
 }
 .header-form input {
   width: 100%;
@@ -3732,7 +3736,7 @@ tbody tr td:last-child {
   -o-transition: all linear 0.3s;
 }
 .header-form button i:hover {
-  color: var(--primary);
+  color: rgb(138, 138, 138);
 }
 .header-media-group {
   display: none;
@@ -3853,7 +3857,7 @@ tbody tr td:last-child {
   -o-transition: all linear 0.3s;
 }
 .navbar-link:hover {
-  color: var(--primary);
+  color: rgb(138, 138, 138);
 }
 .navbar-focus-list {
   display: -webkit-box;
@@ -3883,7 +3887,7 @@ tbody tr td:last-child {
   -o-transition: all linear 0.3s;
 }
 .navbar-focus-list li a:hover {
-  color: var(--primary);
+  color: rgb(138, 138, 138);
 }
 .navbar-focus-list li a i {
   font-size: 18px;
@@ -3918,7 +3922,7 @@ tbody tr td:last-child {
 .navbar-info i {
   font-size: 30px;
   margin-right: 15px;
-  color: var(--primary);
+  color: rgb(138, 138, 138);
 }
 .navbar-info p small {
   font-size: 14px;
@@ -4219,11 +4223,11 @@ tbody tr td:last-child {
 .cart-total i {
   font-size: 20px;
   margin-right: 8px;
-  color: var(--primary);
+  color: rgb(138, 138, 138);
 }
 .cart-total span {
   font-weight: 500;
-  color: var(--primary);
+  color: rgb(138, 138, 138);
   text-transform: capitalize;
 }
 .cart-close {
@@ -4252,7 +4256,7 @@ tbody tr td:last-child {
 }
 .cart-close i:hover {
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 .cart-list {
   height: 100%;
@@ -4374,12 +4378,12 @@ tbody tr td:last-child {
   height: 30px;
   font-size: 14px;
   border-radius: 5px;
-  color: var(--primary);
+  color: rgb(138, 138, 138);
   background: var(--chalk);
 }
 .cart-action-group h6 {
   font-weight: 500;
-  color: var(--primary);
+  color: rgb(138, 138, 138);
 }
 .cart-footer {
   padding: 20px 15px 0px;
@@ -4442,7 +4446,7 @@ tbody tr td:last-child {
 .cart-checkout-btn {
   padding: 10px 0px;
   border-radius: 8px;
-  background: var(--primary);
+  background: rgb(138, 138, 138);
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -5146,12 +5150,12 @@ tbody tr td:last-child {
     left top,
     right top,
     from(rgba(6, 23, 56, 0.8)),
-    to(rgba(17, 151, 68, 0.8))
+    to(rgba(138, 138, 138,0.8))
   );
   background: linear-gradient(
     to right,
     rgba(6, 23, 56, 0.8),
-    rgba(17, 151, 68, 0.8)
+    rgba(138, 138, 138,0.8)
   );
   z-index: -1;
 }
@@ -5239,7 +5243,7 @@ tbody tr td:last-child {
 }
 .intro-wrap:hover .intro-icon i {
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 .intro-icon {
   margin-right: 20px;
@@ -5252,9 +5256,9 @@ tbody tr td:last-child {
   border-radius: 50%;
   text-align: center;
   display: inline-block;
-  color: var(--primary);
+  color: rgb(138, 138, 138);
   background: var(--white);
-  border: 3px double var(--primary);
+  border: 3px double rgb(138, 138, 138);
   -webkit-box-shadow: var(--primary-bshadow);
   box-shadow: var(--primary-bshadow);
   transition: all linear 0.3s;
@@ -5320,7 +5324,7 @@ tbody tr td:last-child {
   line-height: 40px;
   border-radius: 50%;
   text-align: center;
-  color: var(--primary);
+  color: rgb(138, 138, 138);
   background: var(--white);
   text-shadow: var(--primary-tshadow);
   -webkit-box-shadow: var(--primary-bshadow);
@@ -5333,7 +5337,7 @@ tbody tr td:last-child {
 }
 .footer-social li a:hover {
   color: var(--white);
-  background: var(--primary);
+  background: rgb(138, 138, 138);
 }
 .footer-title {
   margin-bottom: 25px;
@@ -5358,7 +5362,7 @@ tbody tr td:last-child {
 .footer-contact li i {
   font-size: 30px;
   margin-right: 15px;
-  color: var(--primary);
+  color: rgb(138, 138, 138);
 }
 .footer-contact li p span {
   display: block;
@@ -5386,7 +5390,7 @@ tbody tr td:last-child {
   -o-transition: all linear 0.3s;
 }
 .footer-links ul li a:hover {
-  color: var(--primary);
+  color: rgb(138, 138, 138);
   text-decoration: underline;
 }
 .footer-app {
@@ -5403,7 +5407,7 @@ tbody tr td:last-child {
   margin-top: 75px;
   padding: 20px 35px 15px;
   border-radius: 8px 8px 0px 0px;
-  background: var(--primary);
+  background: rgb(138, 138, 138);
   border-top: 1px solid var(--border);
   display: -webkit-box;
   display: -ms-flexbox;
@@ -5969,12 +5973,12 @@ tbody tr td:last-child {
     right top,
     left top,
     from(rgba(6, 23, 56, 0.6)),
-    to(rgba(17, 151, 68, 0.6))
+    to(rgba(138, 138, 138, 0.6))
   );
   background: linear-gradient(
     to left,
     rgba(6, 23, 56, 0.6),
-    rgba(17, 151, 68, 0.6)
+    rgba(138, 138, 138, 0.6)
   );
   z-index: -1;
 }
