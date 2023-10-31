@@ -76,10 +76,17 @@ public class OrderController {
 	}
 
 	@GetMapping("/order/detail/{order_id}")
-	public ModelAndView detail(ModelMap model, @PathVariable("order_id") Long id) {
+	public ModelAndView detail(ModelMap model, Model modell, 
+			Principal principal, User user, @PathVariable("order_id")
+	Long id) {
 
 		List<OrderDetail> listO = orderDetailRepository.findByOrderId(id);
+		if (principal != null) {
 
+			modell.addAttribute("user", new User());
+			user = userRepository.findByEmail(principal.getName());
+			modell.addAttribute("user", user);
+		}
 		model.addAttribute("amount", orderRepository.findById(id).get().getAmount());
 		model.addAttribute("orderDetail", listO);
 		model.addAttribute("orderId", id);

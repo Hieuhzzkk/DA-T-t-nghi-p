@@ -196,7 +196,8 @@ public class ProductController{
 	}
 	// get Edit brand
 	@GetMapping(value = "/editProduct/{id}")
-	public String editCategory(@PathVariable("id") Long id, ModelMap model) {
+	public String editCategory(@PathVariable("id") Long id, 
+			ModelMap model) {
 		//Product product = productRepository.findById(id).orElse(null);
 		ProductDto product = productService.getById(id);
 		model.addAttribute("product", product);

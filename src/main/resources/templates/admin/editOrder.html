@@ -77,6 +77,56 @@
 								<div class="alert alert-success row col-12"
 									th:if="${message}" th:text="${message}">
 								</div>
+								<form th:action="@{/updateUser}" method="post"
+								th:object="${user}" class="user-form">
+								<div class="row">
+									<div class="col-lg-2">
+										<div class="profile-image">
+											<a href="javascript:void(0);"> <img
+												th:src="@{'/loadImage?imageName='+${user.avatar}}"
+												alt="user" />
+											</a>
+										</div>
+									</div>
+									<div class="col-md-6 col-lg-4">
+										<div class="form-group">
+											<label class="form-label">Họ và tên</label> <input
+												class="form-control" type="text" th:value="${user.name}"
+												id="name" name="name" />
+										</div>
+									</div>
+									<div class="col-md-6 col-lg-6">
+										<div class="form-group">
+											<label class="form-label">Địa chỉ Email</label><input
+												class="form-control" type="email" th:value="${user.email}"
+												id="email" name="email" disabled />
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-lg-2"></div>
+									<div class="col-md-6 col-lg-4">
+										<div class="form-group">
+											<label class="form-label">Số điện thoại</label> <input
+												class="form-control" type="text" th:value="${user.sdt}"
+												id="sdt" name="sdt" />
+										</div>
+									</div>
+									<div class="col-md-6 col-lg-6">
+										<div class="form-group">
+											<label class="form-label">Địa chỉ</label><input
+												class="form-control" type="text" th:value="${user.address}"
+												id="address" name="address" />
+										</div>
+									</div>
+								</div>
+								<div class="row">
+									<div class="col-lg-10"></div>
+									<div class="col-lg-2">
+										<button type="submit" class="btn btn-inline">Cập nhật</button>
+									</div>
+								</div>
+							</form>
 								<div class="table-responsive">
 									<table id="add-row" class="display table table-striped table-hover" >
 										<thead>
