@@ -11,9 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -77,22 +80,35 @@ public class OrderController {
 
 	@GetMapping("/order/detail/{order_id}")
 	public ModelAndView detail(ModelMap model, Model modell, 
-			Principal principal, User user, @PathVariable("order_id")
-	Long id) {
+			Principal principal, User user, 
+			@PathVariable("order_id") Long id
+			) {
 
 		List<OrderDetail> listO = orderDetailRepository.findByOrderId(id);
-		if (principal != null) {
-
-			modell.addAttribute("user", new User());
-			user = userRepository.findByEmail(principal.getName());
-			modell.addAttribute("user", user);
-		}
+//		User userrUser =userRepository.findById(iduser).orElse(null);
+//		model.addAttribute("user", userrUser);
 		model.addAttribute("amount", orderRepository.findById(id).get().getAmount());
 		model.addAttribute("orderDetail", listO);
 		model.addAttribute("orderId", id);
 		// set active front-end
 		model.addAttribute("menuO", "menu");
 		return new ModelAndView("admin/editOrder", model);
+	}
+	@PostMapping(value = "/updateUserOrder")
+	public String updateUser(@Validated 
+			@ModelAttribute("user") User user, ModelMap model,
+			BindingResult bindingResult) {
+
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("error", "failure");
+
+			return "/orders";
+		}
+
+		userRepository.save(user);
+		model.addAttribute("message", "successful!");
+
+		return "/orders";
 	}
 	@RequestMapping("/order/confirmpp/{order_id}")
 	public ModelAndView confirmpp(ModelMap model, @PathVariable("order_id") Long id) {
@@ -232,6 +248,7 @@ public class OrderController {
 
 		return new ModelAndView("forward:/admin/orders", model);
 	}
+	
 	// to excel
 	@GetMapping(value = "/export")
 	public void exportToExcel(HttpServletResponse response) throws IOException {

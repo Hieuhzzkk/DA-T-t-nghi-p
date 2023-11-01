@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import vn.fs.entities.OrderDetail;
+import vn.fs.entities.User;
 
 
 @Repository
@@ -14,7 +15,8 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
 
 	@Query(value = "select * from order_details where order_id = ?;", nativeQuery = true)
 	List<OrderDetail> findByOrderId(Long id);
-	
+	@Query(value = "select * from user where user_id = ?1", nativeQuery = true)
+	List<User> findByUserId(Long id);
 	// Statistics by product sold
     @Query(value = "SELECT p.product_name , \r\n"
     		+ "SUM(o.quantity) as quantity ,\r\n"

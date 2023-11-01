@@ -80,6 +80,7 @@
 										<thead>
 											<tr>
 												<th>Mã đơn hàng</th>
+												<th>Mã KH</th>
 												<th>Tên khách hàng</th>
 												<th>Số ĐT</th>
 												<th>Ngày đặt hàng</th>
@@ -93,6 +94,7 @@
 										<tbody>
 											<tr th:each="item : ${orderDetails}">
 												<td>[[${item.orderId}]]</td>
+												<td>[[${item.user.userId}]]</td>
 												<td>[[${item.user.name}]]</td>
 												<td>[[${item.phone}]]</td>
 												<td>[[${item.orderDate}]]</td>
