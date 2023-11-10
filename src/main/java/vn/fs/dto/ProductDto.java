@@ -34,6 +34,7 @@ public class ProductDto {
 	public boolean favorite;
 	private Category category;
 	private Size size;
+	private String hang;
 	
 	
 	public ProductDto() {
@@ -120,6 +121,30 @@ public class ProductDto {
 		this.favorite = favorite;
 		this.category = category;
 		this.size = size;
+	}
+	
+	public ProductDto(Long productId, Long categoryId, Long sizeId, String productName, String chatLuong, String ghiChu,
+			int quantity, int maSP, double price, int discount, String productImage, String description,
+			Date enteredDate, Boolean status, boolean favorite, Category category, Size size, String hang) {
+		super();
+		this.productId = productId;
+		this.categoryId = categoryId;
+		this.sizeId = sizeId;
+		this.productName = productName;
+		this.chatLuong = chatLuong;
+		this.ghiChu = ghiChu;
+		this.quantity = quantity;
+		this.maSP = maSP;
+		this.price = price;
+		this.discount = discount;
+		this.productImage = productImage;
+		this.description = description;
+		this.enteredDate = enteredDate;
+		this.status = status;
+		this.favorite = favorite;
+		this.category = category;
+		this.size = size;
+		this.hang = hang;
 	}
 	public String getChatLuong() {
 		return chatLuong;
@@ -223,5 +248,12 @@ public class ProductDto {
 	public void setMaSP(int maSP) {
 		this.maSP = maSP;
 	}
+	public String getHang() {
+		return hang;
+	}
+	public void setHang(String hang) {
+		this.hang = hang;
+	}
+	
 	
 }

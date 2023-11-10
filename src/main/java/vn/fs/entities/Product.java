@@ -38,6 +38,7 @@ public class Product implements Serializable {
 	private String ghiChu;
 	private double price;
 	private int discount;
+	private String hang;
 	private String productImage;
 	private String description;
 	@Temporal(TemporalType.DATE)
@@ -173,5 +174,15 @@ public class Product implements Serializable {
 	public void setMaSP(int maSP) {
 		this.maSP = maSP;
 	}
+
+	public String getHang() {
+		return hang;
+	}
+
+	public void setHang(String hang) {
+		this.hang = hang;
+	}
+	
+	
 	
 }

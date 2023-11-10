@@ -89,6 +89,7 @@ public class ProductServiceImpl implements ProductService{
         productDto.setProductImage(product.getProductImage());
         productDto.setPrice(product.getPrice());
         productDto.setMaSP(product.getMaSP());
+        productDto.setHang(product.getHang());
 		return productDto;
 	}
 	private List<ProductDto> transfer(List<Product> products){
@@ -109,6 +110,7 @@ public class ProductServiceImpl implements ProductService{
             productDto.setPrice(product.getPrice());
             productDto.setMaSP(product.getMaSP());
             productDto.setStatus(product.getStatus());
+            productDto.setHang(product.getHang());
             productDto.setFavorite(false);
             productDtoList.add(productDto);
         }

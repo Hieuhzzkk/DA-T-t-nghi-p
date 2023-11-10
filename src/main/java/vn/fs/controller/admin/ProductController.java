@@ -184,6 +184,7 @@ public class ProductController{
 			product.setDiscount(productdto.getDiscount());
 			product.setEnteredDate(productdto.getEnteredDate());
 			product.setMaSP(productdto.getMaSP());
+			product.setHang(productdto.getHang());
 			product.setProductImage(file.getOriginalFilename());
 			productService.save(product);
 			attributes.addFlashAttribute("successadd", "Thành công");

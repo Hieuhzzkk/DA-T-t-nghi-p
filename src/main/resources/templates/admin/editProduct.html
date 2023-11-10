@@ -127,6 +127,16 @@
 															trống tên sản phẩm!</span>
 													</div>
 												</div>
+												<div class="col-sm-6">
+													<div class="form-group form-group-default">
+														<label>Hãng</label>
+														<input th:field="*{hang}" id="hang"
+															onblur="formatTrim();" oninput="checktext();" type="text"
+															class="form-control" placeholder="Hãng...">
+														<span id="tb" style="display: none;color: red;">Không được để
+															trống hãng sản phẩm!</span>
+													</div>
+												</div>
 												<div class="col-md-6 pr-0">
 													<div class="form-group form-group-default">
 														<label>Ma SP</label>

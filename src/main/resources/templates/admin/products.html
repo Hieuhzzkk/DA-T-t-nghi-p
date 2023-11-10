@@ -122,6 +122,14 @@
 																	trống tên sản phẩm!</span>
 															</div>
 														</div>
+														<div class="col-sm-12">
+															<div class="form-group form-group-default">
+																<label>Hãng</label>
+																<input th:field="*{hang}" id="hang" onblur="formatTrim();" oninput="checktext();" type="text" class="form-control" placeholder="Hãng...">
+																<span id="tb" style="display: none;color: red;">Không được để
+																	trống hãng sản phẩm!</span>
+															</div>
+														</div>
 														
 														<div class="col-md-6 pr-0">
 															<div class="form-group form-group-default">
@@ -222,6 +230,7 @@
 												<th>Size</th>
 												<th>Màu sắc</th>
 												<th>Chất Liệu</th>
+												<th>Hãng</th>
 												<th>Đơn giá</th>
 												<th>Giảm giá</th>
 												<th>Số lượng</th>
@@ -242,6 +251,7 @@
 												<td>[[${item.size.nameSize}]]</td>
 												<td>[[${item.description}]]</td>
 												<td>[[${item.chatLuong}]]</td>
+												<td>[[${item.hang}]]</td>
 												<td th:text="${#numbers.formatDecimal(item.price, 1, 'DEFAULT', 0, 'DEFAULT')}+' đ'"></td>
 												<td>[[${#numbers.formatDecimal(item?.discount, 1, 'DEFAULT', 0, 'DEFAULT')}+' %']]</td>
 												<td>[[${item.quantity}]]</td>
