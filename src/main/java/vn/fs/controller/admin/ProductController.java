@@ -17,6 +17,8 @@ import org.aspectj.weaver.NewConstructorTypeMunger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -29,6 +31,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -225,4 +228,18 @@ public class ProductController{
 		sdf.setLenient(true);
 		binder.registerCustomEditor(Date.class, new CustomDateEditor(sdf, true));
 	}
+	
+	@GetMapping(value = "/getProductCBO/{id}")
+	@ResponseBody
+	public ResponseEntity<ProductDto> getProductPrice(@PathVariable("id") Long id,ModelMap model) {
+	    ProductDto product = productService.getById(id);
+	    if (product != null) {
+	    	model.addAttribute("price0",product.getPrice());
+	    	System.out.println(product.getPrice());
+	        return new ResponseEntity<>(product, HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+	}
+	
 }

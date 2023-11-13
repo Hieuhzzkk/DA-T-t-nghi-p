@@ -14,7 +14,8 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
 
 	@Query(value = "select * from order_details where order_id = ?;", nativeQuery = true)
 	List<OrderDetail> findByOrderId(Long id);
-	
+	@Query(value = "select * from order_details od where order_id = ?;", nativeQuery = true)
+	OrderDetail getOrDetailByOrId(Long id);
 	// Statistics by product sold
     @Query(value = "SELECT p.product_name , \r\n"
     		+ "SUM(o.quantity) as quantity ,\r\n"

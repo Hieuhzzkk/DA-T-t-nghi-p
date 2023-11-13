@@ -99,7 +99,7 @@
 					</div>
 					<div class="shop-widget">
 						<h6 class="shop-widget-title">Theo thể loại</h6>
-							<ul class="shop-widget-list shop-widget-scroll">
+						<ul class="shop-widget-list shop-widget-scroll">
 							<li th:each="item : ${coutnProductByCategory}">
 								<div class="shop-widget-content">
 									<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
@@ -109,8 +109,20 @@
 								<span class="shop-widget-number">([[${item[2]}]])</span>
 							</li>
 						</ul>
-						
 
+					</div>
+					<div class="shop-widget">
+						<h6 class="shop-widget-title">Theo thể loại</h6>
+						<ul class="shop-widget-list shop-widget-scroll">
+							<li th:each="item : ${coutnProductByCategory}">
+								<div class="shop-widget-content">
+									<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
+										<label for="cate1" style="color: rgb(138, 138, 138)">[[${item[1]}]]</label>
+									</a>
+								</div>
+								<span class="shop-widget-number">([[${item[2]}]])</span>
+							</li>
+						</ul>
 					</div>
 				</div>
 				<div class="col-lg-9">

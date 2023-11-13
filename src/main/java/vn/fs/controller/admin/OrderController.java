@@ -79,10 +79,20 @@ public class OrderController {
 	public ModelAndView detail(ModelMap model, @PathVariable("order_id") Long id) {
 
 		List<OrderDetail> listO = orderDetailRepository.findByOrderId(id);
-
+		
 		model.addAttribute("amount", orderRepository.findById(id).get().getAmount());
 		model.addAttribute("orderDetail", listO);
 		model.addAttribute("orderId", id);
+		//cbo for orderDetail add
+		List<Product> cboPro = productRepository.findAll();
+		model.addAttribute("orderDetails", new OrderDetail());
+		model.addAttribute("cboPro",cboPro);
+		double totalPrice = listO.stream()
+                .mapToDouble(item -> (item.getPrice() - (item.getPrice() * item.getProduct().getDiscount() / 100)) * item.getQuantity())
+                .sum();
+        model.addAttribute("totalPrice", totalPrice);
+        
+		
 		// set active front-end
 		model.addAttribute("menuO", "menu");
 		return new ModelAndView("admin/editOrder", model);
@@ -116,7 +126,6 @@ public class OrderController {
 			p.setQuantity(p.getQuantity() - od.getQuantity());
 			productRepository.save(p);
 		}
-
 		return new ModelAndView("forward:/admin/orders", model);
 	}
 	@RequestMapping("/order/cancel/{order_id}/{LyDoHuy}")
@@ -132,7 +141,6 @@ public class OrderController {
 
 		return new ModelAndView("forward:/admin/orders", model);
 	}
-
 	@RequestMapping("/order/confirm/{order_id}")
 	public ModelAndView confirm(ModelMap model, @PathVariable("order_id") Long id) {
 		Optional<Order> o = orderRepository.findById(id);
@@ -167,9 +175,6 @@ public class OrderController {
 		return new ModelAndView("forward:/admin/orders", model);
 	}
 	
-	
-	
-	
 	@RequestMapping("/order/confirmDgh/{order_id}")
 	public ModelAndView confirm2(ModelMap model, @PathVariable("order_id") Long id) {
 		Optional<Order> o = orderRepository.findById(id);
@@ -195,11 +200,6 @@ public class OrderController {
 
 		return new ModelAndView("forward:/admin/orders", model);
 	}
-	
-	
-	
-	
-	
 	
 	@RequestMapping("/order/confirmGiao/{order_id}")
 	public ModelAndView confirmpp2GH(ModelMap model, @PathVariable("order_id") Long id) {
@@ -239,7 +239,8 @@ public class OrderController {
 
 		OrderExcelExporter excelExporter = new OrderExcelExporter(lisOrders);
 		excelExporter.export(response);
-
 	}
+	
+
 
 }
