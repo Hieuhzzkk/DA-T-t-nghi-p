@@ -87,6 +87,7 @@ public class OrderController {
 		List<Product> cboPro = productRepository.findAll();
 		model.addAttribute("orderDetails", new OrderDetail());
 		model.addAttribute("cboPro",cboPro);
+		model.addAttribute("status",orderRepository.findById(id).get().getStatus());
 		double totalPrice = listO.stream()
                 .mapToDouble(item -> (item.getPrice() - (item.getPrice() * item.getProduct().getDiscount() / 100)) * item.getQuantity())
                 .sum();

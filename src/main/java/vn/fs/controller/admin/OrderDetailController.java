@@ -2,6 +2,7 @@ package vn.fs.controller.admin;
 
 import java.security.Principal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -48,66 +49,74 @@ public class OrderDetailController {
 
 	@Autowired
 	UserRepository userRepository;
-	
+
 	@ModelAttribute(value = "user")
 	public User user(Model model, Principal principal, User user) {
-
 		if (principal != null) {
 			model.addAttribute("user", new User());
 			user = userRepository.findByEmail(principal.getName());
 			model.addAttribute("user", user);
 		}
-
 		return user;
 	}
+
 	@GetMapping("/orderdetail/detail/{id}")
-	public String editOrderDetail(@PathVariable("id") Long id,ModelMap model) {
+	public String editOrderDetail(@PathVariable("id") Long id, ModelMap model) {
 		OrderDetail orderDetail = orderDetailRepository.findById(id).orElse(null);
 		List<Product> cboPro = productRepository.findAll();
-		model.addAttribute("orderDetails",orderDetail);
-		model.addAttribute("cboPro",cboPro);
+		model.addAttribute("orderDetails", orderDetail);
+		model.addAttribute("cboPro", cboPro);
 		return "admin/editOrderDetail";
 	}
+
 	@PostMapping("/orderdetail/addOrderDetail")
-	public String addOrDetail(@Validated @ModelAttribute("orderdetail") OrderDetail orderDetail,ModelMap model,RedirectAttributes attributes) {
+	public String addOrDetail(@Validated @ModelAttribute("orderdetail") OrderDetail orderDetail, ModelMap model,
+			RedirectAttributes attributes) {
 		try {
+			Long idOrder = orderDetail.getOrder().getOrderId();
 			orderDetailRepository.save(orderDetail);
 			attributes.addFlashAttribute("successadd", "Thành công");
 			System.out.println("acdckajs" + orderDetail.getOrderDetailId());
+			return "redirect:/admin/order/detail/" + idOrder;
+
 		} catch (Exception e) {
 			attributes.addFlashAttribute("erroradd", "Thất bại");
 			return "/admin/orders";
 
 		}
+	}
+
+	@PostMapping("/orderdetail/updatePriceForOrder")
+	public String updatePriceForOrder(@ModelAttribute("orders") Order orders, ModelMap model,
+			RedirectAttributes attributes) {
+		try {
+			// Kiểm tra orderId trước khi cập nhật
+			Long orderId = orders.getOrderId();
+			Order existingOrder = orderRepository.findById(orderId).orElse(null);
+			existingOrder.setAmount(orders.getAmount());
+			orderRepository.save(existingOrder);
+
+			attributes.addFlashAttribute("successadd", "Thành công");
+			System.out.println("OrderId: " + orderId);
+		} catch (Exception e) {
+			attributes.addFlashAttribute("erroradd", "Thất bại");
+			return "/admin/orders";
+		}
 		return "redirect:/admin/orders";
 	}
-	@PostMapping("/orderdetail/updatePriceForOrder")
-	public String updatePriceForOrder(@ModelAttribute("orders") Order orders,ModelMap model,RedirectAttributes attributes) {
-		try {
-	        // Kiểm tra orderId trước khi cập nhật
-	        Long orderId = orders.getOrderId();
-	        Order existingOrder = orderRepository.findById(orderId).orElse(null);
-	        existingOrder.setAmount(orders.getAmount());
-	        orderRepository.save(existingOrder);
 
-	        attributes.addFlashAttribute("successadd", "Thành công");
-	        System.out.println("OrderId: " + orderId);
-	    } catch (Exception e) {
-	        attributes.addFlashAttribute("erroradd", "Thất bại");
-	        return "/admin/orders";
-	    }
-	    return "redirect:/admin/orders";
-	}
 	@GetMapping("/orderdetail/delete/{id}")
-	public String deleteDetail(@PathVariable("id") Long id,RedirectAttributes attributes) {
+	public String deleteDetail(@PathVariable("id") Long id, RedirectAttributes attributes) {
 		try {
+			OrderDetail orderDetail = orderDetailRepository.findById(id).get();
+			Long orderId = orderDetail.getOrder().getOrderId();
 			orderDetailRepository.deleteById(id);
 			attributes.addFlashAttribute("successmessage", "Đã xóa thành công");
+			return "redirect:/admin/order/detail/" + orderId;
 
 		} catch (Exception e) {
 			attributes.addFlashAttribute("errormessage", "Không thể xóa");
-
+			return "/admin/orders";
 		}
-	    return "redirect:/admin/orders";
 	}
 }

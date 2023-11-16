@@ -66,15 +66,12 @@
 							<div class="card-header">
 								<div class="d-flex align-items-left">
 									<h4 class="card-title">Chi tiết đơn hàng</h4>
-									<button style="margin-left: 3%;" class="btn btn-primary btn-round  ml-auto"
-										data-toggle="modal" data-target="#addRowModalSaveDetail"> <i
-											class="fa fa-plus"></i> Thêm sản
-										phẩm</button>
-									<button style="margin-left: 3%;" class="btn btn-primary btn-round"
-										data-toggle="modal" data-target="#billRowModal"> <i class="fa fa-plus"></i> Hóa
-										đơn</button>
-									<a style="margin-left: 3%;" class="btn btn-primary btn-round"
-										th:href="@{/admin/orders}">Quay lại</a>
+									<button style="margin-left: 73%;" th:if="${status le 3}"
+										class="btn btn-primary btn-round hidden" data-toggle="modal"
+										data-target="#addRowModalSaveDetail">
+										<i class="fa fa-plus"></i> Thêm sản phẩm
+									</button>
+									<a  class="btn btn-primary btn-round ml-auto" th:href="@{/admin/orders}">Quay lại</a>
 								</div>
 							</div>
 							<div class="card-body">
@@ -163,7 +160,8 @@
 													</button>
 												</div>
 												<div class="modal-body">
-													<form th:action="@{/admin/orderdetail/updatePriceForOrder}" method="post" th:object="${orders}">
+													<form th:action="@{/admin/orderdetail/updatePriceForOrder}"
+														method="post" th:object="${orders}">
 														<div class="form-group">
 															<label>Mã đơn hàng</label>
 															<input type="text" name="orderId" th:value="${orderId}"
@@ -171,14 +169,13 @@
 														</div>
 														<div class="form-group">
 															<label>Tổng tiền</label>
-															<input type="text" name="amount"
-																th:value="${totalPrice}"
+															<input type="text" name="amount" th:value="${totalPrice}"
 																class="form-control" required readonly>
 														</div>
 														<div class="form-group">
 															<input type="submit"
-															class="btn btn-primary btn-round ml-auto"
-															value="Cập nhật đơn giá">
+																class="btn btn-primary btn-round ml-auto"
+																value="Cập nhật đơn giá">
 														</div>
 													</form>
 												</div>
@@ -227,7 +224,7 @@
 																	</option>
 																</select>
 															</div>
-														
+
 															<div class="form-group">
 																<label>Đơn giá</label>
 																<input th:field="*{price}" type="text"
@@ -235,18 +232,25 @@
 															</div>
 															<div class="form-group">
 																<label>Màu</label>
-																<input type="text"
-																	class="form-control" id="colorInput" readonly>
+																<input type="text" class="form-control" id="colorInput"
+																	readonly>
 															</div>
 															<div class="form-group">
 																<label>Ảnh</label>
 																<img id="imageElement" class="form-control">
 															</div>
-															<div class="form-group">
-																<label>Số lượng</label>
-																<input th:field="*{quantity}" type="number"
-																	class="form-control" value="1">
+															<div class="row">
+																<div class="form-group">
+																	<label>Số lượng</label>
+																	<input th:field="*{quantity}" type="number" id="quantity" min="1" max="50"
+																	oninput="getSL();" class="form-control">
+																</div>
+																<div class="col-md-6 mt-3">
+																	<span id="badgeIdtoida" class="badge text-white bg-danger"
+																		style="padding: 8px 10px 5px 10px; margin: 30px 0 0 -10px;display: none;">Chỉ được mua tối đa 50 sản phẩm</span>
+																</div>
 															</div>
+															
 														</div>
 														<div class="modal-footer">
 															<input type="button" class="btn btn-default"
@@ -260,98 +264,7 @@
 											</div>
 										</div>
 									</div>
-									<!--Model bill-->
-									<div class="modal fade" id="billRowModal" tabindex="-1" role="dialog"
-										aria-hidden="true">
-										<div class="modal-dialog" role="document">
-											<div class="modal-content">
-												<div class="modal-header no-bd">
-													<h5 class="modal-title">
-														<span class="fw-mediumbold"
-															style="text-decoration: none; color: black;">
-															Hóa đơn</span>
-													</h5>
-													<button type="button" class="close" data-dismiss="modal"
-														aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button>
-												</div>
-												<div class="modal-body">
-													<div class="row">
-														<div class="col-md-6">
-															<div class="card" style="border: 1px dotted black;">
-																<div class="card-header">
-																	Từ:
-																</div>
-																<div class="card-body">
-																	<h6 class="card-text">ADOSHOP</h6>
-																	<p class="card-text">Nam từ liêm, Mỹ Đình, Hà
-																		Nội</p>
-																</div>
-															</div>
-														</div>
-														<div class="col-md-6">
-															<div class="card" style="border: 1px dotted black;">
-																<div class="card-header">
-																	<span style="color: black;font-weight:200">Đến:
-																	</span>
-																</div>
-																<div class="card-body">
-																	<p class="card-text">Khuất Tiến Dũng</p>
-																	<p class="card-text">Số 6,Ngách 12, Xóm Đình,
-																		Tích
-																		Giang, Phúc Thọ, Hà Nội</p>
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="row" style="margin-top: 5px;">
-														<div class="col-md-6">
-															<div class="card" style="border: 1px dotted black;">
-																<div class="card-header">
-																	Ngày giao
-																</div>
-																<div class="card-body">
-																	<span>
-																		<h3>01-11-2023</h3>
-																	</span>
-																</div>
-															</div>
-														</div>
-														<div class="col-md-6">
-															<div class="card" style="border: 1px dotted black;">
-																<div class="card-header">
-																	<p class="card-text">Nội dung: ...........</p>
-																</div>
-																<div class="card-body">
-																</div>
-															</div>
-														</div>
-													</div>
-													<div class="row" style="margin-top: 5px;">
-														<div class="col-md-6">
-															<div class="card" style="border: 1px dotted black;">
-																<div class="card-header">
-																	<p class="card-text">Tổng tiền: </p>
-																</div>
-																<div class="card-body">
-																</div>
-															</div>
-														</div>
-														<div class="col-md-6">
-															<div class="card" style="border: 1px dotted black;">
-																<div class="card-header">
-																	<p class="card-text">Chữ ký: </p>
-																</div>
-																<div class="card-body" style="height: 150px;">
-																</div>
-															</div>
-														</div>
-													</div>
-												</div>
-											</div>
-										</div>
-									</div>
+								
 									<!-- Modal -->
 									<div class="modal" tabindex="-1" role="dialog" id="configmationId">
 										<div class="modal-dialog" role="document">
@@ -408,7 +321,21 @@
 	<script src="/assets/js/atlantis.min.js"></script>
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="/assets/js/setting-demo2.js"></script>
-
+	<script type="text/javascript">
+			function getSL() {
+			var a = $('#quantity').val().trim();
+			if (parseInt(a) < 1) {
+				$('#quantity').val(1);
+			}
+			if ($('#quantity').val().trim() == "") {
+				$('#quantity').val(1);
+			}
+			if(parseInt(a) > 50){
+				$('#quantity').val(50);
+				$('#badgeIdtoida').css("display","block");
+			}
+		}
+	</script>
 	<script>
 		$(document).ready(function () {
 			$("#productSelect").change(function () {
@@ -420,7 +347,7 @@
 						$("#colorInput").val(data.description);
 						var imageName = data.productImage;
 						var urlImgFull = urlImg + imageName;
-						$("#imageElement").attr("src",urlImgFull);
+						$("#imageElement").attr("src", urlImgFull);
 					} else {
 						alert("Sản phẩm không tồn tại hoặc có lỗi.");
 					}
@@ -514,7 +441,7 @@
 
 
 	</script>
-  
+
 </body>
 
 </html>
