@@ -124,6 +124,9 @@
 								<div th:if="${erroradd}" class="text-center alert alert-danger" style="border-left: 24px solid red;">
 									<p th:text="${erroradd}"></p>
 								</div>
+								<div th:if="${errors}" class="text-center alert alert-danger" style="border-left: 24px solid red;">
+									<p th:text="${errors}"></p>
+								</div>
 								<div th:if="${successadd}" class="text-center alert alert-success" style="border-left: 24px solid #31ce36;">
 									<p th:text="${successadd}"></p>
 								</div>
@@ -254,6 +257,8 @@
 	<script src="/assets/js/atlantis.min.js"></script>
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="/assets/js/setting-demo2.js"></script>
+	
+	
 	<script>
 		$(document).ready(function () {
 			$('#basic-datatables').DataTable({

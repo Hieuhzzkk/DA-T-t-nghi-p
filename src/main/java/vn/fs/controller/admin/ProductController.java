@@ -165,31 +165,46 @@ public class ProductController{
 	        return "redirect:/admin/products";
 	    }
 	@PostMapping(value = "/saveproduct")
-	public String addPro(@ModelAttribute("product")ProductDto productdto, 
+	public String addPro(@ModelAttribute("product")ProductDto productdto, ModelMap model,
 						@RequestParam("file")MultipartFile file, RedirectAttributes attributes
 						) throws IOException {
 		
 		try {
-			Product product = new Product();
-			File convFile = new File(pathUploadImage + "/" + file.getOriginalFilename());
-			FileOutputStream fos = new FileOutputStream(convFile);
-			fos.write(file.getBytes());
-			fos.close();
-			product.setProductId(productdto.getProductId());
-			product.setProductName(productdto.getProductName());
-			product.setCategory(productdto.getCategory());
-			product.setSize(productdto.getSize());
-			product.setChatLuong(productdto.getChatLuong());
-			product.setGhiChu(productdto.getGhiChu());
-			product.setQuantity(productdto.getQuantity());
-			product.setPrice(productdto.getPrice());
-			product.setDescription(productdto.getDescription());
-			product.setDiscount(productdto.getDiscount());
-			product.setEnteredDate(productdto.getEnteredDate());
-			product.setMaSP(productdto.getMaSP());
-			product.setProductImage(file.getOriginalFilename());
-			productService.save(product);
-			attributes.addFlashAttribute("successadd", "Thành công");
+			List<Product> products = productRepository.findAll();
+			boolean isNameProduct = true;
+			for(Product lsproduct : products) {
+				if(productdto.getProductName().equalsIgnoreCase(lsproduct.getProductName())) {
+					isNameProduct = false;
+					break;
+				}
+			}
+			if(isNameProduct) {
+				Product product = new Product();
+				File convFile = new File(pathUploadImage + "/" + file.getOriginalFilename());
+				FileOutputStream fos = new FileOutputStream(convFile);
+				fos.write(file.getBytes());
+				fos.close();
+				product.setProductId(productdto.getProductId());
+				product.setProductName(productdto.getProductName());
+				product.setCategory(productdto.getCategory());
+				product.setSize(productdto.getSize());
+				product.setChatLuong(productdto.getChatLuong());
+				product.setGhiChu(productdto.getGhiChu());
+				product.setQuantity(productdto.getQuantity());
+				product.setPrice(productdto.getPrice());
+				product.setDescription(productdto.getDescription());
+				product.setDiscount(productdto.getDiscount());
+				product.setEnteredDate(productdto.getEnteredDate());
+				product.setMaSP(productdto.getMaSP());
+				product.setProductImage(file.getOriginalFilename());
+				productService.save(product);
+				attributes.addFlashAttribute("successadd", "Thành công");
+			}
+			else {
+				attributes.addFlashAttribute("errorsIsName", "Sản phẩm  " + productdto.getProductName() + " đã tồn tại");
+				return "redirect:/admin/products";
+
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 			attributes.addFlashAttribute("erroradd", "Thất bại");

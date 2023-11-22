@@ -27,17 +27,14 @@ public class SizeController {
 	UserRepository userRepository;
 	@Autowired
 	SizeRepository sizeRepository;
-	
-	
+
 	@ModelAttribute(value = "user")
 	public User user(Model model, Principal principal, User user) {
-
 		if (principal != null) {
 			model.addAttribute("user", new User());
 			user = userRepository.findByEmail(principal.getName());
 			model.addAttribute("user", user);
 		}
-
 		return user;
 	}
 
@@ -46,7 +43,6 @@ public class SizeController {
 	public List<Size> showSize(Model model) {
 		List<Size> sizes = sizeRepository.findAll();
 		model.addAttribute("sizes", sizes);
-
 		return sizes;
 	}
 
@@ -54,25 +50,34 @@ public class SizeController {
 	public String sizes(Model model, Principal principal) {
 		Size size = new Size();
 		model.addAttribute("size", size);
-
 		return "admin/size";
 	}
 
 	// add category
 	@PostMapping(value = "/addSize")
-	public String addSize(@Validated @ModelAttribute("size") Size size, ModelMap model,
-			RedirectAttributes attributes) {
+	public String addSize(@Validated @ModelAttribute("size") Size size, ModelMap model, RedirectAttributes attributes) {
 		try {
-			sizeRepository.save(size);
-			attributes.addFlashAttribute("successsize", "Thành công");
+			List<Size> sizes = sizeRepository.findAll();
+			Boolean isNameSize = true;
+			for (Size lsize : sizes) {
+				if (size.getNameSize().equalsIgnoreCase(lsize.getNameSize())) {
+					isNameSize = false;
+					break;
+				}
+			}
+			if (isNameSize) {
+				sizeRepository.save(size);
+				attributes.addFlashAttribute("successsize", "Thành công");
+			} else {
+				attributes.addFlashAttribute("errorsize", "Thất bại"); // check trùng ở đây
+				model.addAttribute("errors", "Size " + size.getNameSize() + " đã tồn tại ");
 
+				return "admin/size";
+			}
 		} catch (Exception e) {
 			attributes.addFlashAttribute("errorsize", "Thất bại");
-
 			return "admin/size";
-
 		}
-		
 		return "redirect:/admin/size";
 	}
 
@@ -80,9 +85,20 @@ public class SizeController {
 	@GetMapping(value = "/editSiae/{id}")
 	public String editCategory(@PathVariable("id") Long id, ModelMap model) {
 		Size size = sizeRepository.findById(id).orElse(null);
-
 		model.addAttribute("size", size);
-
 		return "admin/size";
+	}
+
+	@GetMapping(value = "/deletesize/{id}")
+	public String deleteSize(@PathVariable("id") Long id, ModelMap model, RedirectAttributes attributes) {
+		try {
+			sizeRepository.deleteById(id);
+			attributes.addFlashAttribute("successsize", "Thành công");
+		} catch (Exception e) {
+			attributes.addFlashAttribute("errorsize", "Thất bại");
+			return "redirect:/admin/size";
+
+		}
+		return "redirect:/admin/size";
 	}
 }

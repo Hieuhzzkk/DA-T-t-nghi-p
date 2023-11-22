@@ -122,10 +122,13 @@
 								<div th:if="${errorsize}" class="text-center alert alert-danger" style="border-left: 24px solid red;">
 									<p th:text="${errorsize}"></p>
 								</div>
+								<div th:if="${errors}" class="text-center alert alert-danger" style="border-left: 24px solid red;">
+									<p th:text="${errors}"></p>
+								</div>
 								<div th:if="${successsize}" class="text-center alert alert-success" style="border-left: 24px solid #31ce36;">
 									<p th:text="${successsize}"></p>
 								</div>
-								S
+								
 								</div>
 								<div class="alert alert-success row col-12" th:if="${message}" th:text="${message}">
 								</div>
@@ -163,7 +166,6 @@
 											</tr>
 										</tbody>
 									</table>
-
 									<!-- Delete Category th:data-id="${item.categoryId}" th:href="@{/editCategory/(id=${category.categoryId})}"-->
 									<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js" type="text/javascript"></script>
 									<script>
@@ -181,7 +183,7 @@
 										}
 										function showConfigModalDialog(id, name) {
 											$('#name').text(name);
-											$('#yesOption').attr('href', '/admin/delete/' + id);
+											$('#yesOption').attr('href', '/admin/deletesize/' + id);
 											$('#configmationId').modal('show');
 										}
 									</script>
@@ -242,6 +244,8 @@
 	<script src="/assets/js/atlantis.min.js"></script>
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="/assets/js/setting-demo2.js"></script>
+
+
 	<script>
 		$(document).ready(function () {
 			$('#basic-datatables').DataTable({

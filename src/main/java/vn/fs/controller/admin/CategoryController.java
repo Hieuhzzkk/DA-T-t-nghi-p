@@ -67,17 +67,28 @@ public class CategoryController {
 	public String addCategory(@Validated @ModelAttribute("category") Category category, ModelMap model,
 			RedirectAttributes attributes) {
 		try {
-			categoryRepository.save(category);
-			attributes.addFlashAttribute("successadd", "Thành công");
-			System.out.println("acdckajs" + category.getCategoryName());
-
+			List<Category> lsCate = categoryRepository.findAll();
+			boolean isCate = true;
+			for(Category categoryLs : lsCate) {
+				if(category.getCategoryName().equalsIgnoreCase(categoryLs.getCategoryName())) {
+					isCate = false;
+					break;
+				}
+			}
+			if(isCate) {
+				categoryRepository.save(category);
+				attributes.addFlashAttribute("successadd", "Thành công");
+				System.out.println("acdckajs" + category.getCategoryName());
+			}
+			else {
+				attributes.addFlashAttribute("erroradd", "Thất bại");
+				model.addAttribute("errors","Thể loại " + category.getCategoryName() + " đã tồn tại");
+				return "admin/categories";
+			}
 		} catch (Exception e) {
 			attributes.addFlashAttribute("erroradd", "Thất bại");
-
 			return "admin/categories";
-
 		}
-		
 		return "redirect:/admin/categories";
 	}
 

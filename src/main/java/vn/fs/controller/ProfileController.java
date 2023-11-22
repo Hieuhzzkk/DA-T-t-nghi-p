@@ -81,13 +81,10 @@ public class ProfileController extends CommomController{
 	@PostMapping(value = "/updateUser")
 	public String updateUser(@Validated @ModelAttribute("user") User user, ModelMap model,
 			BindingResult bindingResult) {
-
 		if (bindingResult.hasErrors()) {
 			model.addAttribute("error", "failure");
-
 			return "/profile";
 		}
-
 		userRepository.save(user);
 		model.addAttribute("message", "successful!");
 

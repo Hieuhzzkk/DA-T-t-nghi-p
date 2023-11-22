@@ -199,9 +199,13 @@
 										</div>
 									</div>
 								</div>
+								<div th:if="${errorsIsName}" class="text-center alert alert-danger" style="border-left: 24px solid red;">
+									<p th:text="${errorsIsName}"></p>
+								</div>
 								<div th:if="${errormessage}" class="text-center alert alert-danger" style="border-left: 24px solid red;">
 									<p th:text="${errormessage}"></p>
 								</div>
+								
 								<div th:if="${successmessage}" class="text-center alert alert-success" style="border-left: 24px solid #31ce36;">
 									<p th:text="${successmessage}"></p>
 								</div>
