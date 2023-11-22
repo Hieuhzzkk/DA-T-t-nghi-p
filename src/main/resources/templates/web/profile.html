@@ -112,7 +112,11 @@
 										<div class="col-md-6 col-lg-4">
 											<div class="form-group">
 												<label class="form-label">Họ và tên</label> <input class="form-control"
-													type="text" th:value="${user.name}" id="name" name="name" />
+													type="text" th:value="${user.name}" id="name" name="name" onblur="validateName()" />
+												<span id="badgeName" class="badge text-white bg-danger"
+													style="padding: 8px 10px 5px 10px; margin: -15px 0 0 0; display: none;">Vui
+													lòng nhập họ và tên</span>
+
 											</div>
 										</div>
 										<div class="col-md-6 col-lg-6">
@@ -130,19 +134,20 @@
 												<label class="form-label">Số điện thoại</label> <input
 													class="form-control" type="text" th:value="${user.sdt}" id="sdt"
 													name="sdt" onblur="validatePhoneNumber()" />
-												<span id="badgeIdtoida" class="badge text-white bg-danger"
+												<span id="badgenumber" class="badge text-white bg-danger"
 													style="padding: 8px 10px 5px 10px; margin: -15px 0 0 0; display: none;">Bạn
-													nhập sai định dạng số điện thoại hoặc số điện thoại không tồn tại ở
+													nhập sai định dạng số điện thoại hoặc không tồn tại ở
 													Việt Nam</span>
-
 											</div>
 										</div>
 										<div class="col-md-6 col-lg-6">
 											<div class="form-group">
 												<label class="form-label">Địa chỉ</label><input class="form-control"
 													type="text" th:value="${user.address}" id="address"
-													name="address" />
-
+													name="address" onblur="validateAddress()"/>
+												<span id="badgeAddr" class="badge text-white bg-danger"
+													style="padding: 8px 10px 5px 10px; margin: -15px 0 0 0; display: none;">Vui
+													lòng nhập địa chỉ</span>
 											</div>
 										</div>
 									</div>
@@ -403,8 +408,9 @@
 			function validatePhoneNumber() {
 				var phoneNumber = document.getElementById("sdt").value;
 				var regex = /(84|0[2|3|5|7|8|9])+([0-9]{8})\b/g;
-				var badgeIdtoida = document.getElementById("badgeIdtoida");
-
+				var badgeIdtoida = document.getElementById("badgenumber");
+				var sdt = document.getElementById("sdt").value;
+				var badgeSdt = document.getElementById("badgeSdt");
 				if (!regex.test(phoneNumber)) {
 					badgeIdtoida.style.display = "block";
 				} else {
@@ -422,6 +428,28 @@
 					badgeIdtoida.style.display = "none";
 				}
 			};
+			function validateName() {
+				var name = document.getElementById("name").value;
+				var badgeName = document.getElementById("badgeName");
+
+				// Kiểm tra trường tên
+				if (name.trim() === "") {
+					badgeName.style.display = "block";
+				} else {
+					badgeName.style.display = "none";
+				}
+			};
+			function validateAddress() {
+				var address = document.getElementById("address").value;
+				var badgeAddr = document.getElementById("badgeAddr");
+
+				// Kiểm tra trường tên
+				if (address.trim() === "") {
+					badgeAddr.style.display = "block";
+				} else {
+					badgeAddr.style.display = "none";
+				}
+			}
 
 
 		</script>
