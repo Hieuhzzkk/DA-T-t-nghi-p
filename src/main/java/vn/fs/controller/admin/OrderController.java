@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import vn.fs.dto.OrderExcelExporter;
+import vn.fs.entities.Category;
 import vn.fs.entities.Order;
 import vn.fs.entities.OrderDetail;
 import vn.fs.entities.Product;
@@ -77,7 +78,13 @@ public class OrderController {
 
 		return "admin/orders";
 	}
+	@ModelAttribute("userList")
+	public List<User> showUser(Model model) {
+		List<User> userList = userRepository.findAll();
+		model.addAttribute("userList", userList);
 
+		return userList;
+	}
 	@GetMapping("/order/detail/{order_id}")
 	public ModelAndView detail(ModelMap model, Model modell, 
 			Principal principal, User user, 
@@ -87,6 +94,16 @@ public class OrderController {
 		List<OrderDetail> listO = orderDetailRepository.findByOrderId(id);
 //		User userrUser =userRepository.findById(iduser).orElse(null);
 //		model.addAttribute("user", userrUser);
+		List<Product> cboPro = productRepository.findAll();
+		model.addAttribute("orderDetails", new OrderDetail());
+		model.addAttribute("cboPro",cboPro);
+		double totalPrice = listO.stream()
+                .mapToDouble(item -> (item.getPrice() - (item.getPrice() * item.getProduct().getDiscount() / 100)) * item.getQuantity())
+                .sum();
+        model.addAttribute("totalPrice", totalPrice);
+        
+		
+		// set active front-end
 		model.addAttribute("amount", orderRepository.findById(id).get().getAmount());
 		model.addAttribute("orderDetail", listO);
 		model.addAttribute("orderId", id);
