@@ -125,7 +125,7 @@ public class CartController extends CommomController {
 
 		return "redirect:/products";
 	}
-	
+	//update checkout
 	@PostMapping("/update")
 	public String update(@RequestParam(value =  "id") Long id , @RequestParam("quantity1") 
 	Integer quantity1) {
@@ -149,6 +149,36 @@ public class CartController extends CommomController {
 		}
 		return "redirect:/checkout";
 	}
+	//updateGio
+	@GetMapping("/updateGio/{id}/{quantity}")
+	public String updateGio(@PathVariable("id") Long id, @PathVariable("quantity") Integer quantity) {
+		try {
+			shoppingCartService.update2(id, quantity);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "redirect:/giohang";
+	}
+	//DeleteGio
+	@SuppressWarnings("unlikely-arg-type")
+	@GetMapping(value = "/removegio/{id}")
+	public String removeGio(@PathVariable("id") Long id, HttpServletRequest request, Model model) {
+		Product product = productRepository.findById(id).orElse(null);
+
+		Collection<CartItem> cartItems = shoppingCartService.getCartItems();
+		session = request.getSession();
+		if (product != null) {
+			CartItem item = new CartItem();
+			BeanUtils.copyProperties(product, item);
+			item.setProduct(product);
+			item.setId(id);
+			cartItems.remove(session);
+			shoppingCartService.remove(item);
+		}
+		model.addAttribute("totalCartItems", shoppingCartService.getCount());
+		return "redirect:/giohang";
+	}
 	// delete cartItem
 	@SuppressWarnings("unlikely-arg-type")
 	@GetMapping(value = "/remove/{id}")
@@ -168,7 +198,25 @@ public class CartController extends CommomController {
 		model.addAttribute("totalCartItems", shoppingCartService.getCount());
 		return "redirect:/checkout";
 	}
-
+	//delete gio hang
+//	@SuppressWarnings("unlikely-arg-type")
+//	@GetMapping(value = "/remove/{id}")
+//	public String removegiohang(@PathVariable("id") Long id, HttpServletRequest request, Model model) {
+//		Product product = productRepository.findById(id).orElse(null);
+//
+//		Collection<CartItem> cartItems = shoppingCartService.getCartItems();
+//		session = request.getSession();
+//		if (product != null) {
+//			CartItem item = new CartItem();
+//			BeanUtils.copyProperties(product, item);
+//			item.setProduct(product);
+//			item.setId(id);
+//			cartItems.remove(session);
+//			shoppingCartService.remove(item);
+//		}
+//		model.addAttribute("totalCartItems", shoppingCartService.getCount());
+//		return "redirect:/giohang";
+//	}
 	// show check out
 	@GetMapping(value = "/checkout")
 	public String checkOut(Model model, User user) {
@@ -191,6 +239,28 @@ public class CartController extends CommomController {
 		commomDataService.commonData(model, user);
 
 		return "web/shoppingCart_checkout";
+	}
+	@GetMapping(value = "/giohang")
+	public String giohang(Model model, User user) {
+
+		Order order = new Order();
+		model.addAttribute("order", order);
+
+		Collection<CartItem> cartItems = shoppingCartService.getCartItems();
+		model.addAttribute("cartItems", cartItems);
+		model.addAttribute("total", shoppingCartService.getAmount());
+		model.addAttribute("NoOfItems", shoppingCartService.getCount());
+		double totalPrice = 0;
+		for (CartItem cartItem : cartItems) {
+			double price = cartItem.getQuantity() * cartItem.getProduct().getPrice();
+			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100);
+		}
+
+		model.addAttribute("totalPrice", totalPrice);
+		model.addAttribute("totalCartItems", shoppingCartService.getCount());
+		commomDataService.commonData(model, user);
+
+		return "web/giohang";
 	}
 
 	// submit checkout
@@ -250,7 +320,7 @@ public class CartController extends CommomController {
 		}
 
 		// sendMail
-		commomDataService.sendSimpleEmail(user.getEmail(), "Otis-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
+		commomDataService.sendSimpleEmail(user.getEmail(), "Ado-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
 				totalPrice, order);
 
 		shoppingCartService.clear();
@@ -300,7 +370,7 @@ public class CartController extends CommomController {
 				}
 
 				// sendMail
-				commomDataService.sendSimpleEmail(user.getEmail(), "Otis-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
+				commomDataService.sendSimpleEmail(user.getEmail(), "Ado-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
 						totalPrice, orderFinal);
 
 				shoppingCartService.clear();
