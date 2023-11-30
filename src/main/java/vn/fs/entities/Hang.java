@@ -11,10 +11,13 @@ import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @SuppressWarnings("serial")
 @Data
+@Setter @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
@@ -24,9 +27,13 @@ public class Hang implements Serializable{
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long idhang;
-	
+	@Column(name = "tenhang")
 	private String tenhang;
 
+	
+	public Hang() {
+		super();
+	}
 
 	public Hang(Long idhang, String tenhang) {
 		super();
@@ -34,34 +41,22 @@ public class Hang implements Serializable{
 		this.tenhang = tenhang;
 	}
 
-
-
 	public Long getIdhang() {
 		return idhang;
 	}
-
-
 
 	public void setIdhang(Long idhang) {
 		this.idhang = idhang;
 	}
 
-
-
 	public String getTenhang() {
 		return tenhang;
 	}
-
-
 
 	public void setTenhang(String tenhang) {
 		this.tenhang = tenhang;
 	}
 
 
-
-	public Hang() {
-		super();
-	}
 	
 }

@@ -95,7 +95,7 @@
 												</button>
 											</div>
 											<div class="modal-body">
-												<form th:action="@{/admin/addHang}" th:object="${hang}"
+												<form th:action="@{/admin/hang/addHang}" th:object="${hangs}"
 													method="post">
 													<div class="row">
 														<div class="col-sm-12">
@@ -152,12 +152,12 @@
 											</tr>
 										</tfoot>
 										<tbody>
-											<tr th:each="item : ${hang}">
+											<tr th:each="item : ${lshang}">
 												<td>[[${item.idhang}]]</td>
 												<td>[[${item.tenhang}]]</td>
 												<td>
 													<div class="form-button-action">
-														<a th:href="@{/admin/editHang/{idhang}(idhang=${item.idhang})}"
+														<a th:href="@{/admin/hang/editHang/{idhang}(idhang=${item.idhang})}"
 															type="button" data-toggle="tooltip" title=""
 															class="btn btn-link btn-primary btn-lg"
 															data-original-title="Chỉnh sửa">
@@ -193,7 +193,7 @@
 										}
 										function showConfigModalDialog(id, name) {
 											$('#name').text(name);
-											$('#yesOption').attr('href', '/admin/delete/' + id);
+											$('#yesOption').attr('href', '/admin/hang/delete/' + id);
 											$('#configmationId').modal('show');
 										}
 									</script>

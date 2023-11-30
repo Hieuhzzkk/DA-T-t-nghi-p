@@ -45,25 +45,25 @@ public class HangController {
 	}
 
 	// show list hang - table list
-	@ModelAttribute("hang")
-	public List<Hang> showHang(Model model) {
-		List<Hang> hangs = hangRepository.findAll();
-		model.addAttribute("hang", hangs);
+	@ModelAttribute("lshang")
+	public List<Hang> showHang(ModelMap model){
+		List<Hang> lsHang = hangRepository.findAll();
+		model.addAttribute("lshang", lsHang);
 
-		return hangs;
+		return lsHang;
 	}
 
-	@GetMapping(value = "/hang")
+	@GetMapping(value = "/hangs")
 	public String hangs(Model model, Principal principal) {
 		Hang hangs = new Hang();
-		model.addAttribute("hang", hangs);
+		model.addAttribute("hangs", hangs);
 
 		return "admin/hang";
 	}
 
 	// add hang
-	@PostMapping(value = "/addHang")
-	public String addHang(@Validated @ModelAttribute("hang") Hang hangs, ModelMap model,
+	@PostMapping(value = "/hang/addHang")
+	public String addHang(@Validated @ModelAttribute("hangs") Hang hangs, ModelMap model,
 			RedirectAttributes attributes) {
 		try {
 			hangRepository.save(hangs);
@@ -77,21 +77,21 @@ public class HangController {
 
 		}
 		
-		return "redirect:/admin/hang";
+		return "redirect:/admin/hangs";
 	}
 
 	// get Edit hang
-	@GetMapping(value = "/editHang/{id}")
+	@GetMapping(value = "/hang/editHang/{id}")
 	public String editHang(@PathVariable("id") Long id, ModelMap model) {
 		Hang hangs = hangRepository.findById(id).orElse(null);
 
-		model.addAttribute("hang", hangs);
+		model.addAttribute("hangs", hangs);
 
 		return "admin/editHang";
 	}
 
 	// delete hang
-	@GetMapping("/delete/{id}")
+	@GetMapping("/hang/delete/{id}")
 	public String delHang(@PathVariable("id") Long id, Model model,RedirectAttributes attributes) {
 		try {
 			hangRepository.deleteById(id);
@@ -103,7 +103,7 @@ public class HangController {
 		}
 
 
-		return "redirect:/admin/hang";
+		return "redirect:/admin/hangs";
 	}
 
 }

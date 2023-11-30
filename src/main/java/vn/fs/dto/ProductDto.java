@@ -10,6 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import vn.fs.entities.Category;
+import vn.fs.entities.Hang;
 import vn.fs.entities.Size;
 
 @Data
@@ -20,6 +21,7 @@ public class ProductDto {
 	private Long productId;
 	private Long categoryId;
 	private Long sizeId;
+	private Long idhang;
 	private String productName;
 	private String chatLuong;
 	private String ghiChu;
@@ -34,7 +36,7 @@ public class ProductDto {
 	public boolean favorite;
 	private Category category;
 	private Size size;
-	private String hang;
+	private Hang hang;
 	
 	
 	public ProductDto() {
@@ -78,13 +80,14 @@ public class ProductDto {
 		this.category = category;
 	}
 	
-	public ProductDto(Long productId, Long categoryId, Long sizeId, String productName, int quantity, int maSP,
+	public ProductDto(Long productId, Long categoryId, Long idhang, Long sizeId, String productName, int quantity, int maSP,
 			double price, int discount, String productImage, String description, Date enteredDate, Boolean status,
-			boolean favorite, Category category, Size size) {
+			boolean favorite, Category category, Size size, Hang hang) {
 		super();
 		this.productId = productId;
 		this.categoryId = categoryId;
 		this.sizeId = sizeId;
+		this.idhang = idhang;
 		this.productName = productName;
 		this.quantity = quantity;
 		this.maSP = maSP;
@@ -97,16 +100,18 @@ public class ProductDto {
 		this.favorite = favorite;
 		this.category = category;
 		this.size = size;
+		this.hang = hang;
 	}
 	
 	
-	public ProductDto(Long productId, Long categoryId, Long sizeId, String productName, String chatLuong, String ghiChu,
+	public ProductDto(Long productId, Long categoryId, Long sizeId, Long idhang, String productName, String chatLuong, String ghiChu,
 			int quantity, int maSP, double price, int discount, String productImage, String description,
-			Date enteredDate, Boolean status, boolean favorite, Category category, Size size) {
+			Date enteredDate, Boolean status, boolean favorite, Category category, Size size, Hang hang) {
 		super();
 		this.productId = productId;
 		this.categoryId = categoryId;
 		this.sizeId = sizeId;
+		this.idhang = idhang;
 		this.productName = productName;
 		this.chatLuong = chatLuong;
 		this.ghiChu = ghiChu;
