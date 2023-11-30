@@ -92,7 +92,7 @@ public class CategoryController {
 	}
 
 	// delete category
-	@GetMapping("/delete/{id}")
+	@GetMapping("/delete-Hang/{id}")
 	public String delCategory(@PathVariable("id") Long id, Model model,RedirectAttributes attributes) {
 		try {
 			categoryRepository.deleteById(id);
