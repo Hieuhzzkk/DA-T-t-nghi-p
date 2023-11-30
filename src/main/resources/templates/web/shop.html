@@ -21,89 +21,29 @@
 	<link rel="stylesheet" href="vendor/niceselect/nice-select.min.css" />
 	<link rel="stylesheet" href="vendor/bootstrap/bootstrap.min.css" />
 	<link rel="stylesheet" href="css/main.css" />
+
+
+	<link rel="stylesheet" href="http://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css" />
+	<script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+	<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+
+	<script>
+		$(function () {
+			$("#slide-ranger").slider({
+				ranger: true,
+				min: 0,
+				max: 10000000,
+				values: [500000, 1000000],
+				slide: function (event, ui) {
+					$("#amount").val("$" + ui.values[0] + "-$" + ui.values[1]);
+				}
+			});
+		});
+	</script>
+
 	<style>
-		body {
-			font-family: Arial, Helvetica, sans-serif;
-		}
 
-		.flip-card {
-			background-color: transparent;
-			width: 300px;
-			height: 300px;
-			perspective: 1000px;
-		}
 
-		.flip-card-inner {
-			position: relative;
-			width: 100%;
-			height: 100%;
-			text-align: center;
-			transition: transform 0.6s;
-			transform-style: preserve-3d;
-			box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-		}
-
-		.flip-card:hover .flip-card-inner {
-			transform: rotateY(180deg);
-		}
-
-		.flip-card-front,
-		.flip-card-back {
-			position: absolute;
-			width: 100%;
-			height: 100%;
-			-webkit-backface-visibility: hidden;
-			backface-visibility: hidden;
-		}
-
-		.flip-card-front {
-			background-color: #bbb;
-			color: black;
-		}
-
-		.flip-card-back {
-			background-color: #2980b9;
-			color: white;
-			transform: rotateY(180deg);
-		}
-
-		* {
-			box-sizing: border-box;
-		}
-
-		#myInput {
-			background-image: url('/css/searchicon.png');
-			background-position: 10px 12px;
-			background-repeat: no-repeat;
-			width: 40%;
-			font-size: 16px;
-			padding: 12px 20px 12px 40px;
-			border: 1px solid #ddd;
-			margin-bottom: 12px;
-		}
-
-		#myUL {
-			list-style-type: none;
-			padding: 0;
-			margin: 0;
-			width: 40%;
-		}
-
-		#myUL li a {
-			border: 1px solid #ddd;
-			margin-top: -1px;
-			/* Prevent double borders */
-			background-color: #f6f6f6;
-			padding: 12px;
-			text-decoration: none;
-			font-size: 18px;
-			color: black;
-			display: block
-		}
-
-		#myUL li a:hover:not(.header) {
-			background-color: #eee;
-		}
 	</style>
 </head>
 
@@ -132,16 +72,16 @@
 			<div class="row content-reverse">
 				<div class="col-lg-3">
 					<div class="shop-widget">
-						<h6 class="shop-widget-title">Theo thể loại</h6>
+						<h6 class="shop-widget-title">Theo hãng</h6>
 						<ul class="shop-widget-list shop-widget-scroll">
 							<li th:each="item : ${coutnProductByCategory}">
 								<div class="shop-widget-content">
 									<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
-										
+
 										<div class="form-check">
-											<input class="form-check-input" type="checkbox" value=""
-												id="cate1">
-											<label class="form-check-label" for="cate1" style="color: rgb(138, 138, 138)">
+											<input class="form-check-input" type="checkbox" value="" id="cate1">
+											<label class="form-check-label" for="cate1"
+												style="color: rgb(138, 138, 138)">
 												[[${item[1]}]]
 											</label>
 										</div>
@@ -153,36 +93,57 @@
 						</ul>
 
 					</div>
-					<div class="shop-widget">
-						<h6 class="shop-widget-title">Theo hãng</h6>
+											<form action="/kkk" method="get">
 
-						<ul class="shop-widget-list shop-widget-scroll">
-							<li th:each="item : ${coutnProductByCategory}">
-								<div class="shop-widget-content">
-									<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
-										<label for="cate1" style="color: rgb(138, 138, 138)">[[${item[1]}]]</label>
-									</a>
-								</div>
-								<span class="shop-widget-number">([[${item[2]}]])</span>
-							</li>
-						</ul>
+					<div class="shop-widget">
+						<h6 class="shop-widget-title">Theo loại</h6>
+
+							<ul class="shop-widget-list shop-widget-scroll">
+								<li th:each="item : ${coutnProductByCategory}">
+									<div class="shop-widget-content">
+										<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
+											<div class="form-check">
+												<input class="form-check-input" type="radio" name="ct" th:value="${item[0]}" id="cate1">
+												<label class="form-check-label" for="cate1"
+													style="color: rgb(138, 138, 138)">
+													[[${item[1]}]]
+												</label>
+											</div>
+										</a>
+									</div>
+									<span class="shop-widget-number">([[${item[2]}]])</span>
+								</li>
+							</ul>
 
 					</div>
-					<div class="shop-widget">
-						<h6 class="shop-widget-title">Theo Giá</h6>
-						<ul class="shop-widget-list shop-widget-scroll">
-							<li th:each="item : ${coutnProductByCategory}">
-								<div class="shop-widget-content">
-									<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
-										<label for="cate1" style="color: rgb(138, 138, 138)">[[${item[1]}]]</label>
-									</a>
-								</div>
-								<span class="shop-widget-number">([[${item[2]}]])</span>
-							</li>
-						</ul>
+					
 
+					<label for="customRange1" class="form-label">Example range</label>
+					<input type="range" class="form-range" id="customRange1" name="gia" min="0" max="10000000"
+						oninput="updateSliderValue(this.value)">
+					<p id="sliderValue">0</p>
+
+					<script>
+						function updateSliderValue(value) {
+							document.getElementById("sliderValue").innerText = value;
+						}
+					</script>
+
+					<div class="container">
+						<div class="row">
+							<div class="col">
+								<p>
+									<label for="amount"></label> <input type="text" id="amount" readonly
+										style="border: 0; color: #f6931f; font-weight: bold;">
+								</p>
+								<div id="slider-ranger"></div>
+							</div>
+						</div>
 					</div>
+
 					<button class="btn btn-warning">Lọc</button>
+											</form>
+
 				</div>
 				<div class="col-lg-9">
 					<div class="row">

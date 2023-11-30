@@ -63,10 +63,10 @@ public class CommomDataService {
 	
 	// count product by category
 	public void listCategoryByProductName(Model model) {
-
 		List<Object[]> coutnProductByCategory = productRepository.listCategoryByProductName();
 		model.addAttribute("coutnProductByCategory", coutnProductByCategory);
 	}
+	
 	
 	//sendEmail by order success
 	public void sendSimpleEmail(String email, String subject, String contentEmail, Collection<CartItem> cartItems,

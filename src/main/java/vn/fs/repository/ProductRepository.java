@@ -2,6 +2,8 @@ package vn.fs.repository;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -16,6 +18,12 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	// List product by category
 	@Query(value = "SELECT * FROM products WHERE category_id = ?", nativeQuery = true)
 	public List<Product> listProductByCategory(Long categoryId);
+	
+//	@Query(value = "select * from products where hang = ? and category_id = ? and price >= 250000 and price <= 600000;", nativeQuery = true)
+//	public List<Product> listProductBygia(String hang, Long categoryId, Double price);
+	
+//	@Query(value = "SELECT * FROM products WHERE price between :min and :max")
+//	public List<Product> searchByPrice(@Param("min") double min,@Param("max") double max);
 	
 	@Query(value = "SELECT * FROM products WHERE size_id = ?", nativeQuery = true)
 	public List<Product> listProductBySize(Long idSize);
@@ -58,4 +66,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	@Query(value = "select * from products o where product_id in :ids", nativeQuery = true)
 	List<Product> findByInventoryIds(@Param("ids") List<Integer> listProductId);
 	
+	@Query(value = "select * from products where "
+			+ " (?3 is null or (price<=?3 and ?3 >0)) "
+			+ " and (?2 is null or hang = ?2) "
+			+ " and (?1 is null or category_id = ?1) ", nativeQuery = true)
+	Page<Product> search(Integer idCate,String hang,Long price,Pageable pageable);
 }

@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.jaxb.SpringDataJaxb.PageRequestDto;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,6 +67,16 @@ public class ShopController extends CommomController {
 		return "web/shop";
 	}
 
+	@GetMapping(value = "/kkk")
+	public String kkk(Model model, @RequestParam("page") Optional<Integer> page, User user,
+			@RequestParam Optional<Integer> ct,
+			@RequestParam Optional<Long> gia) {
+		Pageable pageable=PageRequest.of(page.orElse(0), 10);
+		commomDataService.commonData(model, user);
+		model.addAttribute("products", productRepository.search(ct.orElse(null),null , gia.orElse(null), pageable));
+		return "web/shop";
+	}
+	
 	public Page<Product> findPaginated(Pageable pageable) {
 
 		List<Product> productPage = productRepository.findAll();
@@ -132,6 +143,7 @@ public class ShopController extends CommomController {
 	}
 	
 	// list books by category
+
 	@GetMapping(value = "/productByCategory")
 	public String listProductbyid(Model model, @RequestParam("id") Long id, User user) {
 		List<Product> products = productRepository.listProductByCategory(id);
@@ -159,6 +171,7 @@ public class ShopController extends CommomController {
 		commomDataService.commonData(model, user);
 		return "web/shop";
 	}
+	
 	@ModelAttribute("sizeList")
 	public List<Size> showSizes(Model model) {
 		List<Size> sizeList = sizeRepository.findAll();
