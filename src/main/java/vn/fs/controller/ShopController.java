@@ -28,6 +28,7 @@ import vn.fs.entities.Product;
 import vn.fs.entities.Size;
 import vn.fs.entities.User;
 import vn.fs.repository.FavoriteRepository;
+import vn.fs.repository.HangRepository;
 import vn.fs.repository.ProductRepository;
 import vn.fs.repository.SizeRepository;
 
@@ -44,7 +45,8 @@ public class ShopController extends CommomController {
 	SizeRepository sizeRepository;
 	@Autowired
 	CommomDataService commomDataService;
-
+	@Autowired
+	HangRepository hangRepository;
 	@GetMapping(value = "/products")
 	public String shop(Model model, Pageable pageable, @RequestParam("page") Optional<Integer> page,
 			@RequestParam("size") Optional<Integer> size, User user) {
@@ -66,6 +68,20 @@ public class ShopController extends CommomController {
 		return "web/shop";
 	}
 
+<<<<<<< Updated upstream
+=======
+	@GetMapping(value = "/kkk")
+	public String kkk(Model model, @RequestParam("page") Optional<Integer> page, User user,
+			@RequestParam Optional<Integer> ct,
+			@RequestParam Optional<Long>th,
+			@RequestParam Optional<Long> gia) {
+		Pageable pageable=PageRequest.of(page.orElse(0), 10);
+		commomDataService.commonData(model, user);
+		model.addAttribute("products", productRepository.search(th.orElse(null),null,ct.orElse(null),null , gia.orElse(null), pageable));
+		return "web/shop";
+	}
+	
+>>>>>>> Stashed changes
 	public Page<Product> findPaginated(Pageable pageable) {
 
 		List<Product> productPage = productRepository.findAll();

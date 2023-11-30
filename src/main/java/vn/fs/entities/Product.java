@@ -40,6 +40,7 @@ public class Product implements Serializable {
 	private int discount;
 	private String productImage;
 	private String description;
+	
 	@Temporal(TemporalType.DATE)
 	private Date enteredDate;
 	private Boolean status;
@@ -50,6 +51,9 @@ public class Product implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "categoryId")
 	private Category category;
+	@ManyToOne
+	@JoinColumn(name = "idhang")
+	private Hang hang;
 	
 	
 	
@@ -173,5 +177,10 @@ public class Product implements Serializable {
 	public void setMaSP(int maSP) {
 		this.maSP = maSP;
 	}
+<<<<<<< Updated upstream
+=======
+	
+	
+>>>>>>> Stashed changes
 	
 }

@@ -94,6 +94,7 @@
 		<div class="container">
 			<div class="row content-reverse">
 				<div class="col-lg-3">
+<<<<<<< Updated upstream
 					<div class="shop-widget-promo">
 						<a href="#"><img src="images/promo/shop/fv.jpg" alt="promo" /></a>
 					</div>
@@ -112,6 +113,80 @@
 						</ul>
 
 					</div>
+=======
+											<form action="/kkk" method="get">
+												<div class="shop-widget">
+													<h6 class="shop-widget-title">Theo hãng</h6>
+													<ul class="shop-widget-list shop-widget-scroll">
+														<li th:each="item : ${coutnProductByCategory}">
+															<div class="shop-widget-content">
+																<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
+
+																	<div class="form-check">
+																		<input class="form-check-input" type="radio" name="th" th:value="${item[0]}" id="cate2">
+																		<label class="form-check-label" for="cate2"
+																			   style="color: rgb(138, 138, 138)">
+																			[[${item[2]}]]
+																		</label>
+																	</div>
+
+																</a>
+															</div>
+															<span class="shop-widget-number">([[${item[2]}]])</span>
+														</li>
+													</ul>
+
+												</div>
+					<div class="shop-widget">
+						<h6 class="shop-widget-title">Theo loại</h6>
+
+							<ul class="shop-widget-list shop-widget-scroll">
+								<li th:each="item : ${coutnProductByCategory}">
+									<div class="shop-widget-content">
+										<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
+											<div class="form-check">
+												<input class="form-check-input" type="radio" name="ct" th:value="${item[0]}" id="cate1">
+												<label class="form-check-label" for="cate1"
+													style="color: rgb(138, 138, 138)">
+													[[${item[1]}]]
+												</label>
+											</div>
+										</a>
+									</div>
+									<span class="shop-widget-number">([[${item[2]}]])</span>
+								</li>
+							</ul>
+
+					</div>
+					
+
+					<label for="customRange1" class="form-label">Example range</label>
+					<input type="range" class="form-range" id="customRange1" name="gia" min="0" max="10000000"
+						oninput="updateSliderValue(this.value)">
+					<p id="sliderValue">0</p>
+
+					<script>
+						function updateSliderValue(value) {
+							document.getElementById("sliderValue").innerText = value;
+						}
+					</script>
+
+					<div class="container">
+						<div class="row">
+							<div class="col">
+								<p>
+									<label for="amount"></label> <input type="text" id="amount" readonly
+										style="border: 0; color: #f6931f; font-weight: bold;">
+								</p>
+								<div id="slider-ranger"></div>
+							</div>
+						</div>
+					</div>
+
+					<button class="btn btn-warning">Lọc</button>
+											</form>
+
+>>>>>>> Stashed changes
 				</div>
 				<div class="col-lg-9">
 					<div class="row">

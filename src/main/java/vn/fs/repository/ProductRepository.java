@@ -59,6 +59,14 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	@Query(value = "select * from products o where product_id in :ids", nativeQuery = true)
 	List<Product> findByInventoryIds(@Param("ids") List<Integer> listProductId);
 	
+<<<<<<< Updated upstream
+=======
+	@Query(value = "select * from products where "
+			+ " (?3 is null or (price<=?3 and ?3 >0)) "
+			+ " and (?2 is null or hang = ?2) "
+			+ " and (?1 is null or category_id = ?1) ", nativeQuery = true)
+	Page<Product> search(Integer idCate,Long hang,Long price,Pageable pageable);
+>>>>>>> Stashed changes
 }
 
 
