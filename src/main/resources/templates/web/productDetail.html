@@ -91,7 +91,7 @@
 								Thể loại:<a>[[${product.category.categoryName}]]</a>
 							</p>
 							<p>
-								Size:<a>[[${product.size.nameSize}]]</a>
+								Màu:<a>[[${product.size.nameSize}]]</a>
 								<input hidden="hidden" id="nameSize" th:value="${product.size.nameSize}">
 
 							</p>
@@ -108,16 +108,16 @@
 							</span>
 						</h3>
 						<p class="mt-3">Chất liệu: <a>[[${product.chatLuong}]]</a></p>
-						<p class="mt-3">Màu sắc: <a>[[${product.description}]]</a></p>
+						<p class="mt-3">Kích thước: <a>[[${product.description}]]</a></p>
 						<input type="text" th:value="${product.productId}" hidden="hidden" id="productId"> <input
 							type="text" th:value="${product.quantity}" id="productQuatity" hidden="hidden">
 
 						<div class="mb-3 mt-3" style="margin-top: 15px;" role="toolbar"
 							aria-label="Toolbar with button groups">
-							<a type="button" class="btn size btn-outline-secondary" id="btnSizeS" onclick="selectSize('1')">S</a> 
-								<a type="button" class="btn size btn-outline-secondary" id="btnSizeM" onclick="selectSize('2')">M</a> 
-								<a type="button" class="btn size btn-outline-secondary" id="btnSizeL" onclick="selectSize('3')">L</a>
-								<a type="button" class="btn size btn-outline-secondary" id="btnSizeXL" onclick="selectSize('4')">XL</a>
+							<a type="button" class="btn size btn-outline-secondary" id="btnSizeS" onclick="selectSize('1')">Đen</a> 
+								<a type="button" class="btn size btn-outline-secondary" id="btnSizeM" onclick="selectSize('2')">Nâu</a> 
+								<!--<a type="button" class="btn size btn-outline-secondary" id="btnSizeL" onclick="selectSize('3')">L</a>
+								<a type="button" class="btn size btn-outline-secondary" id="btnSizeXL" onclick="selectSize('4')">XL</a>-->
 
 						</div>
 						<div class="row">
@@ -138,7 +138,7 @@
 						<div class="col-md-6 mt-3">
 							<span id="badgeIdtoida" class="badge text-white bg-danger"
 								style="padding: 8px 10px 5px 10px; margin: 0 0 0 -35px;display: none;">Chỉ được mua tối
-								đa 50 sản phẩm</span>
+								đa 10 sản phẩm</span>
 						</div>
 						<p class="mt-4">Mô tả sản phẩm:<a>[[${product.ghiChu}]]</a></p>
 
@@ -222,8 +222,8 @@
 			if ($('#quantity').val().trim() == "") {
 				$('#quantity').val(1);
 			}
-			if (parseInt(a) > 50) {
-				$('#quantity').val(50);
+			if (parseInt(a) > 10) {
+				$('#quantity').val(10);
 				$('#badgeIdtoida').css("display", "block");
 			}
 		}

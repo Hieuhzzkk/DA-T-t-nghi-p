@@ -109,6 +109,7 @@ public class OrderController {
 		model.addAttribute("orderId", id);
 		// set active front-end
 		model.addAttribute("menuO", "menu");
+		model.addAttribute("status",orderRepository.findById(id).get().getStatus());
 		return new ModelAndView("admin/editOrder", model);
 	}
 	@PostMapping(value = "/updateUserOrder")

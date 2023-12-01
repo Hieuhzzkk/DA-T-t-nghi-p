@@ -63,8 +63,25 @@ public class SizeController {
 	public String addSize(@Validated @ModelAttribute("size") Size size, ModelMap model,
 			RedirectAttributes attributes) {
 		try {
-			sizeRepository.save(size);
-			attributes.addFlashAttribute("successsize", "Thành công");
+			List<Size> sizes = sizeRepository.findAll();
+			Boolean isNameSize = true;
+			for (Size lsize : sizes) {
+				if (size.getNameSize().equalsIgnoreCase(lsize.getNameSize())) {
+					isNameSize = false;
+					break;
+				}
+			}
+			if (isNameSize) {
+				sizeRepository.save(size);
+				attributes.addFlashAttribute("successsize", "Thành công");
+			} else {
+				attributes.addFlashAttribute("errorsize", "Thất bại"); // check trùng ở đây
+				model.addAttribute("errors", "Size " + size.getNameSize() + " đã tồn tại ");
+
+				return "admin/size";
+			}
+//			sizeRepository.save(size);
+//			attributes.addFlashAttribute("successsize", "Thành công");
 
 		} catch (Exception e) {
 			attributes.addFlashAttribute("errorsize", "Thất bại");

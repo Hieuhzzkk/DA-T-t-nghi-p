@@ -122,6 +122,9 @@
 								<div th:if="${errorsize}" class="text-center alert alert-danger" style="border-left: 24px solid red;">
 									<p th:text="${errorsize}"></p>
 								</div>
+								<div th:if="${errors}" class="text-center alert alert-danger" style="border-left: 24px solid red;">
+									<p th:text="${errors}"></p>
+								</div>
 								<div th:if="${successsize}" class="text-center alert alert-success" style="border-left: 24px solid #31ce36;">
 									<p th:text="${successsize}"></p>
 								</div>

@@ -68,15 +68,17 @@ public class OrderDetailController {
 	@PostMapping("/orderdetail/addOrderDetail")
 	public String addOrDetail(@Validated @ModelAttribute("orderdetail") OrderDetail orderDetail,ModelMap model,RedirectAttributes attributes) {
 		try {
+			Long idOrder = orderDetail.getOrder().getOrderId();
 			orderDetailRepository.save(orderDetail);
 			attributes.addFlashAttribute("successadd", "Thành công");
 			System.out.println("acdckajs" + orderDetail.getOrderDetailId());
+			return "redirect:/admin/order/detail/" + idOrder;
 		} catch (Exception e) {
 			attributes.addFlashAttribute("erroradd", "Thất bại");
 			return "/admin/orders";
 
 		}
-		return "redirect:/admin/orders";
+		
 	}
 	@PostMapping("/orderdetail/updatePriceForOrder")
 	public String updatePriceForOrder(@ModelAttribute("orders") Order orders,ModelMap model,RedirectAttributes attributes) {
@@ -98,13 +100,17 @@ public class OrderDetailController {
 	@GetMapping("/orderdetail/delete/{id}")
 	public String deleteDetail(@PathVariable("id") Long id,RedirectAttributes attributes) {
 		try {
+			OrderDetail orderDetail = orderDetailRepository.findById(id).get();
+			Long orderId = orderDetail.getOrder().getOrderId();
 			orderDetailRepository.deleteById(id);
 			attributes.addFlashAttribute("successmessage", "Đã xóa thành công");
+			return "redirect:/admin/order/detail/" + orderId;
 
 		} catch (Exception e) {
 			attributes.addFlashAttribute("errormessage", "Không thể xóa");
+			return "/admin/orders";
 
 		}
-	    return "redirect:/admin/orders";
+	    
 	}
 }

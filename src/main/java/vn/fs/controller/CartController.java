@@ -276,7 +276,7 @@ public class CartController extends CommomController {
 		double totalPrice = 0;
 		for (CartItem cartItem : cartItems) {
 			double price = cartItem.getQuantity() * cartItem.getProduct().getPrice();
-			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100) + 20000;
+			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100);
 		}
 
 		BeanUtils.copyProperties(order, orderFinal);
@@ -341,7 +341,7 @@ public class CartController extends CommomController {
 		double totalPrice = 0;
 		for (CartItem cartItem : cartItems) {
 			double price = cartItem.getQuantity() * cartItem.getProduct().getPrice();
-			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100);
+			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100) + 30000;
 		}
 		model.addAttribute("totalPrice", totalPrice);
 		model.addAttribute("totalCartItems", shoppingCartService.getCount());

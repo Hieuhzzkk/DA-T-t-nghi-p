@@ -1,19 +1,20 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
+
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta charset="UTF-8" />
 	<title>Ado - Trang quản trị</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
-	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon"/>
-	
+	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon" />
+
 	<!-- Fonts and icons -->
 	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
 	<script>
 		WebFont.load({
-			google: {"families":["Lato:300,400,700,900"]},
-			custom: {"families":["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['/assets/css/fonts.min.css']},
-			active: function() {
+			google: {"families": ["Lato:300,400,700,900"]},
+			custom: {"families": ["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['/assets/css/fonts.min.css']},
+			active: function () {
 				sessionStorage.fonts = true;
 			}
 		});
@@ -25,150 +26,154 @@
 	<!-- CSS Just for demo purpose, don't include it in your project -->
 	<link rel="stylesheet" href="/assets/css/demo.css">
 </head>
+
 <body>
 	<div class="wrapper">
-	<!-- Header -->
-	
-	<th:block th:replace="~{admin/fragments/header :: header}"></th:block>
-	
-	<!-- End Header -->
-	
-	<!-- Navbar -->
-	
-	<th:block th:replace="~{admin/fragments/navbar :: navbar}"></th:block>
-	
-	<!-- End Navbar -->
-		
-	<div class="main-panel">
-		<div class="content">
-			<div class="page-inner">
-				<div class="page-header">
-					<h4 class="page-title">Quản Lý Đơn Hàng</h4>
-					<ul class="breadcrumbs">
-						<li class="nav-home">
-							<a href="#">
-								<i class="flaticon-home"></i>
-							</a>
-						</li>
-						<li class="separator">
-							<i class="flaticon-right-arrow"></i>
-						</li>
-						<li class="nav-item">
-							<a th:href="@{/admin/home}">Trang chủ</a>
-						</li>
-						<li class="separator">
-							<i class="flaticon-right-arrow"></i>
-						</li>
-						<li class="nav-item">
-							<a href="#">Quản lý đơn hàng</a>
-						</li>
-					</ul>
-				</div>
+		<!-- Header -->
+
+		<th:block th:replace="~{admin/fragments/header :: header}"></th:block>
+
+		<!-- End Header -->
+
+		<!-- Navbar -->
+
+		<th:block th:replace="~{admin/fragments/navbar :: navbar}"></th:block>
+
+		<!-- End Navbar -->
+
+		<div class="main-panel">
+			<div class="content">
+				<div class="page-inner">
+					<div class="page-header">
+						<h4 class="page-title">Quản Lý Đơn Hàng</h4>
+						<ul class="breadcrumbs">
+							<li class="nav-home">
+								<a href="#">
+									<i class="flaticon-home"></i>
+								</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a th:href="@{/admin/home}">Trang chủ</a>
+							</li>
+							<li class="separator">
+								<i class="flaticon-right-arrow"></i>
+							</li>
+							<li class="nav-item">
+								<a href="#">Quản lý đơn hàng</a>
+							</li>
+						</ul>
+					</div>
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
 								<div class="d-flex align-items-center">
-									<h4 class="card-title" >Chi tiết đơn hàng</h4>
-									<button style="margin-left: 3%;" class="btn btn-primary btn-round  ml-auto"
-										data-toggle="modal" data-target="#addRowModalSaveDetail"> <i
-											class="fa fa-plus"></i> Thêm sản
+									<h4 class="card-title">Chi tiết đơn hàng</h4>
+									<button style="margin-left: 73%;" th:if="${status le 3}"
+										class="btn btn-primary btn-round hidden" data-toggle="modal"
+										data-target="#addRowModalSaveDetail">
+										<i class="fa fa-plus"></i> Thêm sản
 										phẩm</button>
-										<a  class="btn btn-primary btn-round ml-auto" th:href="@{/admin/orders}">Quay lại</a>
+									<a class="btn btn-primary btn-round ml-auto" th:href="@{/admin/orders}">Quay lại</a>
 								</div>
 							</div>
 							<div class="card-body">
-							
-								<div class="alert alert-success row col-12"
-									th:if="${message}" th:text="${message}">
+
+								<div class="alert alert-success row col-12" th:if="${message}" th:text="${message}">
 								</div>
-								<form th:action="@{/updateUserOrder}" method="post"
-								th:object="${user}" class="user-form">
-								<div class="row">
-									<div class="col-lg-2">
-										<div class="profile-image">
-											<a href="javascript:void(0);"> <img
-												th:src="@{'/loadImage?imageName='+${user.avatar}}"
-												alt="user" />
-											</a>
+								<form th:action="@{/updateUserOrder}" method="post" th:object="${user}"
+									class="user-form">
+									<div class="row">
+										<div class="col-lg-2">
+											<div class="profile-image">
+												<a href="javascript:void(0);"> <img
+														th:src="@{'/loadImage?imageName='+${user.avatar}}" alt="user" />
+												</a>
+											</div>
+										</div>
+
+										<div class="col-md-6 col-lg-4">
+											<div class="form-group">
+												<label class="form-label">Họ và tên</label>
+												<input class="form-control" type="text" th:field="*{name}" id="name"
+													name="name" />
+											</div>
+											<input type="" name="userId" th:field="*{userId}">
+										</div>
+
+										<div class="col-md-6 col-lg-6">
+											<div class="form-group">
+												<label class="form-label">Địa chỉ Email</label><input
+													class="form-control" type="email" th:field="*{email}" id="email"
+													name="email" disabled />
+											</div>
 										</div>
 									</div>
-									
-									<div class="col-md-6 col-lg-4">
-										<div class="form-group">
-											<label class="form-label">Họ và tên</label> 
-											<input class="form-control" type="text" th:field="*{name}"
-												id="name" name="name" />
+									<div class="row">
+										<div class="col-lg-2"></div>
+										<div class="col-md-6 col-lg-4">
+											<div class="form-group">
+												<label class="form-label">Số điện thoại</label> <input
+													class="form-control" type="text" th:field="*{sdt}" id="sdt"
+													name="sdt" />
+											</div>
 										</div>
-										<input type="" name="userId" th:field="*{userId}">
-									</div>
-									
-									<div class="col-md-6 col-lg-6">
-										<div class="form-group">
-											<label class="form-label">Địa chỉ Email</label><input
-												class="form-control" type="email" th:field="*{email}"
-												id="email" name="email" disabled />
-										</div>
-									</div>
-								</div>
-								<div class="row">
-									<div class="col-lg-2"></div>
-									<div class="col-md-6 col-lg-4">
-										<div class="form-group">
-											<label class="form-label">Số điện thoại</label> <input
-												class="form-control" type="text" th:field="*{sdt}"
-												id="sdt" name="sdt" />
+										<div class="col-md-6 col-lg-6">
+											<div class="form-group">
+												<label class="form-label">Địa chỉ</label><input class="form-control"
+													type="text" th:field="*{address}" id="address" name="address" />
+											</div>
 										</div>
 									</div>
-									<div class="col-md-6 col-lg-6">
-										<div class="form-group">
-											<label class="form-label">Địa chỉ</label><input
-												class="form-control" type="text" th:field="*{address}"
-												id="address" name="address" />
+									<div class="row">
+										<div class="col-lg-10"></div>
+										<div class="col-lg-2">
+											<button type="submit" class="btn btn-inline">Cập nhật</button>
 										</div>
 									</div>
-								</div>
-								<div class="row">
-									<div class="col-lg-10"></div>
-									<div class="col-lg-2">
-										<button type="submit" class="btn btn-inline">Cập nhật</button>
-									</div>
-								</div>
-							</form>
+								</form>
 								<div class="table-responsive">
-									<table id="add-row" class="display table table-striped table-hover" >
+									<table id="add-row" class="display table table-striped table-hover">
 										<thead>
 											<tr>
 												<th width="8%">STT</th>
 												<th>Sản phẩm</th>
-						                        <th>Tên sản phẩm</th>
-						                        <th>Số lượng</th>
-						                        
-						                        <th>Đơn giá</th>
-						                        <th>Tổng tiền</th>
+												<th>Tên sản phẩm</th>
+												<th>Số lượng</th>
+
+												<th>Đơn giá</th>
+												<th>Tổng tiền</th>
 											</tr>
 										</thead>
-										
+
 										<tbody>
 											<tr th:each="item, count : ${orderDetail}">
-						                        <td class="text-center" th:text="${count.index+1}"></td>
-						                        <td>
-													<img th:src="@{'/loadImage?imageName='+${item.product.productImage}}" width="80px" alt="product" />
+												<td class="text-center" th:text="${count.index+1}"></td>
+												<td>
+													<img th:src="@{'/loadImage?imageName='+${item.product.productImage}}"
+														width="80px" alt="product" />
 												</td>
-						                        <td>[[${item.product.productName}]]</td>
-						                        <td>[[${item.quantity}]]</td>
-						                        
-						                        <td>[[${#numbers.formatDecimal(item.price - (item.price * item.product.discount/100), 1, 'DEFAULT', 0, 'DEFAULT')}+ ' đ']]</td>
-						                        <td>[[${#numbers.formatDecimal((item.price - (item.price * item.product.discount/100)) * item.quantity, 1, 'DEFAULT', 0, 'DEFAULT')}+ ' đ']]</td>
-						                    	<td>
-													<a th:href="@{/admin/orderdetail/detail/{orderDetailId}(orderDetailId = ${item.orderDetailId})}"
+												<td>[[${item.product.productName}]]</td>
+												<td>[[${item.quantity}]]</td>
+
+												<td>[[${#numbers.formatDecimal(item.price - (item.price *
+													item.product.discount/100), 1, 'DEFAULT', 0, 'DEFAULT')}+ ' đ']]
+												</td>
+												<td>[[${#numbers.formatDecimal((item.price - (item.price *
+													item.product.discount/100)) * item.quantity, 1, 'DEFAULT', 0,
+													'DEFAULT')}+ ' đ']]</td>
+												<td>
+													<a th:if="${status le 3}" th:href="@{/admin/orderdetail/detail/{orderDetailId}(orderDetailId = ${item.orderDetailId})}"
 														type="button" data-toggle="tooltip" title=""
-														class="btn btn-link btn-primary btn-lg"
+														class="btn btn-link btn-primary btn-lg hidden"
 														data-original-title="Chỉnh sửa">
 														<i class="fa fa-edit"></i>
 													</a>
-													<a th:href="@{/admin/orderdetail/delete/{orderDetailId}(orderDetailId = ${item.orderDetailId})}"
+													<a th:if="${status le 3}" th:href="@{/admin/orderdetail/delete/{orderDetailId}(orderDetailId = ${item.orderDetailId})}"
 														type="button" data-toggle="tooltip" title=""
-														class="btn btn-link btn-primary btn-lg"
+														class="btn btn-link btn-primary btn-lg hidden"
 														data-original-title="Xóa sản phẩm">
 														<i class="fa fa-trash"></i>
 													</a>
@@ -187,17 +192,17 @@
 														Cập nhật</button>
 												</td>
 											</tr>
-						                    </tr>
-						                    
+											</tr>
+
 										</tbody>
 									</table>
-									
+
 									<script>
-									function showConfigModalDialog(id, name) {
-										$('#name').text(name);
-										$('#yesOption').attr('href', '/admin/delete/'+id);
-										$('#configmationId').modal('show');
-									}
+										function showConfigModalDialog(id, name) {
+											$('#name').text(name);
+											$('#yesOption').attr('href', '/admin/delete/' + id);
+											$('#configmationId').modal('show');
+										}
 									</script>
 									<div class="modal fade" id="modelUpdatePriceOrder" tabindex="-1" role="dialog"
 										aria-hidden="true">
@@ -215,7 +220,8 @@
 													</button>
 												</div>
 												<div class="modal-body">
-													<form th:action="@{/admin/orderdetail/updatePriceForOrder}" method="post" th:object="${orders}">
+													<form th:action="@{/admin/orderdetail/updatePriceForOrder}"
+														method="post" th:object="${orders}">
 														<div class="form-group">
 															<label>Mã đơn hàng</label>
 															<input type="text" name="orderId" th:value="${orderId}"
@@ -223,14 +229,13 @@
 														</div>
 														<div class="form-group">
 															<label>Tổng tiền</label>
-															<input type="text" name="amount"
-																th:value="${totalPrice}"
+															<input type="text" name="amount" th:value="${totalPrice}"
 																class="form-control" required readonly>
 														</div>
 														<div class="form-group">
 															<input type="submit"
-															class="btn btn-primary btn-round ml-auto"
-															value="Cập nhật đơn giá">
+																class="btn btn-primary btn-round ml-auto"
+																value="Cập nhật đơn giá">
 														</div>
 													</form>
 												</div>
@@ -279,7 +284,7 @@
 																	</option>
 																</select>
 															</div>
-														
+
 															<div class="form-group">
 																<label>Đơn giá</label>
 																<input th:field="*{price}" type="text"
@@ -287,8 +292,8 @@
 															</div>
 															<div class="form-group">
 																<label>Màu</label>
-																<input type="text"
-																	class="form-control" id="colorInput" readonly>
+																<input type="text" class="form-control" id="colorInput"
+																	readonly>
 															</div>
 															<div class="form-group">
 																<label>Ảnh</label>
@@ -340,16 +345,17 @@
 					</div>
 				</div>
 			</div>
-		<footer class="footer">
-			<div class="container-fluid">
-				
-				<div class="copyright ml-auto">
-				2023, made with <i class="fa fa-heart heart text-danger"></i> by <a href="javascript:void(0);">ADO-SHOP</a>
-				</div>				
-			</div>
-		</footer>
-	</div>
-	
+			<footer class="footer">
+				<div class="container-fluid">
+
+					<div class="copyright ml-auto">
+						2023, made with <i class="fa fa-heart heart text-danger"></i> by <a
+							href="javascript:void(0);">ADO-SHOP</a>
+					</div>
+				</div>
+			</footer>
+		</div>
+
 		<!-- End Custom template -->
 	</div>
 	<!--   Core JS Files   -->
@@ -359,7 +365,7 @@
 	<!-- jQuery UI -->
 	<script src="/assets/js/plugin/jquery-ui-1.12.1.custom/jquery-ui.min.js"></script>
 	<script src="/assets/js/plugin/jquery-ui-touch-punch/jquery.ui.touch-punch.min.js"></script>
-	
+
 	<!-- jQuery Scrollbar -->
 	<script src="/assets/js/plugin/jquery-scrollbar/jquery.scrollbar.min.js"></script>
 	<!-- Datatables -->
@@ -379,7 +385,7 @@
 						$("#colorInput").val(data.description);
 						var imageName = data.productImage;
 						var urlImgFull = urlImg + imageName;
-						$("#imageElement").attr("src",urlImgFull);
+						$("#imageElement").attr("src", urlImgFull);
 					} else {
 						alert("Sản phẩm không tồn tại hoặc có lỗi.");
 					}
@@ -387,34 +393,34 @@
 			});
 		});
 	</script>
-	<script >
-		$(document).ready(function() {
+	<script>
+		$(document).ready(function () {
 			$('#basic-datatables').DataTable({
 			});
 
-			$('#multi-filter-select').DataTable( {
+			$('#multi-filter-select').DataTable({
 				"pageLength": 5,
 				initComplete: function () {
-					this.api().columns().every( function () {
+					this.api().columns().every(function () {
 						var column = this;
 						var select = $('<select class="form-control"><option value=""></option></select>')
-						.appendTo( $(column.footer()).empty() )
-						.on( 'change', function () {
-							var val = $.fn.dataTable.util.escapeRegex(
-								$(this).val()
+							.appendTo($(column.footer()).empty())
+							.on('change', function () {
+								var val = $.fn.dataTable.util.escapeRegex(
+									$(this).val()
 								);
 
-							column
-							.search( val ? '^'+val+'$' : '', true, false )
-							.draw();
-						} );
+								column
+									.search(val ? '^' + val + '$' : '', true, false)
+									.draw();
+							});
 
-						column.data().unique().sort().each( function ( d, j ) {
-							select.append( '<option value="'+d+'">'+d+'</option>' )
-						} );
-					} );
+						column.data().unique().sort().each(function (d, j) {
+							select.append('<option value="' + d + '">' + d + '</option>')
+						});
+					});
 				}
-			});	
+			});
 
 			// Add Row
 			$('#add-row').DataTable({
@@ -433,28 +439,28 @@
 				$('#addRowModal').modal('hide');
 
 			}); */
-			
-			 $('#editRowButton').click(function(event) {
+
+			$('#editRowButton').click(function (event) {
 				/* $('#edit-row').dataTable().fnAddData([
 					$("#categoryId").val(category.categoryId),
 					$("#name").val(category.name),
 					action
 					]);
 				$('#editRowModal').modal('hide'); */
-				
+
 				event.preventDefault();
-				
-				var href= $(this).attr('href');
-				
-				$.get(href, function(category){
+
+				var href = $(this).attr('href');
+
+				$.get(href, function (category) {
 					$('#categoryId').val(category.categoryId);
 					$('#name').val(category.name);
 				})
-				
-				$('#editRowModal').modal();	
 
-			}); 
-			
+				$('#editRowModal').modal();
+
+			});
+
 			/* $('.table .btn').on('click', function(event){
 				
 				event.preventDefault();
@@ -468,10 +474,11 @@
 				
 				$('#editRowModal').modal();
 			}); */
-			
+
 		});
-		
-		
+
+
 	</script>
 </body>
+
 </html>
