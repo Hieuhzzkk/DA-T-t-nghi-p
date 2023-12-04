@@ -36,7 +36,7 @@ public class Order implements Serializable {
 	private Double amount;
 	private String address;
 	private String phone;
-	
+	private String loaiShip;
 	
 	private String lyDo;
 	private int status;
@@ -47,6 +47,15 @@ public class Order implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "userId")
 	private User user;
+	
+	
+	public String getLoaiShip() {
+		return loaiShip;
+	}
+
+	public void setLoaiShip(String loaiShip) {
+		this.loaiShip = loaiShip;
+	}
 
 	public Long getOrderId() {
 		return orderId;

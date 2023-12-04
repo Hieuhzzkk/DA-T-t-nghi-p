@@ -18,6 +18,7 @@ import org.thymeleaf.context.Context;
 
 import vn.fs.entities.CartItem;
 import vn.fs.entities.Order;
+import vn.fs.entities.OrderDetail;
 import vn.fs.entities.User;
 import vn.fs.repository.FavoriteRepository;
 import vn.fs.repository.ProductRepository;
@@ -86,6 +87,29 @@ public class CommomDataService {
 		// Create the HTML body
 		String htmlContent = "";
 		htmlContent = templateEngine.process("mail/email_en.html", ctx);
+		mimeMessageHelper.setText(htmlContent, true);
+
+		// Send Message!
+		emailSender.send(mimeMessage);
+
+	}
+	public void sendSimpleEmailPhiShip(String email, String subject, String contentEmail, 
+			Collection<OrderDetail> orderDetails,double totalPrice) throws MessagingException {
+		Locale locale = LocaleContextHolder.getLocale();
+
+		// Prepare the evaluation context
+		Context ctx = new Context(locale);
+		ctx.setVariable("orderDetails", orderDetails);
+		ctx.setVariable("totalPrice", totalPrice);
+		
+		// Prepare message using a Spring helper
+		MimeMessage mimeMessage = emailSender.createMimeMessage();
+		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
+		mimeMessageHelper.setSubject(subject);
+		mimeMessageHelper.setTo(email);
+		// Create the HTML body
+		String htmlContent = "";
+		htmlContent = templateEngine.process("mail/phiship.html", ctx);
 		mimeMessageHelper.setText(htmlContent, true);
 
 		// Send Message!

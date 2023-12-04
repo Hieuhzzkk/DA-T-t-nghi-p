@@ -71,7 +71,7 @@
 							<div class="card-header">
 								<div class="d-flex align-items-center">
 									<h4 class="card-title">Chi tiết đơn hàng</h4>
-									<button style="margin-left: 73%;" th:if="${status le 3}"
+									<button style="margin-left: 73%;" th:if="${status le 2}"
 										class="btn btn-primary btn-round hidden" data-toggle="modal"
 										data-target="#addRowModalSaveDetail">
 										<i class="fa fa-plus"></i> Thêm sản
@@ -83,57 +83,7 @@
 
 								<div class="alert alert-success row col-12" th:if="${message}" th:text="${message}">
 								</div>
-								<form th:action="@{/updateUserOrder}" method="post" th:object="${user}"
-									class="user-form">
-									<div class="row">
-										<div class="col-lg-2">
-											<div class="profile-image">
-												<a href="javascript:void(0);"> <img
-														th:src="@{'/loadImage?imageName='+${user.avatar}}" alt="user" />
-												</a>
-											</div>
-										</div>
-
-										<div class="col-md-6 col-lg-4">
-											<div class="form-group">
-												<label class="form-label">Họ và tên</label>
-												<input class="form-control" type="text" th:field="*{name}" id="name"
-													name="name" />
-											</div>
-											<input type="" name="userId" th:field="*{userId}">
-										</div>
-
-										<div class="col-md-6 col-lg-6">
-											<div class="form-group">
-												<label class="form-label">Địa chỉ Email</label><input
-													class="form-control" type="email" th:field="*{email}" id="email"
-													name="email" disabled />
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-2"></div>
-										<div class="col-md-6 col-lg-4">
-											<div class="form-group">
-												<label class="form-label">Số điện thoại</label> <input
-													class="form-control" type="text" th:field="*{sdt}" id="sdt"
-													name="sdt" />
-											</div>
-										</div>
-										<div class="col-md-6 col-lg-6">
-											<div class="form-group">
-												<label class="form-label">Địa chỉ</label><input class="form-control"
-													type="text" th:field="*{address}" id="address" name="address" />
-											</div>
-										</div>
-									</div>
-									<div class="row">
-										<div class="col-lg-10"></div>
-										<div class="col-lg-2">
-											<button type="submit" class="btn btn-inline">Cập nhật</button>
-										</div>
-									</div>
-								</form>
+								
 								<div class="table-responsive">
 									<table id="add-row" class="display table table-striped table-hover">
 										<thead>
@@ -165,13 +115,13 @@
 													item.product.discount/100)) * item.quantity, 1, 'DEFAULT', 0,
 													'DEFAULT')}+ ' đ']]</td>
 												<td>
-													<a th:if="${status le 3}" th:href="@{/admin/orderdetail/detail/{orderDetailId}(orderDetailId = ${item.orderDetailId})}"
+													<a th:if="${status le 2}" th:href="@{/admin/orderdetail/detail/{orderDetailId}(orderDetailId = ${item.orderDetailId})}"
 														type="button" data-toggle="tooltip" title=""
 														class="btn btn-link btn-primary btn-lg hidden"
 														data-original-title="Chỉnh sửa">
 														<i class="fa fa-edit"></i>
 													</a>
-													<a th:if="${status le 3}" th:href="@{/admin/orderdetail/delete/{orderDetailId}(orderDetailId = ${item.orderDetailId})}"
+													<a th:if="${status le 2}" th:href="@{/admin/orderdetail/delete/{orderDetailId}(orderDetailId = ${item.orderDetailId})}"
 														type="button" data-toggle="tooltip" title=""
 														class="btn btn-link btn-primary btn-lg hidden"
 														data-original-title="Xóa sản phẩm">
@@ -181,12 +131,19 @@
 
 											</tr>
 											<tr>
+												<td colspan="5" style="font-weight: bold; font-size:15px">Phí Ship: </td>
+												<td>
+													<input type="text" class="form-control" placeholder="Phí ship">
+												</td>
+											</tr>
+											<tr>
+												
 												<td colspan="5" style="font-weight: bold; font-size:15px">Tổng tiền đơn
 													hàng: </td>
 												<td
 													th:text="${#numbers.formatDecimal(totalPrice, 1, 'DEFAULT', 0, 'DEFAULT')} + ' đ'">
 												</td>
-												<td> <button style="margin-left: 3%;"
+												<td> <button th:if="${status le 2}" style="margin-left: 3%;"
 														class="btn btn-primary btn-round  ml-auto" data-toggle="modal"
 														data-target="#modelUpdatePriceOrder"> <i class="fa fa-plus"></i>
 														Cập nhật</button>
@@ -237,6 +194,7 @@
 																class="btn btn-primary btn-round ml-auto"
 																value="Cập nhật đơn giá">
 														</div>
+														<a class="btn btn-primary" href="">Gửi mail</a>
 													</form>
 												</div>
 											</div>

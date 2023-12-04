@@ -37,6 +37,7 @@ public class User implements Serializable{
 	private String sdt;
 	private String address;
 	private Boolean status;
+	
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
 	@JoinTable(name = "users_roles",
@@ -65,6 +66,12 @@ public class User implements Serializable{
 		this.status = status;
 		this.roles = roles;
 	}
+
+	
+	
+
+
+	
 
 
 	public Long getUserId() {

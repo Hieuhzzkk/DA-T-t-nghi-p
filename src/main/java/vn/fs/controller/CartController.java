@@ -307,6 +307,7 @@ public class CartController extends CommomController {
 		order.getOrderId();
 		order.setAmount(totalPrice);
 		order.setUser(user);
+		order.getLoaiShip();
 		orderRepository.save(order);
 
 		for (CartItem cartItem : cartItems) {
@@ -356,6 +357,7 @@ public class CartController extends CommomController {
 				orderFinal.setStatus(6);
 				orderFinal.getOrderId();
 				orderFinal.setUser(user);
+				orderFinal.getLoaiShip();
 				orderFinal.setAmount(totalPrice);
 				orderRepository.save(orderFinal);
 

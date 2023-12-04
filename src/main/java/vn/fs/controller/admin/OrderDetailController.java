@@ -1,7 +1,13 @@
 package vn.fs.controller.admin;
 import java.security.Principal;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import vn.fs.commom.CommomDataService;
+import vn.fs.entities.CartItem;
 import vn.fs.entities.Order;
 import vn.fs.entities.OrderDetail;
 import vn.fs.entities.Product;
@@ -25,12 +33,18 @@ import vn.fs.repository.ProductRepository;
 import vn.fs.repository.UserRepository;
 import vn.fs.service.OrderDetailService;
 import vn.fs.service.SendMailService;
+import vn.fs.service.ShoppingCartService;
 @Controller
 @RequestMapping("/admin")
 public class OrderDetailController {
 	@Autowired
 	OrderDetailService orderDetailService;
-
+	@Autowired
+	CommomDataService commomDataService;
+	@Autowired
+	HttpSession session;
+	@Autowired
+	ShoppingCartService shoppingCartService;
 	@Autowired
 	OrderRepository orderRepository;
 
@@ -45,7 +59,7 @@ public class OrderDetailController {
 
 	@Autowired
 	UserRepository userRepository;
-	
+	public Order orderFinal = new Order();
 	@ModelAttribute(value = "user")
 	public User user(Model model, Principal principal, User user) {
 
@@ -81,14 +95,17 @@ public class OrderDetailController {
 		
 	}
 	@PostMapping("/orderdetail/updatePriceForOrder")
-	public String updatePriceForOrder(@ModelAttribute("orders") Order orders,ModelMap model,RedirectAttributes attributes) {
+	public String updatePriceForOrder(@ModelAttribute("orders") Order orders,ModelMap model,RedirectAttributes attributes, User user,HttpServletRequest request) {
 		try {
 	        // Kiểm tra orderId trước khi cập nhật
 	        Long orderId = orders.getOrderId();
 	        Order existingOrder = orderRepository.findById(orderId).orElse(null);
 	        existingOrder.setAmount(orders.getAmount());
+	        
+	        
+	       
+	        //commomDataService.sendSimpleEmailPhiShip(user.getEmail(), "Ado-Shop Xác Nhận Đơn hàng", "aaaa", existingOrder);
 	        orderRepository.save(existingOrder);
-
 	        attributes.addFlashAttribute("successadd", "Thành công");
 	        System.out.println("OrderId: " + orderId);
 	    } catch (Exception e) {

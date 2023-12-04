@@ -88,8 +88,7 @@ public class OrderController {
 	@GetMapping("/order/detail/{order_id}")
 	public ModelAndView detail(ModelMap model, Model modell, 
 			Principal principal, User user, 
-			@PathVariable("order_id") Long id
-			) {
+			@PathVariable("order_id") Long id) {
 
 		List<OrderDetail> listO = orderDetailRepository.findByOrderId(id);
 //		User userrUser =userRepository.findById(iduser).orElse(null);
