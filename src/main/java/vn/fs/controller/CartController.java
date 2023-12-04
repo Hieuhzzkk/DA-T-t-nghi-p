@@ -231,14 +231,12 @@ public class CartController extends CommomController {
 
 		session = request.getSession();
 		Date date = new Date();
-		
 		order.setOrderDate(date);
 		order.setStatus(0);
 		order.getOrderId();
 		order.setAmount(totalPrice);
 		order.setUser(user);
 		orderRepository.save(order);
-
 		for (CartItem cartItem : cartItems) {
 			OrderDetail orderDetail = new OrderDetail();
 			orderDetail.setQuantity(cartItem.getQuantity());
@@ -248,7 +246,6 @@ public class CartController extends CommomController {
 			orderDetail.setPrice(unitPrice);
 			orderDetailRepository.save(orderDetail);
 		}
-
 		// sendMail
 		commomDataService.sendSimpleEmail(user.getEmail(), "Otis-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
 				totalPrice, order);
@@ -330,7 +327,6 @@ public class CartController extends CommomController {
 		commomDataService.commonData(model, user);
 
 		return "web/checkout_paypal_success";
-
 	}
 	
 }

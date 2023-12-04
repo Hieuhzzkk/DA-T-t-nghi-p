@@ -290,3 +290,33 @@ UNLOCK TABLES;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
 -- Dump completed on 2022-11-08 21:54:21
+
+
+DROP TABLE IF EXISTS `invoice`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+
+CREATE TABLE `invoice` (
+  `invoice_id` bigint NOT NULL AUTO_INCREMENT,
+  `username` varchar(1000) DEFAULT NULL,
+  `phonenumber` varchar(50) DEFAULT NULL,
+  `invoice_date` datetime DEFAULT NULL,
+  `amount` double NOT NULL,
+  `status` int NOT NULL,
+  PRIMARY KEY (`invoice_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=55 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+DROP TABLE IF EXISTS `invoice_detail`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+
+CREATE TABLE `invoice_detail` (
+  `invoice_detail_id` bigint NOT NULL AUTO_INCREMENT,
+  `invoice_id` bigint NOT NULL,
+  `product_id` bigint NOT NULL,
+  `quantity` int NOT NULL,
+  `price` double NOT NULL,
+  PRIMARY KEY (`invoice_detail_id`),
+  CONSTRAINT `FK_invoice_detail_invoice` FOREIGN KEY (`invoice_id`) REFERENCES `invoice` (`invoice_id`),
+  CONSTRAINT `FK_invoice_detail_product` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;

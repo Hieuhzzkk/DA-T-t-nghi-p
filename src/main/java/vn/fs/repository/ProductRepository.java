@@ -58,4 +58,16 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	@Query(value = "select * from products o where product_id in :ids", nativeQuery = true)
 	List<Product> findByInventoryIds(@Param("ids") List<Integer> listProductId);
 	
+	// Product by Id or Name
+	@Query(value = "SELECT * FROM products p WHERE LOWER(p.product_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR LOWER(p.product_id) LIKE LOWER(CONCAT('%', :searchTerm, '%'))", nativeQuery = true)
+	List<Product> findbyProWithIdOrName(@Param("searchTerm") String searchTerm);
+
+	@Query(value = "SELECT *\r\n"
+			+ "FROM products p\r\n"
+			+ "INNER JOIN order_details od ON p.product_id = od.product_id \r\n"
+			+ "INNER JOIN orders o ON od.order_id = o.order_id\r\n"
+			+ "INNER JOIN user u ON o.user_id = u.user_id\r\n"
+			+ "WHERE o.order_id=?;",nativeQuery = true)
+	public List<Product> listProductbyOrderId(Long orderId);
+	
 }

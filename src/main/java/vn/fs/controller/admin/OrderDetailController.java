@@ -4,6 +4,8 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -17,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import vn.fs.commom.CommomDataService;
 import vn.fs.entities.Order;
 import vn.fs.entities.OrderDetail;
 import vn.fs.entities.Product;
@@ -49,6 +52,8 @@ public class OrderDetailController {
 
 	@Autowired
 	UserRepository userRepository;
+	@Autowired
+	CommomDataService commomDataService;
 
 	@ModelAttribute(value = "user")
 	public User user(Model model, Principal principal, User user) {
@@ -87,19 +92,27 @@ public class OrderDetailController {
 	}
 
 	@PostMapping("/orderdetail/updatePriceForOrder")
+	@Transactional
 	public String updatePriceForOrder(@ModelAttribute("orders") Order orders, ModelMap model,
-			RedirectAttributes attributes) {
+			RedirectAttributes attributes,User user) {
 		try {
+			
 			// Kiểm tra orderId trước khi cập nhật
 			Long orderId = orders.getOrderId();
+			List<OrderDetail> listO = orderDetailRepository.findByOrderId(orderId);
 			Order existingOrder = orderRepository.findById(orderId).orElse(null);
-			existingOrder.setAmount(orders.getAmount());
+			double totalPrice = listO.stream()
+	                .mapToDouble(item -> (item.getPrice() - (item.getPrice() * item.getProduct().getDiscount() / 100)) * item.getQuantity())
+	                .sum();
+			Double totalNew = totalPrice+orders.getPriceShip();
+			existingOrder.setPriceShip(orders.getPriceShip());
+			existingOrder.setAmount(totalNew);
 			orderRepository.save(existingOrder);
-
+			commomDataService.senmailUpdate(existingOrder.getUser().getEmail(), "Xac nhan don hang", "aaa", totalNew, orderId);
 			attributes.addFlashAttribute("successadd", "Thành công");
-			System.out.println("OrderId: " + orderId);
 		} catch (Exception e) {
 			attributes.addFlashAttribute("erroradd", "Thất bại");
+			e.printStackTrace();
 			return "/admin/orders";
 		}
 		return "redirect:/admin/orders";

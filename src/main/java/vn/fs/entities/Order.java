@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -41,6 +42,7 @@ public class Order implements Serializable {
 	
 	private String lyDo;
 	private int status;
+	private double priceShip;
 	
 	@OneToMany(mappedBy = "order")
 	private List<OrderDetail> orderDetails;
@@ -67,6 +69,14 @@ public class Order implements Serializable {
 
 	public Double getAmount() {
 		return amount;
+	}
+
+	public double getPriceShip() {
+		return priceShip;
+	}
+
+	public void setPriceShip(double priceShip) {
+		this.priceShip = priceShip;
 	}
 
 	public void setAmount(Double amount) {

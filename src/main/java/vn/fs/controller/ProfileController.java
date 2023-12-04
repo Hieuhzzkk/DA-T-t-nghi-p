@@ -60,24 +60,18 @@ public class ProfileController extends CommomController{
 			user = userRepository.findByEmail(principal.getName());
 			model.addAttribute("user", user);
 		}
-		
 		int currentPage = page.orElse(1);
 		int pageSize = size.orElse(6);
-
 		Page<Order> orderPage = findPaginated(PageRequest.of(currentPage - 1, pageSize), user);
-
 		int totalPages = orderPage.getTotalPages();
 		if (totalPages > 0) {
 			List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
 			model.addAttribute("pageNumbers", pageNumbers);
 		}
-
 		commomDataService.commonData(model, user);
 		model.addAttribute("orderByUser", orderPage);
-
 		return "web/profile";
 	}
-	
 	@PostMapping(value = "/updateUser")
 	public String updateUser(@Validated @ModelAttribute("user") User user, ModelMap model,
 			BindingResult bindingResult) {
@@ -112,7 +106,6 @@ public class ProfileController extends CommomController{
 
 		return orderPages;
 	}
-	
 	@GetMapping("/order/detail/{order_id}")
 	public ModelAndView detail(Model model, Principal principal, User user, @PathVariable("order_id") Long id) {
 

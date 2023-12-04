@@ -112,7 +112,8 @@
 										<div class="col-md-6 col-lg-4">
 											<div class="form-group">
 												<label class="form-label">Họ và tên</label> <input class="form-control"
-													type="text" th:value="${user.name}" id="name" name="name" onblur="validateName()" />
+													type="text" th:value="${user.name}" id="name" name="name"
+													onblur="validateName()" />
 												<span id="badgeName" class="badge text-white bg-danger"
 													style="padding: 8px 10px 5px 10px; margin: -15px 0 0 0; display: none;">Vui
 													lòng nhập họ và tên</span>
@@ -124,6 +125,18 @@
 												<label class="form-label">Địa chỉ Email</label><input
 													class="form-control" type="email" th:value="${user.email}"
 													id="email" name="email" disabled />
+											</div>
+										</div>
+										<div class="col-md-12 col-lg-12">
+											<div class="form-group">
+													<select class="form-control col-md-6 col-lg-6" name="" id="province">
+													</select>
+													<select class="form-control col-md-6 col-lg-6" name="" id="district">
+														<option value="">chọn quận</option>
+													</select>
+													<select class="form-control col-md-6 col-lg-6" name="" id="ward">
+														<option value="">chọn phường</option>
+													</select>
 											</div>
 										</div>
 									</div>
@@ -143,13 +156,14 @@
 										<div class="col-md-6 col-lg-6">
 											<div class="form-group">
 												<label class="form-label">Địa chỉ</label><input class="form-control"
-													type="text" th:value="${user.address}" id="address"
-													name="address" onblur="validateAddress()"/>
+													type="text" th:value="${user.address}" id="resultInput" name="address"
+													onblur="validateAddress()"/>
 												<span id="badgeAddr" class="badge text-white bg-danger"
 													style="padding: 8px 10px 5px 10px; margin: -15px 0 0 0; display: none;">Vui
 													lòng nhập địa chỉ</span>
 											</div>
 										</div>
+
 									</div>
 									<div class="row">
 										<div class="col-lg-10"></div>
@@ -403,6 +417,7 @@
 		<script src="js/venobox.js"></script>
 		<script src="js/slick.js"></script>
 		<script src="js/main.js"></script>
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 
 		<script>
 			function validatePhoneNumber() {
@@ -453,7 +468,59 @@
 
 
 		</script>
+		<script>
+			const host = "https://provinces.open-api.vn/api/";
+			var callAPI = (api) => {
+				return axios.get(api)
+					.then((response) => {
+						renderData(response.data, "province");
+					});
+			}
+			callAPI('https://provinces.open-api.vn/api/?depth=1');
+			var callApiDistrict = (api) => {
+				return axios.get(api)
+					.then((response) => {
+						renderData(response.data.districts, "district");
+					});
+			}
+			var callApiWard = (api) => {
+				return axios.get(api)
+					.then((response) => {
+						renderData(response.data.wards, "ward");
+					});
+			}
 
+			var renderData = (array, select) => {
+				let row = ' <option disable value="">chọn</option>';
+				array.forEach(element => {
+					row += `<option value="${element.code}">${element.name}</option>`
+				});
+				document.querySelector("#" + select).innerHTML = row
+			}
+
+			$("#province").change(() => {
+				callApiDistrict(host + "p/" + $("#province").val() + "?depth=2");
+				printResult();
+			});
+			$("#district").change(() => {
+				callApiWard(host + "d/" + $("#district").val() + "?depth=2");
+				printResult();
+			});
+			$("#ward").change(() => {
+				printResult();
+			})
+
+			var printResult = () => {
+				if ($("#district").val() != "" && $("#province").val() != "" &&
+					$("#ward").val() != "") {
+					let result = $("#province option:selected").text() +
+						" | " + $("#district option:selected").text() + " | " +
+						$("#ward option:selected").text();
+						$("#resultInput").val(result);
+				}
+
+			}
+		</script>
 	</body>
 
 	</html>
