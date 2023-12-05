@@ -50,7 +50,9 @@ public class ProductServiceImpl implements ProductService{
 	public List<Product> getAllCate(Long id){
 		return productRepository.listProductByCategory(id);
 	}
-	
+	public List<Product> getAllHang(Long id){
+		return productRepository.listProductByHang(id);
+	}
 	public List<Product> getAllSize(Long id){
 		return productRepository.listProductBySize(id);
 	}

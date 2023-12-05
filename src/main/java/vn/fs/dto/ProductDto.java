@@ -42,6 +42,32 @@ public class ProductDto {
 	public ProductDto() {
 		super();
 	}
+	
+	public ProductDto(Long productId, Long categoryId, Long sizeId, Long idhang, String productName, String chatLuong,
+			String ghiChu, int quantity, int maSP, double price, int discount, String productImage, String description,
+			Date enteredDate, Boolean status, boolean favorite, Category category, Size size, Hang hang) {
+		super();
+		this.productId = productId;
+		this.categoryId = categoryId;
+		this.sizeId = sizeId;
+		this.idhang = idhang;
+		this.productName = productName;
+		this.chatLuong = chatLuong;
+		this.ghiChu = ghiChu;
+		this.quantity = quantity;
+		this.maSP = maSP;
+		this.price = price;
+		this.discount = discount;
+		this.productImage = productImage;
+		this.description = description;
+		this.enteredDate = enteredDate;
+		this.status = status;
+		this.favorite = favorite;
+		this.category = category;
+		this.size = size;
+		this.hang = hang;
+	}
+
 	public ProductDto(Long productId, Long categoryId, String productName, int quantity, double price, int discount,
 			String productImage, String description, Date enteredDate, Boolean status, boolean favorite,
 			Category category) {
@@ -104,51 +130,17 @@ public class ProductDto {
 	}
 	
 	
-	public ProductDto(Long productId, Long categoryId, Long sizeId, Long idhang, String productName, String chatLuong, String ghiChu,
-			int quantity, int maSP, double price, int discount, String productImage, String description,
-			Date enteredDate, Boolean status, boolean favorite, Category category, Size size, Hang hang) {
-		super();
-		this.productId = productId;
-		this.categoryId = categoryId;
-		this.sizeId = sizeId;
-		this.idhang = idhang;
-		this.productName = productName;
-		this.chatLuong = chatLuong;
-		this.ghiChu = ghiChu;
-		this.quantity = quantity;
-		this.maSP = maSP;
-		this.price = price;
-		this.discount = discount;
-		this.productImage = productImage;
-		this.description = description;
-		this.enteredDate = enteredDate;
-		this.status = status;
-		this.favorite = favorite;
-		this.category = category;
-		this.size = size;
-	}
 	
-	public ProductDto(Long productId, Long categoryId, Long sizeId, String productName, String chatLuong, String ghiChu,
-			int quantity, int maSP, double price, int discount, String productImage, String description,
-			Date enteredDate, Boolean status, boolean favorite, Category category, Size size, String hang) {
-		super();
-		this.productId = productId;
-		this.categoryId = categoryId;
-		this.sizeId = sizeId;
-		this.productName = productName;
-		this.chatLuong = chatLuong;
-		this.ghiChu = ghiChu;
-		this.quantity = quantity;
-		this.maSP = maSP;
-		this.price = price;
-		this.discount = discount;
-		this.productImage = productImage;
-		this.description = description;
-		this.enteredDate = enteredDate;
-		this.status = status;
-		this.favorite = favorite;
-		this.category = category;
-		this.size = size;
+	public Long getIdhang() {
+		return idhang;
+	}
+	public void setIdhang(Long idhang) {
+		this.idhang = idhang;
+	}
+	public Hang getHang() {
+		return hang;
+	}
+	public void setHang(Hang hang) {
 		this.hang = hang;
 	}
 	public String getChatLuong() {
@@ -253,12 +245,7 @@ public class ProductDto {
 	public void setMaSP(int maSP) {
 		this.maSP = maSP;
 	}
-	public String getHang() {
-		return hang;
-	}
-	public void setHang(String hang) {
-		this.hang = hang;
-	}
+
 	
 	
 }

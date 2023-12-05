@@ -18,7 +18,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	// List product by category
 	@Query(value = "SELECT * FROM products WHERE category_id = ?", nativeQuery = true)
 	public List<Product> listProductByCategory(Long categoryId);
-	
+
+	@Query(value = "SELECT * FROM products WHERE idhang = ?", nativeQuery = true)
+	public List<Product> listProductByHang(Long idhang);
 //	@Query(value = "select * from products where hang = ? and category_id = ? and price >= 250000 and price <= 600000;", nativeQuery = true)
 //	public List<Product> listProductBygia(String hang, Long categoryId, Double price);
 	

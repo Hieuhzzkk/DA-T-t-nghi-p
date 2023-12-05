@@ -114,20 +114,25 @@
 																</select>
 															</div>
 														</div>
+														<div class="col-md-6 pr-0">
+															<div class="form-group form-group-default">
+																<label>Hãng</label>
+																<select class="form-control"
+																		name="hang" th:field="*{hang.idhang}" id="idhang">
+																	<option th:each="item : ${hangList}"
+																			th:value="${item.idhang}" th:text="${item.tenhang}"
+																			th:selected="${item.idhang == product.hang.idhang}">
+																		Tên hãng
+																	</option>
+																</select>
+															</div>
+														</div>
 														<div class="col-sm-12">
 															<div class="form-group form-group-default">
 																<label>Chất Liệu</label>
 																<input th:field="*{chatLuong}" id="chatLuong" onblur="formatTrim();" oninput="checktext();" type="text" class="form-control" placeholder="Chất Liệu...">
 																<span id="tb" style="display: none;color: red;">Không được để
 																	trống tên sản phẩm!</span>
-															</div>
-														</div>
-														<div class="col-sm-12">
-															<div class="form-group form-group-default">
-																<label>Hãng</label>
-																<input th:field="*{hang}" id="hang" onblur="formatTrim();" oninput="checktext();" type="text" class="form-control" placeholder="Hãng...">
-																<span id="tb" style="display: none;color: red;">Không được để
-																	trống hãng sản phẩm!</span>
 															</div>
 														</div>
 														
@@ -251,7 +256,8 @@
 												<td>[[${item.size.nameSize}]]</td>
 												<td>[[${item.description}]]</td>
 												<td>[[${item.chatLuong}]]</td>
-												<td>[[${item.hang}]]</td>
+												<td>[[${item.hang.tenhang}]]</td>
+
 												<td th:text="${#numbers.formatDecimal(item.price, 1, 'DEFAULT', 0, 'DEFAULT')}+' đ'"></td>
 												<td>[[${#numbers.formatDecimal(item?.discount, 1, 'DEFAULT', 0, 'DEFAULT')}+' %']]</td>
 												<td>[[${item.quantity}]]</td>
@@ -263,7 +269,7 @@
 															type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Chỉnh sửa">
 															<i class="fa fa-edit"></i>
 														</a>
-														<button th:data-id="${item.productId}" th:data-name="${item.productName}"
+														<button th:data-id="${item.productId}" th:daThta-name="${item.productName}"
 																onclick="showConfigModalDialog(this.getAttribute('data-id'), this.getAttribute('data-name'))"
 																type="button" data-toggle="tooltip" title="" class="btn btn-link btn-danger" data-original-title="Xóa">
 															<i class="fa fa-times"></i>

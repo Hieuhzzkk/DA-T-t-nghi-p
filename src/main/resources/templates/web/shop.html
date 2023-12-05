@@ -30,7 +30,7 @@
 	<script>
 		$(function () {
 			$("#slide-ranger").slider({
-				ranger: true,
+				ranger: true,	
 				min: 0,
 				max: 10000000,
 				values: [500000, 1000000],
@@ -72,29 +72,28 @@
 			<div class="row content-reverse">
 				<div class="col-lg-3">
 					<div class="shop-widget">
-						<h6 class="shop-widget-title">Theo hãng</h6>
-						<ul class="shop-widget-list shop-widget-scroll">
-							<li th:each="item : ${coutnProductByCategory}">
-								<div class="shop-widget-content">
-									<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
-
-										<div class="form-check">
-											<input class="form-check-input" type="checkbox" value="" id="cate1">
-											<label class="form-check-label" for="cate1"
-												style="color: rgb(138, 138, 138)">
-												[[${item[1]}]]
-											</label>
-										</div>
-
-									</a>
-								</div>
-								<span class="shop-widget-number">([[${item[2]}]])</span>
-							</li>
-						</ul>
 
 					</div>
 											<form action="/kkk" method="get">
+												<h6 class="shop-widget-title">Theo hãng</h6>
+												<ul class="shop-widget-list shop-widget-scroll">
+													<li th:each="item : ${coutnProductByCategory}">
+														<div class="shop-widget-content">
+															<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
 
+																<div class="form-check">
+																	<input class="form-check-input" type="radio" value="" id="cate1">
+																	<label class="form-check-label" for="cate1"
+																		   style="color: rgb(138, 138, 138)">
+																		[[${item[1]}]]
+																	</label>
+																</div>
+
+															</a>
+														</div>
+														<span class="shop-widget-number">([[${item[2]}]])</span>
+													</li>
+												</ul>
 					<div class="shop-widget">
 						<h6 class="shop-widget-title">Theo loại</h6>
 

@@ -38,7 +38,7 @@ public class Product implements Serializable {
 	private String ghiChu;
 	private double price;
 	private int discount;
-	private String hang;
+
 	private String productImage;
 	private String description;
 	@Temporal(TemporalType.DATE)
@@ -52,7 +52,9 @@ public class Product implements Serializable {
 	@JoinColumn(name = "categoryId")
 	private Category category;
 	
-	
+	@ManyToOne
+	@JoinColumn(name = "idhang")
+	private Hang hang;
 	
 
 	public String getChatLuong() {
@@ -175,14 +177,14 @@ public class Product implements Serializable {
 		this.maSP = maSP;
 	}
 
-	public String getHang() {
+	public Hang getHang() {
 		return hang;
 	}
 
-	public void setHang(String hang) {
+	public void setHang(Hang hang) {
 		this.hang = hang;
 	}
+
 	
-	
-	
+
 }

@@ -34,10 +34,12 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import vn.fs.dto.ProductDto;
 import vn.fs.entities.Category;
+import vn.fs.entities.Hang;
 import vn.fs.entities.Product;
 import vn.fs.entities.Size;
 import vn.fs.entities.User;
 import vn.fs.repository.CategoryRepository;
+import vn.fs.repository.HangRepository;
 import vn.fs.repository.ProductRepository;
 import vn.fs.repository.SizeRepository;
 import vn.fs.repository.UserRepository;
@@ -57,7 +59,10 @@ public class ProductController{
 
 	@Autowired
 	CategoryRepository categoryRepository;
-	
+
+	@Autowired
+	HangRepository hangRepository;
+
 	@Autowired
 	UserRepository userRepository;
 	
@@ -147,6 +152,13 @@ public class ProductController{
 
 		return categoryList;
 	}
+	@ModelAttribute("hangList")
+	public List<Hang> showHang(Model model) {
+		List<Hang> hangList = hangRepository.findAll();
+		model.addAttribute("hangList", hangList);
+
+		return hangList;
+	}
 	@ModelAttribute("sizeList")
 	public List<Size> showSize(Model model) {
 		List<Size> sizeList = sizeRepository.findAll();
@@ -159,6 +171,7 @@ public class ProductController{
 	        model.addAttribute("productdto", new ProductDto());
 	        model.addAttribute("categories", categoryRepository.findAll());
 	        model.addAttribute("size", sizeRepository.findAll());
+		model.addAttribute("hang", hangRepository.findAll());
 	        return "redirect:/admin/products";
 	    }
 	@PostMapping(value = "/saveproduct")
