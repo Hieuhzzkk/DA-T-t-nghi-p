@@ -37,7 +37,7 @@ public class Order implements Serializable {
 	private String address;
 	private String phone;
 	private String loaiShip;
-	
+	private double priceShip;
 	private String lyDo;
 	private int status;
 	
@@ -49,6 +49,14 @@ public class Order implements Serializable {
 	private User user;
 	
 	
+	public double getPriceShip() {
+		return priceShip;
+	}
+
+	public void setPriceShip(double priceShip) {
+		this.priceShip = priceShip;
+	}
+
 	public String getLoaiShip() {
 		return loaiShip;
 	}

@@ -90,5 +90,10 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
     		+ "INNER JOIN user c ON p.user_id = c.user_id\r\n"
     		+ "GROUP BY c.user_id, c.name;", nativeQuery = true)
     public List<Object[]> reportCustommer();
-
+    @Query(value = "SELECT od.*  FROM order_details od\r\n"
+    		+ "INNER JOIN products p ON p.product_id = od.product_id \r\n"
+    		+ "INNER JOIN orders o ON od.order_id = o.order_id\r\n"
+    		+ "INNER JOIN user u ON o.user_id = u.user_id\r\n"
+    		+ "WHERE o.order_id = ?;",nativeQuery = true)
+    public List<OrderDetail> findByOrderDetailByOrderId(Long orderId);
 }

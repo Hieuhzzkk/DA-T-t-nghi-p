@@ -21,6 +21,8 @@ import vn.fs.entities.Order;
 import vn.fs.entities.OrderDetail;
 import vn.fs.entities.User;
 import vn.fs.repository.FavoriteRepository;
+import vn.fs.repository.OrderDetailRepository;
+import vn.fs.repository.OrderRepository;
 import vn.fs.repository.ProductRepository;
 import vn.fs.service.ShoppingCartService;
 
@@ -36,7 +38,10 @@ public class CommomDataService {
 	
 	@Autowired
 	ProductRepository productRepository;
-	
+	@Autowired
+	OrderRepository orderRepository;
+	@Autowired
+	OrderDetailRepository orderDetailRepository;
 	@Autowired
 	public JavaMailSender emailSender;
 	
@@ -93,15 +98,24 @@ public class CommomDataService {
 		emailSender.send(mimeMessage);
 
 	}
-	public void sendSimpleEmailPhiShip(String email, String subject, String contentEmail, 
-			Collection<OrderDetail> orderDetails,double totalPrice) throws MessagingException {
+	public void senmailUpdate(String email, String subject, String contentEmail,
+			double totalPrice, Long orderId) throws MessagingException {
 		Locale locale = LocaleContextHolder.getLocale();
-
-		// Prepare the evaluation context
+		Order orderFinal = new Order();
+		orderFinal = orderRepository.findById(orderId).get();
+		List<OrderDetail> orderDetailFinal = orderDetailRepository.findByOrderDetailByOrderId(orderId);
+		double priceShip ;
 		Context ctx = new Context(locale);
-		ctx.setVariable("orderDetails", orderDetails);
+		for(OrderDetail orls : orderDetailFinal) {
+			priceShip = orls.getOrder().getPriceShip();
+			ctx.setVariable("priceShip",priceShip);
+
+			break;
+		}
+		// Prepare the evaluation context
 		ctx.setVariable("totalPrice", totalPrice);
-		
+		ctx.setVariable("orderFinal", orderFinal);
+		ctx.setVariable("orderDetailFinal", orderDetailFinal);
 		// Prepare message using a Spring helper
 		MimeMessage mimeMessage = emailSender.createMimeMessage();
 		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
@@ -110,10 +124,9 @@ public class CommomDataService {
 		// Create the HTML body
 		String htmlContent = "";
 		htmlContent = templateEngine.process("mail/phiship.html", ctx);
+		System.out.println("HTML Content: " + htmlContent);
 		mimeMessageHelper.setText(htmlContent, true);
-
 		// Send Message!
 		emailSender.send(mimeMessage);
-
 	}
 }
