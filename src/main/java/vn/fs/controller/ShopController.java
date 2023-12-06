@@ -25,10 +25,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import vn.fs.commom.CommomDataService;
 import vn.fs.entities.Category;
 import vn.fs.entities.Favorite;
+import vn.fs.entities.Hang;
 import vn.fs.entities.Product;
 import vn.fs.entities.Size;
 import vn.fs.entities.User;
 import vn.fs.repository.FavoriteRepository;
+import vn.fs.repository.HangRepository;
 import vn.fs.repository.ProductRepository;
 import vn.fs.repository.SizeRepository;
 
@@ -45,7 +47,15 @@ public class ShopController extends CommomController {
 	SizeRepository sizeRepository;
 	@Autowired
 	CommomDataService commomDataService;
+	@Autowired
+	HangRepository hangRepository;
+	@ModelAttribute("hangList")
+	public List<Hang> showHang(Model model) {
+		List<Hang> hangList = hangRepository.findAll();
+		model.addAttribute("hangList", hangList);
 
+		return hangList;
+	}
 	@GetMapping(value = "/products")
 	public String shop(Model model, Pageable pageable, @RequestParam("page") Optional<Integer> page,
 			@RequestParam("size") Optional<Integer> size, User user) {
@@ -172,6 +182,7 @@ public class ShopController extends CommomController {
 		return "web/shop";
 	}
 	
+	
 	@ModelAttribute("sizeList")
 	public List<Size> showSizes(Model model) {
 		List<Size> sizeList = sizeRepository.findAll();
@@ -208,5 +219,11 @@ public class ShopController extends CommomController {
 		model.addAttribute("products", listProductNew);
 		commomDataService.commonData(model, user);
 		return "web/prodetail";
+	}
+	@GetMapping("/searchByCHP")
+	public String searchCHP(@RequestParam(value = "idCate",required = false) Long cateId,@RequestParam(value = "idhang",required = false)  Long hangid,@RequestParam(value = "price",required = false)  Double price,Model model) {
+		List<Product> lsProducts = productRepository.productByCateBranPrice(cateId, hangid, price);
+		model.addAttribute("products", lsProducts);
+		return "web/shop";
 	}
 }

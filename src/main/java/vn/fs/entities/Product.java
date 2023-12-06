@@ -53,7 +53,7 @@ public class Product implements Serializable {
 	private Category category;
 	
 	@ManyToOne
-	@JoinColumn(name = "idhang")
+	@JoinColumn (name = "idhang",referencedColumnName = "idhang")
 	private Hang hang;
 	
 

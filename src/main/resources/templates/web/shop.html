@@ -71,29 +71,29 @@
 		<div class="container">
 			<div class="row content-reverse">
 				<div class="col-lg-3">
+					<form action="/searchCHP" method="get">
+
 					<div class="shop-widget">
+						<h6 class="shop-widget-title">Theo hãng</h6>
+						<ul class="shop-widget-list shop-widget-scroll">
+							<li th:each="item : ${hangList}">
+								<div class="shop-widget-content">
 
+										<div class="form-check">
+											<input class="form-check-input" th:value="${item.idhang}" name="idhang" type="radio" value="" id="cate1">
+											<label class="form-check-label" for="cate1"
+												   style="color: rgb(138, 138, 138)">
+												[[${item.tenhang}]]
+											</label>
+										</div>
+
+									</a>
+								</div>
+								<span class="shop-widget-number"></span>
+							</li>
+						</ul>
 					</div>
-											<form action="/kkk" method="get">
-												<h6 class="shop-widget-title">Theo hãng</h6>
-												<ul class="shop-widget-list shop-widget-scroll">
-													<li th:each="item : ${coutnProductByCategory}">
-														<div class="shop-widget-content">
-															<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
 
-																<div class="form-check">
-																	<input class="form-check-input" type="radio" value="" id="cate1">
-																	<label class="form-check-label" for="cate1"
-																		   style="color: rgb(138, 138, 138)">
-																		[[${item[1]}]]
-																	</label>
-																</div>
-
-															</a>
-														</div>
-														<span class="shop-widget-number">([[${item[2]}]])</span>
-													</li>
-												</ul>
 					<div class="shop-widget">
 						<h6 class="shop-widget-title">Theo loại</h6>
 
@@ -102,7 +102,7 @@
 									<div class="shop-widget-content">
 										<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
 											<div class="form-check">
-												<input class="form-check-input" type="radio" name="ct" th:value="${item[0]}" id="cate1">
+												<input class="form-check-input" name="idCate" type="radio" th:value="${item[0]}" id="cate1">
 												<label class="form-check-label" for="cate1"
 													style="color: rgb(138, 138, 138)">
 													[[${item[1]}]]
@@ -118,7 +118,7 @@
 					
 
 					<label for="customRange1" class="form-label">Example range</label>
-					<input type="range" class="form-range" id="customRange1" name="gia" min="0" max="10000000"
+					<input type="range" class="form-range" id="customRange1" name="price" min="0" max="10000000"
 						oninput="updateSliderValue(this.value)">
 					<p id="sliderValue">0</p>
 
@@ -139,10 +139,9 @@
 							</div>
 						</div>
 					</div>
+					<button type="submit" class="btn btn-warning">Lọc</button>
 
-					<button class="btn btn-warning">Lọc</button>
-											</form>
-
+					</form>
 				</div>
 				<div class="col-lg-9">
 					<div class="row">

@@ -15,6 +15,7 @@ import vn.fs.entities.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
 
+
 	// List product by category
 	@Query(value = "SELECT * FROM products WHERE category_id = ?", nativeQuery = true)
 	public List<Product> listProductByCategory(Long categoryId);
@@ -73,4 +74,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 			+ " and (?2 is null or hang = ?2) "
 			+ " and (?1 is null or category_id = ?1) ", nativeQuery = true)
 	Page<Product> search(Integer idCate,String hang,Long price,Pageable pageable);
+	@Query(value = "SELECT p FROM Product p " +
+	        "JOIN Hang h ON p.idhang = h.idhang " +
+	        "JOIN Category c ON p.category_id = c.category_id " +
+	        "WHERE c.category_id = ?1 AND h.idhang = ?2 AND p.price = ?3",nativeQuery = true)
+	List<Product> productByCateBranPrice(Long idCate, Long idHang, Double price);
+
 }
