@@ -342,7 +342,7 @@ public class CartController extends CommomController {
 		double totalPrice = 0;
 		for (CartItem cartItem : cartItems) {
 			double price = cartItem.getQuantity() * cartItem.getProduct().getPrice();
-			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100) + 30000;
+			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100) + 20000;
 		}
 		model.addAttribute("totalPrice", totalPrice);
 		model.addAttribute("totalCartItems", shoppingCartService.getCount());
@@ -372,7 +372,7 @@ public class CartController extends CommomController {
 				}
 
 				// sendMail
-				commomDataService.sendSimpleEmail(user.getEmail(), "Ado-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
+				commomDataService.sendSimpleEmailpay(user.getEmail(), "Ado-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
 						totalPrice, orderFinal);
 
 				shoppingCartService.clear();
