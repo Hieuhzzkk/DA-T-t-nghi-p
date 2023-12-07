@@ -125,13 +125,13 @@
 														
 														<div class="col-md-6 pr-0">
 															<div class="form-group form-group-default">
-																<label>Size</label>
+																<label>Màu</label>
 																<select class="form-control"
 																	 name="size" th:field="*{size.sizeId}" id="sizeId">
 																	<option th:each="item : ${sizeList}"
 					  													th:value="${item.sizeId}" th:text="${item.nameSize}"
 																		th:selected="${item.sizeId == product.size.sizeId}">
-																		Size name
+																		Màu
 																	</option>
 																</select>
 															</div>
@@ -177,7 +177,7 @@
 														</div>
 														<div class="col-sm-12">
 															<div class="form-group form-group-default">
-																<label>Màu sắc</label>
+																<label>Kích thước</label>
 																<textarea th:field="*{description}" id="description" class="form-control" placeholder="Màu sắc"></textarea>
 															</div>
 														</div>
