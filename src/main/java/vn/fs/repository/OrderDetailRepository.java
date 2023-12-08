@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import vn.fs.entities.OrderDetail;
+import vn.fs.entities.User;
 
 
 @Repository
@@ -14,8 +15,8 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
 
 	@Query(value = "select * from order_details where order_id = ?;", nativeQuery = true)
 	List<OrderDetail> findByOrderId(Long id);
-	@Query(value = "select * from order_details od where order_id = ?;", nativeQuery = true)
-	OrderDetail getOrDetailByOrId(Long id);
+	@Query(value = "select * from user where user_id = ?1", nativeQuery = true)
+	List<User> findByUserId(Long id);
 	// Statistics by product sold
     @Query(value = "SELECT p.product_name , \r\n"
     		+ "SUM(o.quantity) as quantity ,\r\n"
@@ -89,12 +90,10 @@ public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> 
     		+ "INNER JOIN user c ON p.user_id = c.user_id\r\n"
     		+ "GROUP BY c.user_id, c.name;", nativeQuery = true)
     public List<Object[]> reportCustommer();
-    
     @Query(value = "SELECT od.*  FROM order_details od\r\n"
     		+ "INNER JOIN products p ON p.product_id = od.product_id \r\n"
     		+ "INNER JOIN orders o ON od.order_id = o.order_id\r\n"
     		+ "INNER JOIN user u ON o.user_id = u.user_id\r\n"
     		+ "WHERE o.order_id = ?;",nativeQuery = true)
     public List<OrderDetail> findByOrderDetailByOrderId(Long orderId);
-
 }

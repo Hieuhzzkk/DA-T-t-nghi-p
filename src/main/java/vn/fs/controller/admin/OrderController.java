@@ -11,14 +11,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import vn.fs.dto.OrderExcelExporter;
+import vn.fs.entities.Category;
 import vn.fs.entities.Order;
 import vn.fs.entities.OrderDetail;
 import vn.fs.entities.Product;
@@ -74,20 +78,24 @@ public class OrderController {
 
 		return "admin/orders";
 	}
+	@ModelAttribute("userList")
+	public List<User> showUser(Model model) {
+		List<User> userList = userRepository.findAll();
+		model.addAttribute("userList", userList);
 
+		return userList;
+	}
 	@GetMapping("/order/detail/{order_id}")
-	public ModelAndView detail(ModelMap model, @PathVariable("order_id") Long id) {
+	public ModelAndView detail(ModelMap model, Model modell, 
+			Principal principal, User user, 
+			@PathVariable("order_id") Long id) {
 
 		List<OrderDetail> listO = orderDetailRepository.findByOrderId(id);
-		
-		model.addAttribute("amount", orderRepository.findById(id).get().getAmount());
-		model.addAttribute("orderDetail", listO);
-		model.addAttribute("orderId", id);
-		//cbo for orderDetail add
+//		User userrUser =userRepository.findById(iduser).orElse(null);
+//		model.addAttribute("user", userrUser);
 		List<Product> cboPro = productRepository.findAll();
 		model.addAttribute("orderDetails", new OrderDetail());
 		model.addAttribute("cboPro",cboPro);
-		model.addAttribute("status",orderRepository.findById(id).get().getStatus());
 		double totalPrice = listO.stream()
                 .mapToDouble(item -> (item.getPrice() - (item.getPrice() * item.getProduct().getDiscount() / 100)) * item.getQuantity())
                 .sum();
@@ -95,8 +103,29 @@ public class OrderController {
         
 		
 		// set active front-end
+		model.addAttribute("amount", orderRepository.findById(id).get().getAmount());
+		model.addAttribute("orderDetail", listO);
+		model.addAttribute("orderId", id);
+		// set active front-end
 		model.addAttribute("menuO", "menu");
+		model.addAttribute("status",orderRepository.findById(id).get().getStatus());
 		return new ModelAndView("admin/editOrder", model);
+	}
+	@PostMapping(value = "/updateUserOrder")
+	public String updateUser(@Validated 
+			@ModelAttribute("user") User user, ModelMap model,
+			BindingResult bindingResult) {
+
+		if (bindingResult.hasErrors()) {
+			model.addAttribute("error", "failure");
+
+			return "/orders";
+		}
+
+		userRepository.save(user);
+		model.addAttribute("message", "successful!");
+
+		return "/orders";
 	}
 	@RequestMapping("/order/confirmpp/{order_id}")
 	public ModelAndView confirmpp(ModelMap model, @PathVariable("order_id") Long id) {
@@ -127,6 +156,7 @@ public class OrderController {
 			p.setQuantity(p.getQuantity() - od.getQuantity());
 			productRepository.save(p);
 		}
+
 		return new ModelAndView("forward:/admin/orders", model);
 	}
 	@RequestMapping("/order/cancel/{order_id}/{LyDoHuy}")
@@ -142,6 +172,7 @@ public class OrderController {
 
 		return new ModelAndView("forward:/admin/orders", model);
 	}
+
 	@RequestMapping("/order/confirm/{order_id}")
 	public ModelAndView confirm(ModelMap model, @PathVariable("order_id") Long id) {
 		Optional<Order> o = orderRepository.findById(id);
@@ -176,6 +207,9 @@ public class OrderController {
 		return new ModelAndView("forward:/admin/orders", model);
 	}
 	
+	
+	
+	
 	@RequestMapping("/order/confirmDgh/{order_id}")
 	public ModelAndView confirm2(ModelMap model, @PathVariable("order_id") Long id) {
 		Optional<Order> o = orderRepository.findById(id);
@@ -202,6 +236,11 @@ public class OrderController {
 		return new ModelAndView("forward:/admin/orders", model);
 	}
 	
+	
+	
+	
+	
+	
 	@RequestMapping("/order/confirmGiao/{order_id}")
 	public ModelAndView confirmpp2GH(ModelMap model, @PathVariable("order_id") Long id) {
 		Optional<Order> o = orderRepository.findById(id);
@@ -226,6 +265,7 @@ public class OrderController {
 
 		return new ModelAndView("forward:/admin/orders", model);
 	}
+	
 	// to excel
 	@GetMapping(value = "/export")
 	public void exportToExcel(HttpServletResponse response) throws IOException {
@@ -240,8 +280,7 @@ public class OrderController {
 
 		OrderExcelExporter excelExporter = new OrderExcelExporter(lisOrders);
 		excelExporter.export(response);
-	}
-	
 
+	}
 
 }

@@ -4,17 +4,16 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta charset="UTF-8" />
-	<title>Otis - Trang quản trị</title>
+	<title>Ado - Trang quản trị</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon" />
 
 	<!-- Fonts and icons -->
 	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
-
 	<script>
 		WebFont.load({
-			google: { "families": ["Lato:300,400,700,900"] },
-			custom: { "families": ["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['/assets/css/fonts.min.css'] },
+			google: {"families": ["Lato:300,400,700,900"]},
+			custom: {"families": ["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['/assets/css/fonts.min.css']},
 			active: function () {
 				sessionStorage.fonts = true;
 			}
@@ -31,11 +30,17 @@
 <body>
 	<div class="wrapper">
 		<!-- Header -->
+
 		<th:block th:replace="~{admin/fragments/header :: header}"></th:block>
+
 		<!-- End Header -->
+
 		<!-- Navbar -->
+
 		<th:block th:replace="~{admin/fragments/navbar :: navbar}"></th:block>
+
 		<!-- End Navbar -->
+
 		<div class="main-panel">
 			<div class="content">
 				<div class="page-inner">
@@ -64,19 +69,21 @@
 					<div class="col-md-12">
 						<div class="card">
 							<div class="card-header">
-								<div class="d-flex align-items-left">
+								<div class="d-flex align-items-center">
 									<h4 class="card-title">Chi tiết đơn hàng</h4>
-									<button style="margin-left: 73%;" th:if="${status le 3}"
+									<button style="margin-left: 73%;" th:if="${status le 2}"
 										class="btn btn-primary btn-round hidden" data-toggle="modal"
 										data-target="#addRowModalSaveDetail">
-										<i class="fa fa-plus"></i> Thêm sản phẩm
-									</button>
-									<a  class="btn btn-primary btn-round ml-auto" th:href="@{/admin/orders}">Quay lại</a>
+										<i class="fa fa-plus"></i> Thêm sản
+										phẩm</button>
+									<a class="btn btn-primary btn-round ml-auto" th:href="@{/admin/orders}">Quay lại</a>
 								</div>
 							</div>
 							<div class="card-body">
+
 								<div class="alert alert-success row col-12" th:if="${message}" th:text="${message}">
 								</div>
+								
 								<div class="table-responsive">
 									<table id="add-row" class="display table table-striped table-hover">
 										<thead>
@@ -85,11 +92,12 @@
 												<th>Sản phẩm</th>
 												<th>Tên sản phẩm</th>
 												<th>Số lượng</th>
+
 												<th>Đơn giá</th>
 												<th>Tổng tiền</th>
-												<th>Action</th>
 											</tr>
 										</thead>
+
 										<tbody>
 											<tr th:each="item, count : ${orderDetail}">
 												<td class="text-center" th:text="${count.index+1}"></td>
@@ -107,13 +115,13 @@
 													item.product.discount/100)) * item.quantity, 1, 'DEFAULT', 0,
 													'DEFAULT')}+ ' đ']]</td>
 												<td>
-													<a th:if="${status le 3}" th:href="@{/admin/orderdetail/detail/{orderDetailId}(orderDetailId = ${item.orderDetailId})}"
+													<a th:if="${status le 2}" th:href="@{/admin/orderdetail/detail/{orderDetailId}(orderDetailId = ${item.orderDetailId})}"
 														type="button" data-toggle="tooltip" title=""
 														class="btn btn-link btn-primary btn-lg hidden"
 														data-original-title="Chỉnh sửa">
 														<i class="fa fa-edit"></i>
 													</a>
-													<a th:if="${status le 3}" th:href="@{/admin/orderdetail/delete/{orderDetailId}(orderDetailId = ${item.orderDetailId})}"
+													<a th:if="${status le 2}" th:href="@{/admin/orderdetail/delete/{orderDetailId}(orderDetailId = ${item.orderDetailId})}"
 														type="button" data-toggle="tooltip" title=""
 														class="btn btn-link btn-primary btn-lg hidden"
 														data-original-title="Xóa sản phẩm">
@@ -122,28 +130,31 @@
 												</td>
 
 											</tr>
+											
 											<tr>
-												<td colspan="5" style="font-weight: bold; font-size:15px">Tổng tiền đơn
-													hàng: </td>
+												
+												<td colspan="5" style="font-weight: bold; font-size:15px">Tổng tiền sản phẩm: </td>
 												<td
 													th:text="${#numbers.formatDecimal(totalPrice, 1, 'DEFAULT', 0, 'DEFAULT')} + ' đ'">
 												</td>
-												<td> <button style="margin-left: 3%;"
+												<td> <button th:if="${status le 2}" style="margin-left: 3%;"
 														class="btn btn-primary btn-round  ml-auto" data-toggle="modal"
 														data-target="#modelUpdatePriceOrder"> <i class="fa fa-plus"></i>
 														Cập nhật</button>
 												</td>
 											</tr>
+											</tr>
+
 										</tbody>
 									</table>
+
 									<script>
 										function showConfigModalDialog(id, name) {
 											$('#name').text(name);
 											$('#yesOption').attr('href', '/admin/delete/' + id);
 											$('#configmationId').modal('show');
-										}							
+										}
 									</script>
-									<!-- Model update gia -->
 									<div class="modal fade" id="modelUpdatePriceOrder" tabindex="-1" role="dialog"
 										aria-hidden="true">
 										<div class="modal-dialog" role="document">
@@ -167,8 +178,9 @@
 															<input type="text" name="orderId" th:value="${orderId}"
 																class="form-control" required readonly>
 														</div>
+														
 														<div class="form-group">
-															<label>Tổng tiền</label>
+															<label>Tổng tiền sản phẩm</label>
 															<input type="text" name="amount" th:value="${totalPrice}"
 																class="form-control" required readonly>
 														</div>
@@ -182,6 +194,7 @@
 																class="btn btn-primary btn-round ml-auto"
 																value="Cập nhật đơn giá">
 														</div>
+														
 													</form>
 												</div>
 											</div>
@@ -209,7 +222,7 @@
 														<div class="modal-body">
 															<div class="form-group">
 																<label>Mã đơn hàng chi tiết</label>
-																<input th:field="*{orderDetailId}" type="text"
+																<input th:filed="*{orderDetailId}" type="text"
 																	class="form-control" required readonly>
 															</div>
 															<div class="form-group">
@@ -244,18 +257,11 @@
 																<label>Ảnh</label>
 																<img id="imageElement" class="form-control">
 															</div>
-															<div class="row">
-																<div class="form-group">
-																	<label>Số lượng</label>
-																	<input th:field="*{quantity}" type="number" id="quantity" min="1" max="50"
-																	oninput="getSL();" class="form-control">
-																</div>
-																<div class="col-md-6 mt-3">
-																	<span id="badgeIdtoida" class="badge text-white bg-danger"
-																		style="padding: 8px 10px 5px 10px; margin: 30px 0 0 -10px;display: none;">Chỉ được mua tối đa 50 sản phẩm</span>
-																</div>
+															<div class="form-group">
+																<label>Số lượng</label>
+																<input th:field="*{quantity}" type="number"
+																	class="form-control" value="1">
 															</div>
-															
 														</div>
 														<div class="modal-footer">
 															<input type="button" class="btn btn-default"
@@ -269,7 +275,6 @@
 											</div>
 										</div>
 									</div>
-								
 									<!-- Modal -->
 									<div class="modal" tabindex="-1" role="dialog" id="configmationId">
 										<div class="modal-dialog" role="document">
@@ -302,7 +307,8 @@
 				<div class="container-fluid">
 
 					<div class="copyright ml-auto">
-						2022, made with <i class="fa fa-heart heart text-danger"></i> by <a href="">OTIS</a>
+						2023, made with <i class="fa fa-heart heart text-danger"></i> by <a
+							href="javascript:void(0);">ADO-SHOP</a>
 					</div>
 				</div>
 			</footer>
@@ -326,21 +332,6 @@
 	<script src="/assets/js/atlantis.min.js"></script>
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="/assets/js/setting-demo2.js"></script>
-	<script type="text/javascript">
-			function getSL() {
-			var a = $('#quantity').val().trim();
-			if (parseInt(a) < 1) {
-				$('#quantity').val(1);
-			}
-			if ($('#quantity').val().trim() == "") {
-				$('#quantity').val(1);
-			}
-			if(parseInt(a) > 50){
-				$('#quantity').val(50);
-				$('#badgeIdtoida').css("display","block");
-			}
-		}
-	</script>
 	<script>
 		$(document).ready(function () {
 			$("#productSelect").change(function () {
@@ -404,7 +395,7 @@
 					action
 					]);
 				$('#addRowModal').modal('hide');
-	
+
 			}); */
 
 			$('#editRowButton').click(function (event) {
@@ -446,7 +437,6 @@
 
 
 	</script>
-
 </body>
 
 </html>

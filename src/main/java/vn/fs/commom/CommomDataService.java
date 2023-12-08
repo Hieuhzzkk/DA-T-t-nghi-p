@@ -17,9 +17,9 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import vn.fs.entities.CartItem;
+import vn.fs.entities.InvoiceCart;
 import vn.fs.entities.Order;
 import vn.fs.entities.OrderDetail;
-import vn.fs.entities.Product;
 import vn.fs.entities.User;
 import vn.fs.repository.FavoriteRepository;
 import vn.fs.repository.OrderDetailRepository;
@@ -43,7 +43,6 @@ public class CommomDataService {
 	OrderRepository orderRepository;
 	@Autowired
 	OrderDetailRepository orderDetailRepository;
-	
 	@Autowired
 	public JavaMailSender emailSender;
 	
@@ -66,8 +65,24 @@ public class CommomDataService {
 
 		Collection<CartItem> cartItems = shoppingCartService.getCartItems();
 		model.addAttribute("cartItems", cartItems);
-		
-		
+
+	}
+	public void commonDataInvoice(Model model, User user) {
+		listCategoryByProductName(model);
+		Integer totalSave = 0;
+		// get count yêu thích
+		if (user != null) {
+			totalSave = favoriteRepository.selectCountSave(user.getUserId());
+		}
+
+		Integer totalCartItems = shoppingCartService.getCount();
+
+		model.addAttribute("totalSave", totalSave);
+
+		model.addAttribute("totalCartItems", totalCartItems);
+
+		Collection<InvoiceCart> cartItems = shoppingCartService.getInvoiceCarts();
+		model.addAttribute("cartItems", cartItems);
 
 	}
 	
@@ -78,16 +93,18 @@ public class CommomDataService {
 		model.addAttribute("coutnProductByCategory", coutnProductByCategory);
 	}
 	
+
+	
 	//sendEmail by order success
 	public void sendSimpleEmail(String email, String subject, String contentEmail, Collection<CartItem> cartItems,
 			double totalPrice, Order orderFinal) throws MessagingException {
 		Locale locale = LocaleContextHolder.getLocale();
+
 		// Prepare the evaluation context
 		Context ctx = new Context(locale);
 		ctx.setVariable("cartItems", cartItems);
 		ctx.setVariable("totalPrice", totalPrice);
 		ctx.setVariable("orderFinal", orderFinal);
-
 		// Prepare message using a Spring helper
 		MimeMessage mimeMessage = emailSender.createMimeMessage();
 		MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, "UTF-8");
@@ -97,8 +114,10 @@ public class CommomDataService {
 		String htmlContent = "";
 		htmlContent = templateEngine.process("mail/email_en.html", ctx);
 		mimeMessageHelper.setText(htmlContent, true);
+
 		// Send Message!
 		emailSender.send(mimeMessage);
+
 	}
 	public void senmailUpdate(String email, String subject, String contentEmail,
 			double totalPrice, Long orderId) throws MessagingException {
@@ -125,11 +144,10 @@ public class CommomDataService {
 		mimeMessageHelper.setTo(email);
 		// Create the HTML body
 		String htmlContent = "";
-		htmlContent = templateEngine.process("mail/updateAmount.html", ctx);
+		htmlContent = templateEngine.process("mail/phiship.html", ctx);
 		System.out.println("HTML Content: " + htmlContent);
 		mimeMessageHelper.setText(htmlContent, true);
 		// Send Message!
 		emailSender.send(mimeMessage);
 	}
-	
 }

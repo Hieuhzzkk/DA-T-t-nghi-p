@@ -1,5 +1,6 @@
 package vn.fs.entities;
 
+
 import java.io.Serializable;
 
 import javax.persistence.Column;
@@ -95,5 +96,3 @@ public class InvoiceDetail implements Serializable{
 		this.products = products;
 	}
 }
-	
-

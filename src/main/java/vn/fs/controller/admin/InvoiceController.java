@@ -1,14 +1,23 @@
 package vn.fs.controller.admin;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
+import javax.mail.MessagingException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import javax.transaction.Transactional;
+
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,25 +27,27 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import vn.fs.commom.CommomDataService;
+import vn.fs.entities.CartItem;
 import vn.fs.entities.Invoice;
+import vn.fs.entities.InvoiceCart;
 import vn.fs.entities.InvoiceDetail;
-import vn.fs.entities.OrderDetail;
 import vn.fs.entities.Product;
+import vn.fs.entities.Size;
 import vn.fs.entities.User;
 import vn.fs.repository.InvoiceDetailRepository;
 import vn.fs.repository.InvoiceRepository;
-import vn.fs.repository.OrderDetailRepository;
-import vn.fs.repository.OrderRepository;
 import vn.fs.repository.ProductRepository;
+import vn.fs.repository.SizeRepository;
 import vn.fs.repository.UserRepository;
-import vn.fs.service.OrderDetailService;
-import vn.fs.service.SendMailService;
-
+import vn.fs.service.ShoppingCartService;
 
 @Controller
 @RequestMapping("/admin")
-public class InvoiceController {
-
+public class InvoiceController{
+	@Autowired
+	HttpSession session;
+	
 	@Autowired
 	ProductRepository productRepository;
 
@@ -47,7 +58,15 @@ public class InvoiceController {
 	InvoiceRepository invoiceRepository;
 	@Autowired
 	InvoiceDetailRepository invoiceDetailRepository;
-
+	@Autowired
+	ShoppingCartService shoppingCartService;
+	@Autowired
+	CommomDataService commomDataService;
+	@Autowired
+	SizeRepository sizeRepository;
+	
+	Invoice invoiceFinal = new Invoice();
+	
 	@ModelAttribute(value = "user")
 	public User user(Model model, Principal principal, User user) {
 
@@ -64,31 +83,110 @@ public class InvoiceController {
 		List<Invoice> invoice = invoiceRepository.findAll();
 		model.addAttribute("invoices",invoice);
         model.addAttribute("optionPro", new Product());
-
 		return invoice;
 	}
-	
-	@GetMapping(value = "/invoices")
-	public String orders(ModelMap model) {
+	@GetMapping("/invoices")
+	public String invoiceform(Model model,User user) {
 		Invoice invoices = new Invoice();
 		model.addAttribute("invoice",invoices);
         model.addAttribute("matchedProducts", productRepository.findAll());
         model.addAttribute("invoiceDetail",invoiceDetailRepository.findAll());
+    	Collection<InvoiceCart> cartItems = shoppingCartService.getInvoiceCarts();
+		model.addAttribute("cartItems", cartItems);
+		model.addAttribute("total", shoppingCartService.getAmount());
+		model.addAttribute("NoOfItems", shoppingCartService.getCount());
+		double totalPrice = 0;
+		for (InvoiceCart cartItem : cartItems) {
+			double price = cartItem.getQuantity() * cartItem.getProduct().getPrice();
+			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100);
+		}
+
+		model.addAttribute("totalPrice", totalPrice);
+		model.addAttribute("totalCartItems", shoppingCartService.getCount());
+		commomDataService.commonDataInvoice(model, user);
 		return "admin/invoice";
 	}
-	
-	@PostMapping(value = "/invoices/detail/addInvoice")
-	public String addInvoice(@Validated @ModelAttribute("invoice") Invoice invoices,RedirectAttributes attributes,ModelMap model) {
-		try {
-			invoiceRepository.save(invoices);
-			attributes.addFlashAttribute("successadd", "Thành công");
+	@GetMapping("/invoice/tabInvoiceNew")
+	public ModelAndView tabInvoice(Model model,User user) {
+    	Collection<InvoiceCart> cartItems = new ArrayList<InvoiceCart>();
+    	
 
-		} catch (Exception e) {
-			attributes.addFlashAttribute("erroradd", "Thất bại");
-			return "admin/invoice";
+    	model.addAttribute("cartItems", cartItems);
+		model.addAttribute("total", shoppingCartService.getAmount());
+		model.addAttribute("NoOfItems", shoppingCartService.getCount());
+		double totalPrice = 0;
+		for (InvoiceCart cartItem : cartItems) {
+			double price = cartItem.getQuantity() * cartItem.getProduct().getPrice();
+			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100);
 		}
-		return "redirect:/admin/invoices";
+
+		model.addAttribute("totalPrice", totalPrice);
+		model.addAttribute("totalCartItems", shoppingCartService.getCount());
+		commomDataService.commonDataInvoice(model, user);
+		return new ModelAndView("forward:/admin/invoices");
 	}
+	
+	@PostMapping(value = "/invoices/addToCart")
+	public String add(
+	    @RequestParam("productId") Long productId,
+	    @RequestParam("quantity") Integer quantity,
+	    @RequestParam("sizeId") Long sizeId,
+	    HttpServletRequest request,
+	    Model model,
+	    RedirectAttributes attributes
+	) {
+	    Product product = productRepository.findById(productId).orElse(null);
+	    Size size = sizeRepository.findById(sizeId).orElse(null);
+
+	    if (product != null && size != null) {
+	        InvoiceCart item = new InvoiceCart();
+	        item.setQuantity(quantity);
+	        item.setProduct(product);
+	        item.setId(productId);
+	        item.setSize(size);
+	        shoppingCartService.add3(item, product);
+
+	        // Lưu giỏ hàng vào session
+	        session = request.getSession();
+	        session.setAttribute("cartItems", shoppingCartService.getInvoiceCarts());
+	    }
+
+	    model.addAttribute("totalCartItems", shoppingCartService.getCount());
+
+	    return "redirect:/admin/invoices";
+	}
+	
+	@GetMapping("/updateInvoice/{id}/{quantity}")
+	public String updateInvoice(@PathVariable("id") Long id, @PathVariable("quantity") Integer quantity) {
+		try {
+			shoppingCartService.updateInvoice(id, quantity);
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	    return "forward:/admin/invoices";
+	}
+	@SuppressWarnings("unlikely-arg-type")
+	@GetMapping(value = "/removeInvoice/{id}")
+	public String removeInvoiceCart(@PathVariable("id") Long id, HttpServletRequest request, Model model) {
+		Product product = productRepository.findById(id).orElse(null);
+
+		Collection<InvoiceCart> cartItems = shoppingCartService.getInvoiceCarts();
+		session = request.getSession();
+		if (product != null) {
+			InvoiceCart item = new InvoiceCart();
+			BeanUtils.copyProperties(product, item);
+			item.setProduct(product);
+			item.setId(id);
+			cartItems.remove(session);
+			shoppingCartService.removeCartInvoice(item);
+		}
+		model.addAttribute("totalCartItems", shoppingCartService.getCount());
+	    return "redirect:/admin/invoices";
+	}
+
+	
+	
 	@GetMapping("/invoices/search")
 	public String searchProduct(@RequestParam("searchTerm") String searchTerm, ModelMap model, RedirectAttributes attributes) {
 	    try {
@@ -113,43 +211,64 @@ public class InvoiceController {
 	    }
 	    return "admin/invoice";
 	}
-	@GetMapping("/invoices/lsInvoice")
-	public String lsInvoice(ModelMap model) {
-		
-		List<Invoice> lsinvoice = invoiceRepository.findAll();
-		model.addAttribute("lsinvoice",lsinvoice);
-	    return "admin/listInvoice";
-	}
-	@RequestMapping("/invoices/addDetail/{id}")
-	public ModelAndView detailProductinInvoice(@PathVariable("id") Long id,ModelMap model, RedirectAttributes redirectAttributes) {
-		Invoice invoices = new Invoice();
-  		model.addAttribute("invoice",invoices);
-		Product dePro = productRepository.findById(id).get();
-		InvoiceDetail voiceDetail = new InvoiceDetail();
-		voiceDetail.setInvoiceDetailId(id);
-//        redirectAttributes.addFlashAttribute("optionPro", dePro);
-		return new ModelAndView("redirect:/admin/invoices");
+	
+	@PostMapping(value = "/invoices/addInvoide")
+	@Transactional
+	public String checkoutInvoice(Model model,@ModelAttribute("invoice") Invoice invoice,HttpServletRequest request,User user) throws MessagingException {
+		Collection<InvoiceCart> cartItems = shoppingCartService.getInvoiceCarts();
+		double totalPrice = 0;
+		for (InvoiceCart cartItem : cartItems) {
+			double price = cartItem.getQuantity() * cartItem.getProduct().getPrice();
+			totalPrice += price - (price * cartItem.getProduct().getDiscount() / 100);
+		}
+		BeanUtils.copyProperties(invoice, invoiceFinal);
+		session = request.getSession();
+		Date date = new Date();
+		invoice.setAmount(totalPrice);
+		invoice.setInvoiceDate(date);
+		invoice.setStatus(0);
+		model.addAttribute("totalPrice", totalPrice);
+		invoiceRepository.save(invoice);
+		for(InvoiceCart invoiceCart : cartItems ) {
+			InvoiceDetail detailInvoice = new InvoiceDetail();
+			detailInvoice.setQuantity(invoiceCart.getQuantity());
+			detailInvoice.setPrice(invoiceCart.getProduct().getPrice());
+			detailInvoice.setProducts(invoiceCart.getProduct());
+			detailInvoice.setInvoice(invoice);
+			invoiceDetailRepository.save(detailInvoice);
+		}
+//		commomDataService.sendSimpleEmail(user.getEmail(), "Ado-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
+//				totalPrice, invoices);
+		shoppingCartService.clearInvoice();
+		session.removeAttribute("cartItems");
+		return "redirect:/admin/invoices/lsInvoice";
 	}
 	
+	@GetMapping("/invoices/lsInvoice")
+	public String lsInvoice(ModelMap model) {		
+		List<Invoice> lsinvoice = invoiceRepository.findAll();
+		model.addAttribute("lsinvoice",lsinvoice);
+	    return "admin/lsinvoice";
+	}
 	@RequestMapping("/invoices/payForinvoice/{invoice_id}")
 	public ModelAndView payForinvoice(ModelMap model,@PathVariable("invoice_id") Long id) {
-//		Optional<Invoice> iv = invoiceRepository.findById(id);
-//		if(iv.isEmpty()) {
-//			return new ModelAndView("forward:/admin/invoices", model);
-//		}
-//		Invoice ivReal = iv.get();
-//		ivReal.setStatus((short) 1);
-//		invoiceRepository.save(ivReal);
-//		Product p = null;
-//		List<Invoice> listVe = invoiceRepository.findByInvoices(id);
-//		for (Invoice lsIv : listVe) {
-//			p = lsIv.getProduct();
-//			p.setQuantity(p.getQuantity() - lsIv.getQuantity());
-//			productRepository.save(p);
-//		}
+		Optional<Invoice> iv = invoiceRepository.findById(id);
+		if(iv.isEmpty()) {
+			return new ModelAndView("forward:/admin/invoices", model);
+		}
+		Invoice ivReal = iv.get();
+		ivReal.setStatus((short) 1);
+		invoiceRepository.save(ivReal);
+		Product p = null;
+		List<InvoiceDetail> listDetailVoce = invoiceDetailRepository.findByInvoiceDeTailByInvoiceId(id);
+		for (InvoiceDetail lsIv : listDetailVoce) {
+			p = lsIv.getProducts();
+			p.setQuantity(p.getQuantity() - lsIv.getQuantity());
+			productRepository.save(p);
+		}
 		return new ModelAndView("forward:/admin/invoices/lsInvoice", model);
 
 	}
-	
 
+	
 }

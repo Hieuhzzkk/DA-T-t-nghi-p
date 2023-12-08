@@ -85,10 +85,17 @@ public class CategoryController {
 				model.addAttribute("errors","Thể loại " + category.getCategoryName() + " đã tồn tại");
 				return "admin/categories";
 			}
+//			categoryRepository.save(category);
+//			attributes.addFlashAttribute("successadd", "Thành công");
+//			System.out.println("acdckajs" + category.getCategoryName());
+
 		} catch (Exception e) {
 			attributes.addFlashAttribute("erroradd", "Thất bại");
+
 			return "admin/categories";
+
 		}
+		
 		return "redirect:/admin/categories";
 	}
 

@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta charset="UTF-8" />
-	<title>Otis - Trang quản trị</title>
+	<title>Ado - Trang quản trị</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon" />
 
@@ -80,12 +80,15 @@
 										<thead>
 											<tr>
 												<th>Mã đơn hàng</th>
+												<th>Mã KH</th>
 												<th>Tên khách hàng</th>
 												<th>Số ĐT</th>
 												<th>Ngày đặt hàng</th>
 												<th>Địa chỉ</th>
-												<th>Tổng tiền</th>
-												<th>Chi tiết đơn hàng</th>
+												<th>Tổng tiền đơn hàng</th>
+												<th>Loại ship</th>
+												<th>Phí ship</th>
+\												<th>Chi tiết đơn hàng</th>
 												<th style="width: 10%">Hành động</th>
 											</tr>
 										</thead>
@@ -93,6 +96,7 @@
 										<tbody>
 											<tr th:each="item : ${orderDetails}">
 												<td>[[${item.orderId}]]</td>
+												<td>[[${item.user.userId}]]</td>
 												<td>[[${item.user.name}]]</td>
 												<td>[[${item.phone}]]</td>
 												<td>[[${item.orderDate}]]</td>
@@ -100,9 +104,12 @@
 												<td
 													th:text="${#numbers.formatDecimal(item.amount, 1, 'DEFAULT', 0, 'DEFAULT')}+' đ'">
 												</td>
+												<td>[[${item.loaiShip}]]</td>
+												<td>[[${item.priceShip}]]đ</td>
 												<td><a th:href="@{'/admin/order/detail/'+${item.orderId}}"> <i
 															class="fa fa-info-circle"> Chi tiết đơn hàng</i>
 													</a></td>
+
 												<td class="text-center">
 													<div th:if="${item.status==0}">
 														<a style="cursor: pointer; color: #0e76a8;"
@@ -191,6 +198,7 @@
 												'show');
 										}
 									</script>
+
 									<!-- Modal -->
 									<div class="modal" id="configmationConfirmppId">
 										<div class="modal-dialog" role="document">
@@ -217,6 +225,8 @@
 											</div>
 										</div>
 									</div>
+									
+									
 									<!-- Xác nhận đơn -->
 									<script>
 										function showConfigConfirmModalDialog(
@@ -230,6 +240,7 @@
 												'show');
 										}
 									</script>
+
 									<!-- Modal -->
 									<div class="modal" id="configmationConfirmId">
 										<div class="modal-dialog" role="document">
@@ -269,6 +280,7 @@
 												'show');
 										}
 									</script>
+
 									<!-- Modal -->
 									<div class="modal" id="configmationConfirmIdGiao">
 										<div class="modal-dialog" role="document">
@@ -586,8 +598,7 @@
 				<div class="container-fluid">
 					
 					<div class="copyright ml-auto">
-						2022, made with <i class="fa fa-heart heart text-danger"></i> by <a
-							href="javascript:void(0);">OTIS-SHOP</a>
+						2023, made with <i class="fa fa-heart heart text-danger"></i> by <a href="javascript:void(0);">ADO-SHOP</a>
 					</div>
 				</div>
 			</footer>

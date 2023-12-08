@@ -12,8 +12,8 @@
 	<script src="/assets/js/plugin/webfont/webfont.min.js"></script>
 	<script>
 		WebFont.load({
-			google: { "families": ["Lato:300,400,700,900"] },
-			custom: { "families": ["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['/assets/css/fonts.min.css'] },
+			google: {"families": ["Lato:300,400,700,900"]},
+			custom: {"families": ["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands", "simple-line-icons"], urls: ['/assets/css/fonts.min.css']},
 			active: function () {
 				sessionStorage.fonts = true;
 			}
@@ -74,74 +74,48 @@
 								</div>
 							</div>
 							<div class="card-header">
-								<section>
-									<form th:action="@{/admin/orderdetail/addOrderDetail}" method="post"
-										class="col-sm-12" th:object="${orderDetails}">
-										<div class="row">
-											<div class="col">
+								<section class="row">
+									<div class="col-6 offset-3 mt-4">
+										<form th:action="@{/admin/orderdetail/addOrderDetail}" method="post" th:object="${orderDetails}">
+											<div class="modal-body">
 												<div class="form-group">
 													<label>Mã đơn hàng chi tiết</label>
 													<input type="text" class="form-control" th:field="*{orderDetailId}"
-														readonly required>
-												</div>
-											</div>
-											<div class="col">
-												<div class="form-group">
-													<label>Mã đơn hàng</label>
-													<input type="text" class="form-control" th:field="*{order}" readonly
 														required>
 												</div>
-											</div>
-										</div>
-										
-										<div class="row">
-											<div class="col">
 												<div class="form-group">
-													<label>Số lượng</label>
-													<input th:field="*{quantity}" type="number" id="quantity" min="1"
-														max="50" oninput="getSL();" class="form-control">
+													<label>Mã đơn hàng</label>
+													<input type="text" class="form-control" th:field="*{order}"
+														required>
 												</div>
-												<div class="col-md-6 mt-3">
-													<span id="badgeIdtoida" class="badge text-white bg-danger"
-														style="padding: 8px 10px 5px 10px; margin: -15px 0 0 0;display: none;">Chỉ
-														được mua tối đa 50 sản phẩm</span>
-												</div>
-											</div>
-											<div class="col">
-
-												<div class="form-group">
-													<label>Đơn giá</label>
-													<input th:field="*{price}" type="text" class="form-control"
-														id="priceInput" readonly>
-												</div>
-											</div>
-										</div>
-										<div class="row">
-											<div class="col">
 												<div class="form-group">
 													<label>Lựa chọn sản phẩm</label>
 													<select th:field="*{product}" class="form-control"
 														id="productSelect">
 														<option value="">-- Chọn sản phẩm --</option>
-														<option th:each="item : ${cboPro}" th:value="${item.productId}"
-															th:text="${item.productName}" th:data-price="${item.price}">
-														</option>
+														<option th:each="item : ${cboPro}"
+															th:value="${item.productId}"
+															th:text="${item.productName}"
+															th:data-price="${item.price}"></option>
 													</select>
 												</div>
-											</div>
-											<div class="col">
 												<div class="form-group">
-													<label>Ảnh</label>
-													<img id="imageElement" style="width: 230px;" class="form-control">
+													<label>Đơn giá</label>
+													<input th:field="*{price}" type="text"
+														class="form-control" id="priceInput" readonly>
 												</div>
-											</div>
+												<div class="form-group">
+													<label>Số lượng</label>
+													<input th:field="*{quantity}" type="number" class="form-control" value="1">
+												</div>
 
-										</div>
-										<div class="modal-footer">
-											<input type="submit" class="btn btn-primary btn-round ml-auto"
-												value="Cập nhật">
-										</div>
-									</form>
+											</div>
+											<div class="modal-footer">
+												<input type="submit" class="btn btn-primary btn-round ml-auto"
+													value="Cập nhật">
+											</div>
+										</form>
+									</div>
 								</section>
 							</div>
 						</div>
@@ -151,10 +125,10 @@
 			<script>
 				function checktext() {
 					if ($('#categoryName').val().trim() == "") {
-						$('#tb').css({ 'display': 'block' }) &&
+						$('#tb').css({'display': 'block'}) &&
 							$('#Addcat').prop('disabled', true)
 					} else (
-						$('#tb').css({ 'display': 'none' }) &&
+						$('#tb').css({'display': 'none'}) &&
 						$('#Addcat').prop('disabled', false)
 					);
 				}
@@ -196,21 +170,6 @@
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="/assets/js/setting-demo2.js"></script>
 
-	<script type="text/javascript">
-		function getSL() {
-			var a = $('#quantity').val().trim();
-			if (parseInt(a) < 1) {
-				$('#quantity').val(1);
-			}
-			if ($('#quantity').val().trim() == "") {
-				$('#quantity').val(1);
-			}
-			if (parseInt(a) > 50) {
-				$('#quantity').val(50);
-				$('#badgeIdtoida').css("display", "block");
-			}
-		}
-	</script>
 	<!--Get price by product-->
 	<script>
 		$(document).ready(function () {
@@ -314,23 +273,5 @@
 
 	</script>
 </body>
-<script>
-	$(document).ready(function () {
-		$("#productSelect").change(function () {
-			var selectedProductId = $(this).val();
-			var urlImg = "/loadImage?imageName=";
-			$.get('/admin/getProductCBO/' + selectedProductId, function (data) {
-				if (data != null) {
-					$("#colorInput").val(data.description);
-					var imageName = data.productImage;
-					var urlImgFull = urlImg + imageName;
-					$("#imageElement").attr("src", urlImgFull);
-				} else {
-					alert("Sản phẩm không tồn tại hoặc có lỗi.");
-				}
-			});
-		});
-	});
-</script>
 
 </html>

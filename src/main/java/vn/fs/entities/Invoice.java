@@ -1,5 +1,6 @@
 package vn.fs.entities;
 
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;

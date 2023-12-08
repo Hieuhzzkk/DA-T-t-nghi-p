@@ -4,9 +4,7 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -38,11 +36,10 @@ public class Order implements Serializable {
 	private Double amount;
 	private String address;
 	private String phone;
-	
-	
+	private String loaiShip;
+	private double priceShip;
 	private String lyDo;
 	private int status;
-	private double priceShip;
 	
 	@OneToMany(mappedBy = "order")
 	private List<OrderDetail> orderDetails;
@@ -50,6 +47,23 @@ public class Order implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "userId")
 	private User user;
+	
+	
+	public double getPriceShip() {
+		return priceShip;
+	}
+
+	public void setPriceShip(double priceShip) {
+		this.priceShip = priceShip;
+	}
+
+	public String getLoaiShip() {
+		return loaiShip;
+	}
+
+	public void setLoaiShip(String loaiShip) {
+		this.loaiShip = loaiShip;
+	}
 
 	public Long getOrderId() {
 		return orderId;
@@ -69,14 +83,6 @@ public class Order implements Serializable {
 
 	public Double getAmount() {
 		return amount;
-	}
-
-	public double getPriceShip() {
-		return priceShip;
-	}
-
-	public void setPriceShip(double priceShip) {
-		this.priceShip = priceShip;
 	}
 
 	public void setAmount(Double amount) {
