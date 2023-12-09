@@ -32,114 +32,7 @@
 
 
 	<style>
-		body {
-			font-family: 'Lato', sans-serif;
-			margin: 0;
-			padding: 0;
-		}
 
-		/* Header Styles */
-		.header {
-			background-color: #fff;
-			box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-			padding: 15px;
-			display: flex;
-			justify-content: space-between;
-			align-items: center;
-		}
-
-		/* Navbar Styles */
-		.navbar {
-			background-color: #343a40;
-			color: #fff;
-			padding: 10px;
-		}
-
-		.navbar a {
-			color: #fff;
-		}
-
-		.navbar a:hover {
-			color: #17a2b8;
-		}
-
-		/* Main Panel Styles */
-		.main-panel {
-			padding: 20px;
-		}
-
-		/* Tabs Styles */
-		.nav-tabs {
-			overflow: auto;
-			white-space: nowrap;
-			margin-bottom: 15px;
-		}
-
-		.nav-link,
-		.nav-item.add-tab {
-			display: inline-block;
-			padding: 10px;
-			margin-right: 10px;
-			border: 1px solid #ccc;
-			border-radius: 5px;
-			text-align: center;
-			cursor: pointer;
-			color: #000;
-			/* Tab text color */
-		}
-
-		.nav-link.active {
-			background-color: #17a2b8;
-			/* Active tab background color */
-			color: #fff;
-			/* Active tab text color */
-		}
-
-		.nav-item.add-tab {
-			background-color: #343a40;
-			/* "+" button background color */
-			color: #fff;
-			/* "+" button text color */
-		}
-
-		.tab-content {
-			border: 1px solid #ccc;
-			padding: 15px;
-			border-radius: 5px;
-		}
-
-		/* Footer Styles */
-		.footer {
-			background-color: #f8f9fa;
-			padding: 15px;
-			margin-top: 20px;
-			border-top: 1px solid #ccc;
-			text-align: center;
-		}
-
-		/* Breadcrumbs Styles */
-		.breadcrumbs {
-			list-style: none;
-			padding: 0;
-			margin: 0;
-		}
-
-		.breadcrumbs li {
-			display: inline;
-			margin-right: 5px;
-		}
-
-		.breadcrumbs i {
-			margin-right: 5px;
-		}
-
-		.close-tab {
-			cursor: pointer;
-			color: #343a40;
-			font-weight: bold;
-			font-size: 18px;
-			margin-left: 5px;
-		}
 	</style>
 </head>
 
@@ -190,94 +83,126 @@
 						<div class="col-md-7">
 							<div class="container mt-5">
 								<div class="nav-tabs" id="myTabs">
-									<a class="nav-link active" id="tab1-tab" data-toggle="tab" href="#tab1">Hóa đơn
+									<a class="nav-link active" id="tab1-tab" data-toggle="tab" href="#tab1">Giỏ hàng
 									</a>
-									<!-- <a class="nav-item add-tab" id="addTabBtn">+</a> -->
 								</div>
 
+								<!-- <div class="col-sm-6">
+											<button class="btn btn-primary" type="submit">Tạo hóa
+												đơn</button>
+										</div> -->
 								<div class="tab-content mt-2" style="height: 550px; overflow: scroll;">
-									<div class="tab-pane fade show active" id="tab1">
+									<div class="tab-pane fade show active">
 										<div id="yourExistingContentId">
+											<form th:action="@{/admin/invoices/addInvoide}" method="post"
+												class="col-sm-12" th:object="${invoice}">
+												<div class="row">
+													<div class="col-sm-6">
+														<div class="form-group">
+															<label>Mã hóa đơn: </label>
+															<input class="form-control" th:field="*{invoiceId}"
+																type="text" readonly>
+														</div>
+														<div class="form-group">
+															<label>Tổng tiền: </label>
+															<input class="form-control" id="totalPriceInput"
+																th:field="*{amount}" type="text" readonly>
+														</div>
+													</div>
+													<div class="col-sm-6">
+														<div class="form-group">
+															<label>Tên khách hàng: </label>
+															<input class="form-control" th:field="*{username}"
+																type="text" required>
+														</div>
+														<div class="form-group">
+															<label>Số điện thoại: </label>
+															<input class="form-control" th:field="*{phonenumber}"
+																type="text" required>
+														</div>
+													</div>
+													<div class="col-md-12">
+														<table class="display table table-striped table-hover"
+															id="LstTbl">
+															<thead>
+																<tr>
+																	<th hidden></th>
+																	<th scope="col">#</th>
+																	<th scope="col">Sản phẩm</th>
+																	<th scope="col">Tên sản phẩm</th>
+																	<th scope="col">Thể loại</th>
+																	<th scope="col">Màu sắc</th>
+																	<th scope="col">Số lượng</th>
+																	<th scope="col">Đơn giá</th>
+																	<th scope="col">action</th>
+																</tr>
+															</thead>
+															<tbody id="myTableId">
+																<tr th:each="item,State : ${cartItems}"
+																	th:id="'row_'+${State.index + 1}">
+																	<td th:name="checkbox" th:id="${State.index + 1}"
+																		hidden>
+																	</td>
+										
+																	<td id="idproductGio"
+																		th:value="${item.product.productId}" hidden>
+																		[[${item.product.productId}]]</td>
+																	<td class="table-serial">
+																		<span id="idRow">[[${State.index + 1}]]</span>
+																	</td>
+																	<td class="table-image">
+																		<img style="width: 100%;"
+																			th:src="@{'/loadImage?imageName='+${item.product.productImage}}"
+																			alt="product" />
+																	</td>
+																	<td class="table-name">
+																		<h6>[[${item.product.productName}]]</h6>
+																	</td>
+																	<td class="table-brand">
+																		<h6>[[${item.product.category.categoryName}]]
+																		</h6>
+																	</td>
+																	<td class="table-brand">
+																		<h6>[[${item.size.nameSize}]]</h6>
+																	</td>
+																	<td class="table-quantity" style="width: 15%;">
+																		<input type="number" id="quantity"
+																			class="form-control"
+																			oninput="updateInvoi(this);"
+																			onblur="updateInvoi(this);"
+																			onclick="updateInvoi(this);"
+																			th:value="${item.quantity}">
+																	</td>
+																	<td class="table-price" id="price">
+																		[[${#numbers.formatDecimal((item.product.price -
+																		(item.product.price *
+																		item.product.discount/100)) * item.quantity, 1,
+																		'DEFAULT', 0, 'DEFAULT')}+ ' đ']]
+																	</td>
+																	</td>
+																	<td class="table-action">
+																		<a class="view"
+																			th:id="'submitInvoice'+${State.index + 1}"
+																			title="Cập nhật">
+																			<i class="fa fa-edit"></i>
+																		</a>
 
-											<div class="col-md-12">
-												<table class="display table table-striped table-hover" id="LstTbl">
-													<thead>
-														<tr>
-															<th hidden></th>
-															<th scope="col">#</th>
-															<th scope="col">Sản phẩm</th>
-															<th scope="col">Tên sản phẩm</th>
-															<th scope="col">Thể loại</th>
-															<th scope="col">Màu sắc</th>
-															<th scope="col">Số lượng</th>
-															<th scope="col">Đơn giá</th>
-
-															<th scope="col">action</th>
-														</tr>
-													</thead>
-													<tbody id="myTableId">
-
-														<tr th:each="item,State : ${cartItems}"
-															th:id="'row_'+${State.index + 1}">
-															<td th:name="checkbox" th:id="${State.index + 1}" hidden>
-															</td>
-															<td id="idproductGio" th:value="${item.product.productId}"
-																hidden>
-																[[${item.product.productId}]]</td>
-															<td class="table-serial">
-																<span id="idRow">[[${State.index + 1}]]</span>
-															</td>
-															<td class="table-image">
-																<img style="width: 100%;"
-																	th:src="@{'/loadImage?imageName='+${item.product.productImage}}"
-																	alt="product" />
-															</td>
-															<td class="table-name">
-																<h6>[[${item.product.productName}]]</h6>
-															</td>
-															<td class="table-brand">
-																<h6>[[${item.product.category.categoryName}]]
-																</h6>
-															</td>
-															<td class="table-brand">
-																<h6>[[${item.size.nameSize}]]</h6>
-															</td>
-															<td class="table-quantity" style="width: 15%;">
-																<input type="number" id="quantity" class="form-control"
-																	oninput="updateInvoi(this);"
-																	onblur="updateInvoi(this);"
-																	onclick="updateInvoi(this);"
-																	th:value="${item.quantity}">
-															</td>
-															<td class="table-price" id="price">
-																[[${#numbers.formatDecimal((item.product.price -
-																(item.product.price *
-																item.product.discount/100)) * item.quantity, 1,
-																'DEFAULT', 0, 'DEFAULT')}+ ' đ']]
-															</td>
-															</td>
-															<td class="table-action">
-																<a class="view"
-																	th:id="'submitInvoice'+${State.index + 1}"
-																	title="Cập nhật">
-																	<i class="fa fa-edit"></i>
-																</a>
-
-																<a class="trash" href="javascript:void(0);"
-																	title="Xóa sản phẩm"
-																	th:data-id="${item.product.productId}"
-																	th:data-name="${item.product.productName}"
-																	onclick="showConfigModalDialogGio(this.getAttribute('data-id'), this.getAttribute('data-name'))">
-																	<i class="icofont-trash"></i>
-																</a>
-																<input type="text" id="quanPro"
-																	th:value="${item.product.quantity}" hidden="hidden">
-															</td>
-														</tr>
-													</tbody>
+																		<a class="trash" href="javascript:void(0);"
+																			title="Xóa sản phẩm"
+																			th:data-id="${item.product.productId}"
+																			th:data-name="${item.product.productName}"
+																			onclick="showConfigModalDialogGio(this.getAttribute('data-id'), this.getAttribute('data-name'))">
+																			<i class="icofont-trash"></i>
+																		</a>
+																		<input type="text" id="quanPro"
+																			th:value="${item.product.quantity}"
+																			hidden="hidden">
+																	</td>
+																</tr>
+															</tbody>
 
 
-													<!-- <td class="table-action">
+															<!-- <td class="table-action">
 
 																		<a class="view"
 																			th:id="'submitInvoice'+${State.index + 1}"
@@ -336,79 +261,28 @@
 
 																</tr>
 															</tbody> -->
-												</table>
-												<button class="btn btn-primary" data-toggle="modal"
-													data-target="#addRowModal">
-													<i class="fa fa-plus"></i>
-													Tạo hóa đơn
-												</button>
-											</div>
-
-											<script>
-												function showConfigModalDialogHoaDon() {
-													$('#productName').text(name);
-													$('#yesOption').attr('href', '/admin/removeInvoice/' + id);
-													$('#configmationId').modal('show');
-												}
-											</script>
-										</div>
-										</form>
-									</div>
-
-								</div>
-							</div>
-							<div class="modal fade" id="addRowModal" tabindex="-1" role="dialog" aria-hidden="true">
-								<div class="modal-dialog" role="document">
-									<div class="modal-content">
-										<div class="modal-header no-bd">
-											<h5 class="modal-title">
-												<span class="fw-mediumbold"
-													style="text-decoration: none; color: black;">
-													Tạo hóa đơn</span>
-
-											</h5>
-											<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-												<span aria-hidden="true">&times;</span>
-											</button>
-										</div>
-										<div class="modal-body">
-											<form th:action="@{/admin/invoices/addInvoide}" method="post"
-												class="col-sm-12" th:object="${invoice}">
-												<div class="row">
-													<div class="col-sm-6">
-														<div class="form-group">
-															<label>Mã hóa đơn: </label>
-															<input class="form-control" th:field="*{invoiceId}"
-																type="text" readonly>
-														</div>
-														<div class="form-group">
-															<label>Tổng tiền: </label>
-															<input class="form-control" id="totalPriceInput"
-																th:field="*{amount}" type="text" readonly>
-														</div>
+														</table>
+														<button class="btn btn-primary" type="submit">
+															Tạo hóa đơn
+														</button>
 													</div>
-													<div class="col-sm-6">
-														<div class="form-group">
-															<label>Tên khách hàng: </label>
-															<input class="form-control" th:field="*{username}"
-																type="text" required>
-														</div>
-														<div class="form-group">
-															<label>Số điện thoại: </label>
-															<input class="form-control" th:field="*{phonenumber}"
-																type="text" required>
-														</div>
-													</div>
-													<div class="col-sm-6">
-														<button class="btn btn-primary" type="submit">Tạo hóa
-															đơn</button>
-													</div>
+
+													<script>
+														function showConfigModalDialogHoaDon() {
+															$('#productName').text(name);
+															$('#yesOption').attr('href', '/admin/removeInvoice/' + id);
+															$('#configmationId').modal('show');
+														}
+													</script>
+												</div>
 											</form>
 										</div>
-									</div>
-								</div>
-							</div>
 
+									</div>
+									</form>
+								</div>
+
+							</div>
 						</div>
 
 						<script>
@@ -466,7 +340,8 @@
 										<div class="modal-body">
 											<p>
 												Bạn có muốn xoá sản phẩm " <span style="color: #119744"
-													id="productName"></span> "
+													id="productName"></span>
+												"
 												ra khỏi giỏ hàng không ?
 											</p>
 										</div>
@@ -474,72 +349,73 @@
 											<a id="yesOption" type="button" class="btn btn-success">Có</a>
 										</div>
 									</div>
-
 								</div>
 							</div>
 						</div>
-
-					</div>
-					<div class="col-md-5">
-						<div class="container mt-5">
-							<div class="nav-tabs">
-								<a class="nav-link active">Tìm kiếm sản phẩm
-								</a>
-							</div>
-							<form th:action="@{/admin/invoices/search}" method="get">
-								<div class="input-group mb-3">
-									<input name="searchTerm" id="searchTerm" type="text" class="form-control"
-										placeholder="Tên sản phẩm hoặc mã sản phẩm" aria-label="Tên sản phẩm"
-										aria-describedby="basic-addon2">
-									<div class="input-group-append">
-										<button class="btn btn-outline-secondary" type="submit">Search</button>
+						<div class="col-md-5">
+							<div class="container mt-5">
+								<div class="nav-tabs">
+									<a class="nav-link active">Tìm kiếm sản phẩm
+									</a>
+								</div>
+								<form th:action="@{/admin/invoices/search}" method="get">
+									<div class="input-group mb-3">
+										<input name="searchTerm" id="searchTerm" type="text" class="form-control"
+											placeholder="Tên sản phẩm hoặc mã sản phẩm" aria-label="Tên sản phẩm"
+											aria-describedby="basic-addon2">
+										<div class="input-group-append">
+											<button class="btn btn-outline-secondary" type="submit">Search</button>
+										</div>
 									</div>
-								</div>
-							</form>
-							<div class="row" style="max-height: 500px; overflow-y: auto;">
-								<div class="card" style="width: 95%; padding: 15px; margin-left: 20px;"
-									th:each="item : ${matchedProducts}">
-									<form action="/admin/invoices/addToCart" method="post">
+								</form>
+								<div class="row" style="max-height: 500px; overflow-y: auto;">
+									<div class="card" style="width: 95%; padding: 15px; margin-left: 20px;"
+										th:each="item : ${matchedProducts}">
+										<form action="/admin/invoices/addToCart" method="post">
 
-										<div class="row no-gutters">
-											<div class="col-md-4">
-												<img th:src="@{'/loadImage?imageName='+${item.productImage}}"
-													style="max-width: 100%; height: auto;">
-											</div>
-											<div class="col-md-8">
-												<div class="card-body">
-													<h5 class="card-title">Mã sản phẩm: [[${item.productId}]]</h5>
-													<input type="hidden" name="productId" th:value="${item.productId}">
-
-													<h5 class="card-title">Tên sản phẩm: [[${item.productName}]]
-													</h5>
-													<input type="hidden" name="sizeId" th:value="${item.size.sizeId}">
-													<div>
-														<span>Màu sắc: [[${item.size.nameSize}]]</span>
-													</div>
-													<div>Số lượng: <input name="quantity" type="number" min="1" max="50"
-															value="1">
-														<span id="badgeId" class="badge text-white bg-info"
-															style="padding: 8px 10px 5px 10px; margin: 0 0 0 0px;">[[${item.quantity}]]
-															sản phẩm có sẵn</span>
-
-
-													</div><br>
-													<div>Đơn giá: [[${item.price}]] VNĐ</div>
+											<div class="row no-gutters">
+												<div class="col-md-4">
+													<img th:src="@{'/loadImage?imageName='+${item.productImage}}"
+														style="max-width: 100%; height: auto;">
 												</div>
-											</div>
+												<div class="col-md-8">
+													<div class="card-body">
+														<h5 class="card-title">Mã sản phẩm:
+															[[${item.productId}]]</h5>
+														<input type="hidden" name="productId"
+															th:value="${item.productId}">
 
-										</div>
-										<div class="card-footer">
-											<button type="submit" class="btn btn-primary float-right">Thêm
-												vào giỏ hàng</button>
-										</div>
-									</form>
+														<h5 class="card-title">Tên sản phẩm:
+															[[${item.productName}]]
+														</h5>
+														<input type="hidden" name="sizeId"
+															th:value="${item.size.sizeId}">
+														<div>
+															<span>Màu sắc: [[${item.size.nameSize}]]</span>
+														</div>
+														<div>Số lượng: <input name="quantity" type="number" min="1"
+																max="50" value="1">
+															<span id="badgeId" class="badge text-white bg-info"
+																style="padding: 8px 10px 5px 10px; margin: 0 0 0 0px;">[[${item.quantity}]]
+																sản phẩm có sẵn</span>
+
+
+														</div><br>
+														<div>Đơn giá: [[${item.price}]] VNĐ</div>
+													</div>
+												</div>
+
+											</div>
+											<div class="card-footer">
+												<button type="submit" class="btn btn-primary float-right">Thêm
+													vào giỏ hàng</button>
+											</div>
+										</form>
+
+									</div>
 
 								</div>
-
 							</div>
-
 						</div>
 					</div>
 
@@ -632,7 +508,7 @@
 		var totalPrice = /*[[${totalPrice}]]*/ 0;
 		document.getElementById("totalPriceInput").value = totalPrice;
 	</script>
-	<script>
+	<!-- <script>
 		function createNewTab() {
 			tabIndex++;
 			let tabID = "tab" + tabIndex;
@@ -697,7 +573,7 @@
 				$("#" + tabID).addClass("active show");
 			});
 			addNewTab();
-		});
+		}); -->
 
 
 	</script>

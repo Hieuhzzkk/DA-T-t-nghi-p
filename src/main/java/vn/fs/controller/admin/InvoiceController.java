@@ -184,9 +184,6 @@ public class InvoiceController{
 		model.addAttribute("totalCartItems", shoppingCartService.getCount());
 	    return "redirect:/admin/invoices";
 	}
-
-	
-	
 	@GetMapping("/invoices/search")
 	public String searchProduct(@RequestParam("searchTerm") String searchTerm, ModelMap model, RedirectAttributes attributes) {
 	    try {
@@ -237,11 +234,10 @@ public class InvoiceController{
 			detailInvoice.setInvoice(invoice);
 			invoiceDetailRepository.save(detailInvoice);
 		}
-//		commomDataService.sendSimpleEmail(user.getEmail(), "Ado-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
-//				totalPrice, invoices);
+		Long idInvo = invoice.getInvoiceId();
 		shoppingCartService.clearInvoice();
 		session.removeAttribute("cartItems");
-		return "redirect:/admin/invoices/lsInvoice";
+		return "redirect:/admin/invoices/detail/" + idInvo;
 	}
 	
 	@GetMapping("/invoices/lsInvoice")
@@ -269,6 +265,33 @@ public class InvoiceController{
 		return new ModelAndView("forward:/admin/invoices/lsInvoice", model);
 
 	}
+	@GetMapping("/invoices/delete/{id}")
+	public String deleteInvoide(@PathVariable("id") Long id,Model model) {
+		invoiceRepository.deleteById(id);
+		return "redirect:/admin/invoices/lsInvoice";
+	}
+	@GetMapping("/invoices/detail/{id}")
+	public String invoiceDetailLs(Model model,@PathVariable("id") Long id,User user) {
+		List<InvoiceDetail> details = invoiceDetailRepository.findByInvoiceDeTailByInvoiceId(id);
+		double totalPrice = details.stream()
+                .mapToDouble(item -> (item.getPrice() - (item.getPrice() * item.getProducts().getDiscount() / 100)) * item.getQuantity())
+                .sum();
+        model.addAttribute("totalPrice", totalPrice);
+		model.addAttribute("lsDetailInvoice",invoiceDetailRepository.findByInvoiceDeTailByInvoiceId(id));
+		return "admin/invoiceDetail";
+	}
+	@GetMapping("/invoiceDetail/delete/{id}")
+	public String invoiceDetailDelete(@PathVariable("id") Long id) {
+		InvoiceDetail detail = invoiceDetailRepository.findById(id).get();
+		Long idInvoice = detail.getInvoice().getInvoiceId();
+		invoiceDetailRepository.deleteById(id);
+		List<InvoiceDetail> lsDetail = invoiceDetailRepository.findByInvoiceDeTailByInvoiceId(idInvoice);
+		if(lsDetail.isEmpty()) {
+			invoiceRepository.deleteById(idInvoice);
+			return "redirect:/admin/invoices/lsInvoice";
 
+		}
+		return "redirect:/admin/invoices/detail/"+idInvoice;
+	}
 	
 }

@@ -45,7 +45,7 @@
 			<div class="content">
 				<div class="page-inner">
 					<div class="page-header">
-						<h4 class="page-title">Quản lý Size</h4>
+						<h4 class="page-title">Quản lý hóa đơn </h4>
 						<ul class="breadcrumbs">
 							<li class="nav-home">
 								<a href="javascript:void(0);">
@@ -68,11 +68,11 @@
 						<div class="card">
 							<div class="card-header">
 								<div class="d-flex align-items-center">
-									<button class="btn btn-primary btn-round ml-auto" data-toggle="modal"
+									<!-- <button class="btn btn-primary btn-round ml-auto" data-toggle="modal"
 										data-target="#addRowModal">
 										<i class="fa fa-plus"></i>
 										Thêm mới
-									</button>
+									</button> -->
 								</div>
 							</div>
 							<div class="card-body">
@@ -157,7 +157,7 @@
 											<td>[[${item.phonenumber}]]</td>
 											<td>[[${item.invoiceDate}]]</td>
 											<td>[[${item.amount}]]</td>
-											<td><a href="#">Hóa đơn chi tiết</a></td>
+											<td><a th:href="@{/admin/invoices/detail/{invoiceId}(invoiceId=${item.invoiceId})}">Hóa đơn chi tiết</a></td>
 											<td>
 												<div th:if="${item.status==0}">
 													<a style="cursor: pointer; color: #ffab10;"
@@ -168,8 +168,7 @@
 												</div>
 												<div th:if="${item.status==1}">
 													<a style="cursor: pointer; color: #119744;"
-														th:data-id="${item.invoiceId}"
-														onclick="showConfigDeliveredModalDialog(this.getAttribute('data-id'))">
+														th:data-id="${item.invoiceId}">
 														<i class="fa fa-check-circle">Đã thanh toán</i>
 													</a>
 												</div>
@@ -214,13 +213,13 @@
 											</div>
 											<td>
 												<div class="form-button-action">
-													<a th:href="@{/admin/invoices/{invoiceId}(invoiceId=${item.invoiceId})}"
+													<!-- <a th:href="@{/admin/invoices/detail/{invoiceId}(invoiceId=${item.invoiceId})}"
 														type="button" data-toggle="tooltip" title=""
 														class="btn btn-link btn-primary btn-lg"
 														data-original-title="Chỉnh sửa">
 														<i class="fa fa-edit"></i>
-													</a>
-													<button th:data-id="${item.invoiceId}"
+													</a> -->
+													<button th:if="${item.status==0}" th:data-id="${item.invoiceId}"
 														th:data-name="${item.username}"
 														onclick="showConfigModalDialog(this.getAttribute('data-id'), this.getAttribute('data-name'))"
 														type="button" data-toggle="tooltip" title=""
@@ -250,7 +249,7 @@
 									}
 									function showConfigModalDialog(id, name) {
 										$('#name').text(name);
-										$('#yesOption').attr('href', '/admin/invoices/delete' + id);
+										$('#yesOption').attr('href', '/admin/invoices/delete/' + id);
 										$('#configmationId').modal('show');
 									}
 								</script>
@@ -267,7 +266,7 @@
 												</button>
 											</div>
 											<div class="modal-body">
-												<p style="color: black">Bạn có muốn xóa thể loại này không?</p>
+												<p style="color: black">Bạn có muốn xóa hóa đơn này không?</p>
 											</div>
 											<div class="modal-footer">
 												<a id="yesOption" type="button" class="btn btn-primary">Có</a>

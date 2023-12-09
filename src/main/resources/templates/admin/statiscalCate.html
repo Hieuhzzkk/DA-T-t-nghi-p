@@ -92,6 +92,10 @@
 												<td>[[${#numbers.formatDecimal(item[2], 1, 'DEFAULT', 0, 'DEFAULT')} + ' đ']]</td>
 												
 											</tr>
+											<tr>
+												<td colspan="3">Tổng tiền</td>
+												<td th:text="${#numbers.formatDecimal(totalPrice, 1, 'DEFAULT', 0, 'DEFAULT')} + ' đ'"></td>
+											</tr>
 										</tbody>
 									</table>
 								</div>
