@@ -92,9 +92,7 @@ public class OrderDetailController {
 		} catch (Exception e) {
 			attributes.addFlashAttribute("erroradd", "Thất bại");
 			return "/admin/orders";
-
 		}
-		
 	}
 	@PostMapping("/orderdetail/updatePriceForOrder")
 	@Transactional

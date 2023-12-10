@@ -277,6 +277,11 @@ public class InvoiceController{
                 .mapToDouble(item -> (item.getPrice() - (item.getPrice() * item.getProducts().getDiscount() / 100)) * item.getQuantity())
                 .sum();
         model.addAttribute("totalPrice", totalPrice);
+		List<Product> cboPro = productRepository.findAll();
+		model.addAttribute("cboPro",cboPro);
+        model.addAttribute("invoiceId",id);
+model.addAttribute("invoiceDetails",new InvoiceDetail());
+model.addAttribute("status",invoiceRepository.findById(id).get().getStatus());
 		model.addAttribute("lsDetailInvoice",invoiceDetailRepository.findByInvoiceDeTailByInvoiceId(id));
 		return "admin/invoiceDetail";
 	}
@@ -289,7 +294,6 @@ public class InvoiceController{
 		if(lsDetail.isEmpty()) {
 			invoiceRepository.deleteById(idInvoice);
 			return "redirect:/admin/invoices/lsInvoice";
-
 		}
 		return "redirect:/admin/invoices/detail/"+idInvoice;
 	}
