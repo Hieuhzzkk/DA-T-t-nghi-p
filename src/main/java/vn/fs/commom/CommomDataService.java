@@ -25,6 +25,7 @@ import vn.fs.repository.OrderDetailRepository;
 import vn.fs.repository.OrderRepository;
 import vn.fs.repository.ProductRepository;
 import vn.fs.service.ShoppingCartService;
+import vn.fs.entities.InvoiceCart;
 
 
 @Service
@@ -151,5 +152,23 @@ public class CommomDataService {
 		mimeMessageHelper.setText(htmlContent, true);
 		// Send Message!
 		emailSender.send(mimeMessage);
+	}
+	public void commonDataInvoice(Model model, User user) {
+		listCategoryByProductName(model);
+		Integer totalSave = 0;
+		// get count yêu thích
+		if (user != null) {
+			totalSave = favoriteRepository.selectCountSave(user.getUserId());
+		}
+
+		Integer totalCartItems = shoppingCartService.getCount();
+
+		model.addAttribute("totalSave", totalSave);
+
+		model.addAttribute("totalCartItems", totalCartItems);
+
+		Collection<InvoiceCart> cartItems = shoppingCartService.getInvoiceCarts();
+		model.addAttribute("cartItems", cartItems);
+
 	}
 }

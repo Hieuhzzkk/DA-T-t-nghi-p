@@ -9,12 +9,14 @@ import org.springframework.stereotype.Service;
 import vn.fs.entities.CartItem;
 import vn.fs.entities.Product;
 import vn.fs.service.ShoppingCartService;
+import vn.fs.entities.InvoiceCart;
 
 
 @Service
 public class ShoppingCartServiceImpl implements ShoppingCartService {
 
 	private Map<Long, CartItem> map = new HashMap<Long, CartItem>(); // <Long, CartItem>
+	private Map<Long, InvoiceCart> map2 = new HashMap<Long, InvoiceCart>(); // <Long, CartItem>
 
 	@Override
 	public void add(CartItem item) {
@@ -40,6 +42,20 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 			existedItem.setTotalPrice(item.getTotalPrice() + existedItem.getUnitPrice() * existedItem.getQuantity());
 		} else {
 			map.put(item.getId(), item);
+		}
+		
+	}
+	@Override
+	public void add3(InvoiceCart item, Product product) {
+		InvoiceCart existedItem = map2.get(item.getId());
+		if (existedItem != null) {
+			existedItem.setQuantity(item.getQuantity() + existedItem.getQuantity());
+			if (existedItem.getQuantity()> product.getQuantity()) {
+				existedItem.setQuantity(product.getQuantity());
+			}
+			existedItem.setTotalPrice(item.getTotalPrice() + existedItem.getUnitPrice() * existedItem.getQuantity());
+		} else {
+			map2.put(item.getId(), item);
 		}
 		
 	}
@@ -102,6 +118,10 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	public void clear() {
 		map.clear();
 	}
+	@Override
+	public void clearInvoice() {
+		map2.clear();
+	}
 	
 	@Override
 	public double getAmount() {
@@ -120,5 +140,26 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	@Override
 	public void remove(Product product) {
 
+	}
+	@Override
+	public Collection<InvoiceCart> getInvoiceCarts() {
+		return map2.values();
+	}
+	@Override
+	public InvoiceCart updateInvoice(Long id, int quantity1) {
+		Collection<InvoiceCart> cartItems = map2.values();
+		for (InvoiceCart cartItemss : cartItems) {
+			cartItemss = map2.get(id);
+			cartItemss.setQuantity(quantity1);
+		}
+		
+		
+		return (InvoiceCart) cartItems;
+	}
+
+	@Override
+	public void removeCartInvoice(InvoiceCart item) {
+		map2.remove(item.getId());
+		
 	}
 }
