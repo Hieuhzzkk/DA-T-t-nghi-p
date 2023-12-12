@@ -67,105 +67,104 @@
                     <div class="col-md-12">
                         <div class="card">
                             <div class="card-header">
-								<div class="d-flex align-items-center">
-									<button th:if="${status==0}" class="btn btn-primary btn-round ml-auto" data-toggle="modal"
-										data-target="#addinvoiceDetail">
-										<i class="fa fa-plus"></i>
-										Thêm sản phẩm
-									</button>
-								</div>
-							</div>
+                                <div class="d-flex align-items-center">
+                                    <button th:if="${status==0}" class="btn btn-primary btn-round ml-auto"
+                                        data-toggle="modal" data-target="#addinvoiceDetail">
+                                        <i class="fa fa-plus"></i>
+                                        Thêm sản phẩm
+                                    </button>
+                                </div>
+                            </div>
                             <div class="card-body">
-								<!-- Modal add -->
-								<div class="modal fade" id="addinvoiceDetail" tabindex="-1" role="dialog"
-										aria-hidden="true">
-										<div class="modal-dialog" role="document">
-											<div class="modal-content">
-												<div class="modal-header no-bd">
-													<h5 class="modal-title">
-														<span class="fw-mediumbold"
-															style="text-decoration: none; color: black;">
-															Thêm sản phẩm</span>
-													</h5>
-													<button type="button" class="close" data-dismiss="modal"
-														aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button>
-												</div>
-												<div class="modal-body">
-													<form th:action="@{/admin/invoideDetails/addInvoiceDetail}" method="post"
-														th:object="${invoiceDetails}">
-														<div class="modal-body">
-															<div class="form-group">
-																<label hidden>Mã đơn hàng chi tiết</label>
-																<input hidden th:filed="*{invoiceDetailId}" type="text"
-																	class="form-control" required readonly>
-															</div>
-															<div class="form-group">
-																<label>Mã đơn hàng</label>
-																<input name="invoice" type="text" class="form-control"
-																	th:value="${invoiceId}" readonly>
-															</div>
-															<div class="form-group" style="position: relative;">
-																<label>Lựa chọn sản phẩm</label>
-																<select th:field="*{products}" class="form-control"
-																	id="productSelect">
-																	<option value="">-- Chọn sản phẩm --</option>
-																	<option th:each="item : ${cboPro}"
-																		th:value="${item.productId}"
-																		th:text="${item.productName}"
-																		th:data-price="${item.price}">
-																	</option>
-																</select>
-															</div>
+                                <!-- Modal add -->
+                                <div class="modal fade" id="addinvoiceDetail" tabindex="-1" role="dialog"
+                                    aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header no-bd">
+                                                <h5 class="modal-title">
+                                                    <span class="fw-mediumbold"
+                                                        style="text-decoration: none; color: black;">
+                                                        Thêm sản phẩm</span>
+                                                </h5>
+                                                <button type="button" class="close" data-dismiss="modal"
+                                                    aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form th:action="@{/admin/invoideDetails/addInvoiceDetail}"
+                                                    method="post" th:object="${invoiceDetails}">
+                                                    <div class="modal-body">
+                                                        <div class="form-group">
+                                                            <label hidden>Mã đơn hàng chi tiết</label>
+                                                            <input hidden th:filed="*{invoiceDetailId}" type="text"
+                                                                class="form-control" required readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Mã đơn hàng</label>
+                                                            <input name="invoice" type="text" class="form-control"
+                                                                th:value="${invoiceId}" readonly>
+                                                        </div>
+                                                        <div class="form-group" style="position: relative;">
+                                                            <label>Lựa chọn sản phẩm</label>
+                                                            <select th:field="*{products}" class="form-control"
+                                                                id="productSelect">
+                                                                <option value="">-- Chọn sản phẩm --</option>
+                                                                <option th:each="item : ${cboPro}"
+                                                                    th:value="${item.productId}"
+                                                                    th:text="${item.productName}"
+                                                                    th:data-price="${item.price}">
+                                                                </option>
+                                                            </select>
+                                                        </div>
 
-															<div class="form-group">
-																<label>Đơn giá</label>
-																<input th:field="*{price}" type="text"
-																	class="form-control" id="priceInput" readonly>
-															</div>
-															<div class="form-group">
-																<label>Màu</label>
-																<input type="text" class="form-control" id="colorInput"
-																	readonly>
-															</div>
-															<div class="form-group">
-																<label>Ảnh</label>
-																<img id="imageElement" class="form-control">
-															</div>
-															<div class="form-group">
-																<label>Số lượng</label>
-																<input th:field="*{quantity}" type="number"
-																	class="form-control" value="1">
-															</div>
-														</div>
-														<div class="modal-footer">
-															<input type="button" class="btn btn-default"
-																data-dismiss="modal" value="Cancel">
-															<input type="submit"
-																class="btn btn-primary btn-round ml-auto"
-																value="Thêm sản phẩm">
-														</div>
-													</form>
-												</div>
-											</div>
-										</div>
-									</div>
-								<div th:if="${errorsize}" class="text-center alert alert-danger"
-									style="border-left: 24px solid red;">
-									<p th:text="${errorsadd}"></p>
-								</div>
-								<div th:if="${errors}" class="text-center alert alert-danger"
-									style="border-left: 24px solid red;">
-									<p th:text="${errors}"></p>
-								</div>
-								<div th:if="${successsize}" class="text-center alert alert-success"
-									style="border-left: 24px solid #31ce36;">
-									<p th:text="${successadd}"></p>
-								</div>
+                                                        <div class="form-group">
+                                                            <label>Đơn giá</label>
+                                                            <input th:field="*{price}" type="text" class="form-control"
+                                                                id="priceInput" readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Màu</label>
+                                                            <input type="text" class="form-control" id="colorInput"
+                                                                readonly>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Ảnh</label>
+                                                            <img id="imageElement" class="form-control">
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <label>Số lượng</label>
+                                                            <input th:field="*{quantity}" id="quantityInput"
+                                                                type="number" class="form-control" min="1" value="1">
+                                                        </div>
+                                                    </div>
+                                                    <div class="modal-footer">
+                                                        <input type="button" class="btn btn-default"
+                                                            data-dismiss="modal" value="Cancel">
+                                                        <input type="submit" class="btn btn-primary btn-round ml-auto"
+                                                            value="Thêm sản phẩm">
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:if="${errorsize}" class="text-center alert alert-danger"
+                                    style="border-left: 24px solid red;">
+                                    <p th:text="${errorsadd}"></p>
+                                </div>
+                                <div th:if="${errors}" class="text-center alert alert-danger"
+                                    style="border-left: 24px solid red;">
+                                    <p th:text="${errors}"></p>
+                                </div>
+                                <div th:if="${successsize}" class="text-center alert alert-success"
+                                    style="border-left: 24px solid #31ce36;">
+                                    <p th:text="${successadd}"></p>
+                                </div>
 
-							</div>
-                               
+                            </div>
+
 
                             <div class="alert alert-success row col-12" th:if="${message}" th:text="${message}">
                             </div>
@@ -187,7 +186,7 @@
                                     </thead>
 
                                     <tbody>
-                                        <tr th:each="item, count : ${lsDetailInvoice}">
+                                        <tr th:each="item, count : ${lsDetailInvoice}" style="margin-top: 10px;">
                                             <td class="text-center" th:text="${count.index+1}"></td>
                                             <td>[[${item.invoice.invoiceId}]]</td>
                                             <td>
@@ -220,9 +219,10 @@
                                                 </div>
                                                 <script>
                                                     function showConfigDeliveredModalDialog(
-                                                        id) {
+                                                        id, name) {
                                                         $('#idDelivered').text(id);
-            
+
+
                                                         $('#yesOptionDelivered').attr(
                                                             'href',
                                                             '/admin/invoices/payForinvoice/'
@@ -230,41 +230,82 @@
                                                         $('#configmationDeliveredId')
                                                             .modal('show');
                                                     }
-                                                </script>	
-                                                	<!-- Modal -->
-											<div class="modal" id="configmationDeliveredId">
-												<div class="modal-dialog" role="document">
-													<div class="modal-content">
-														<div class="modal-header">
-															<h5 class="modal-title">Xác nhận</h5>
-															<button type="button" class="close" data-dismiss="modal"
-																aria-label="Close">
-																<span aria-hidden="true">&times;</span>
-															</button>
-														</div>
-														<div class="modal-body">
-															<p>
-																 Thanh toán đơn hàng có mã là "<span
-																	id="idDelivered"></span>" ?
-															</p>
-														</div>
-														<div class="modal-footer">
-															<a id="yesOptionDelivered" type="button" class="btn btn-info">Đã thanh toán</a>
-															<button type="button" class="btn btn-danger"
-																data-dismiss="modal">Chưa</button>
-														</div>
-													</div>
-												</div>
-											</div>
+                                                </script>
+                                                <!-- Modal -->
+                                                <div class="modal" id="configmationDeliveredId">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Xác nhận</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>
+                                                                    Thanh toán đơn hàng có mã là "<span
+                                                                        id="idDelivered"></span>" ?
+                                                                </p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <a id="yesOptionDelivered" type="button"
+                                                                    class="btn btn-info">Đã thanh toán</a>
+                                                                <button type="button" class="btn btn-danger"
+                                                                    data-dismiss="modal">Chưa</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
+
                                             <td>
-                                                <a
-                                                    th:href="@{/admin/invoiceDetail/delete/{invoiceDetailId}(invoiceDetailId = ${item.invoiceDetailId})}"
-                                                    type="button" data-toggle="tooltip" title=""
-                                                    class="btn btn-link btn-primary btn-lg hidden"
-                                                    data-original-title="Xóa sản phẩm">
-                                                    <i class="fa fa-trash"></i>
+                                                <a class="trash" href="javascript:void(0);" title="Xóa sản phẩm"
+                                                    th:data-id="${item.invoiceDetailId}"
+                                                    th:data-name="${item.products.productId}"
+                                                    onclick="showModelDelete(this.getAttribute('data-id'), this.getAttribute('data-name'))">
+                                                    <i class="fa fa-times"></i>
                                                 </a>
+                                                <script>
+                                                    function showModelDelete(
+                                                        id, name) {
+                                                        $('#idProduct').text(name);
+                                                        $('#idDelivered').text(id);
+                                                        console.log(id);
+
+                                                        $('#deleteYes').attr(
+                                                            'href',
+                                                            '/admin/invoiceDetail/delete/'
+                                                            + id);
+                                                        $('#showModelDelete')
+                                                            .modal('show');
+                                                    }
+                                                </script>
+                                                <div class="modal" id="showModelDelete">
+                                                    <div class="modal-dialog" role="document">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <h5 class="modal-title">Xóa</h5>
+                                                                <button type="button" class="close" data-dismiss="modal"
+                                                                    aria-label="Close">
+                                                                    <span aria-hidden="true">&times;</span>
+                                                                </button>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <p>
+                                                                    Xóa sản phẩm có mã là "<span id="idProduct"></span>"
+                                                                    ?
+                                                                </p>
+                                                            </div>
+                                                            <div class="modal-footer">
+                                                                <a id="deleteYes" type="button"
+                                                                    class="btn btn-info">Xóa</a>
+                                                                <button type="button" class="btn btn-danger"
+                                                                    data-dismiss="modal">Hủy</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </td>
 
                                         </tr>
@@ -277,11 +318,17 @@
                                             </td>
                                             <td colspan="2">
                                                 <button th:if="${status==0}" style="margin-left: 3%;"
-														class="btn btn-primary btn-round  ml-auto" data-toggle="modal"
-														data-target="#modelUpdatePriceInvoice"> <i class="fa fa-plus"></i>
-														Cập nhật</button>
+                                                    class="btn btn-primary btn-round  ml-auto" data-toggle="modal"
+                                                    data-target="#modelUpdatePriceInvoice"> <i class="fa fa-plus"></i>
+                                                    Cập nhật</button>
                                             </td>
-
+                                        </tr>
+                                        <tr>
+                                            <td colspan="2">QR đơn hàng</td>
+                                            <td>
+                                                <div th:attr="data-qr-url=@{'/admin/invoices/detail/' + ${invoiceId}}">
+                                                </div>
+                                            </td>
                                         </tr>
                                         <script>
                                             function showConfigDeliveredModalDialog(
@@ -324,94 +371,56 @@
                                         </div>
                                         <!--Modelupdateprice-->
                                         <div class="modal fade" id="modelUpdatePriceInvoice" tabindex="-1" role="dialog"
-										aria-hidden="true">
-										<div class="modal-dialog" role="document">
-											<div class="modal-content">
-												<div class="modal-header no-bd">
-													<h5 class="modal-title">
-														<span class="fw-mediumbold"
-															style="text-decoration: none; color: black;">
-															Cập nhật hóa đơn</span>
-													</h5>
-													<button type="button" class="close" data-dismiss="modal"
-														aria-label="Close">
-														<span aria-hidden="true">&times;</span>
-													</button>
-												</div>
-												<div class="modal-body">
-													<form th:action="@{/admin/invoiceDetails/updatePriceForInvoice}"
-														method="post" th:object="${invoices}">
-														<div class="form-group">
-															<label>Mã đơn hàng</label>
-															<input type="text" name="invoiceId" th:value="${invoiceId}"
-																class="form-control" required readonly>
-														</div>
-														
-														<div class="form-group">
-															<label>Tổng tiền sản phẩm</label>
-															<input type="text" name="amount" th:value="${totalPrice}"
-																class="form-control" required readonly>
-														</div>
-										
-														<div class="form-group">
-															<input type="submit"
-																class="btn btn-primary btn-round ml-auto"
-																value="Cập nhật đơn giá">
-														</div>
-														
-													</form>
-												</div>
-											</div>
-										</div>
-									</div>
+                                            aria-hidden="true">
+                                            <div class="modal-dialog" role="document">
+                                                <div class="modal-content">
+                                                    <div class="modal-header no-bd">
+                                                        <h5 class="modal-title">
+                                                            <span class="fw-mediumbold"
+                                                                style="text-decoration: none; color: black;">
+                                                                Cập nhật hóa đơn</span>
+                                                        </h5>
+                                                        <button type="button" class="close" data-dismiss="modal"
+                                                            aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    <div class="modal-body">
+                                                        <form th:action="@{/admin/invoiceDetails/updatePriceForInvoice}"
+                                                            method="post" th:object="${invoices}">
+                                                            <div class="form-group">
+                                                                <label>Mã đơn hàng</label>
+                                                                <input type="text" name="invoiceId"
+                                                                    th:value="${invoiceId}" class="form-control"
+                                                                    required readonly>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <label>Tổng tiền sản phẩm</label>
+                                                                <input type="text" name="amount"
+                                                                    th:value="${totalPrice}" class="form-control"
+                                                                    required readonly>
+                                                            </div>
+
+                                                            <div class="form-group">
+                                                                <input type="submit"
+                                                                    class="btn btn-primary btn-round ml-auto"
+                                                                    value="Cập nhật đơn giá">
+                                                            </div>
+
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
 
                                     </tbody>
                                 </table>
                                 <!-- Delete Category th:data-id="${item.categoryId}" th:href="@{/editCategory/(id=${category.categoryId})}"-->
                                 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"
                                     type="text/javascript"></script>
-                                <script>
-                                    function checktext() {
-                                        if ($('#nameSize').val().trim() == "") {
-                                            $('#tb').css({ 'display': 'block' }) &&
-                                                $('#Addcat').prop('disabled', true)
-                                        } else (
-                                            $('#tb').css({ 'display': 'none' }) &&
-                                            $('#Addcat').prop('disabled', false)
-                                        );
-                                    }
-                                    function formatTrim() {
-                                        $('#nameSize').val($('#nameSize').val().trim());
-                                    }
-                                    function showConfigModalDialog(id, name) {
-                                        $('#name').text(name);
-                                        $('#yesOption').attr('href', '#' + id);
-                                        $('#configmationId').modal('show');
-                                    }
-                                </script>
 
-                                <!-- Modal -->
-                                <div class="modal" tabindex="-1" role="dialog" id="configmationId">
-                                    <div class="modal-dialog" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h5 class="modal-title" style="color: black">Xác nhận</h5>
-                                                <button type="button" class="close" data-dismiss="modal"
-                                                    aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <p style="color: black">Bạn có muốn xóa hóa đơn này không?</p>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <a id="yesOption" type="button" class="btn btn-primary">Có</a>
-                                                <button type="button" class="btn btn-danger"
-                                                    data-dismiss="modal">Không</button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+
                             </div>
                         </div>
                     </div>
@@ -446,26 +455,50 @@
     <script src="/assets/js/atlantis.min.js"></script>
     <!-- Atlantis DEMO methods, don't include it in your project! -->
     <script src="/assets/js/setting-demo2.js"></script>
+    <script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 
-<script>
-    		$(document).ready(function () {
-			$("#productSelect").change(function () {
-				var selectedProductId = $(this).val();
-				var urlImg = "/loadImage?imageName=";
-				$.get('/admin/getProductCBO/' + selectedProductId, function (data) {
-					if (data != null) {
-						$("#priceInput").val(data.price);
-						$("#colorInput").val(data.description);
-						var imageName = data.productImage;
-						var urlImgFull = urlImg + imageName;
-						$("#imageElement").attr("src", urlImgFull);
-					} else {
-						alert("Sản phẩm không tồn tại hoặc có lỗi.");
-					}
-				});
-			});
-		});
-</script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Select all elements with the data-qr-url attribute
+            var qrCodeElements = document.querySelectorAll('[data-qr-url]');
+
+            // Loop through each element and generate the QR code
+            qrCodeElements.forEach(function (element) {
+                var url = element.getAttribute('data-qr-url');
+
+                // Generate QR code
+                var qrcode = new QRCode(element, {
+                    text: url,
+                    width: 128,
+                    height: 128
+                });
+            });
+        });
+    </script>
+
+
+
+    <script>
+        $(document).ready(function () {
+            $("#productSelect").change(function () {
+                var selectedProductId = $(this).val();
+                var urlImg = "/loadImage?imageName=";
+                $.get('/admin/getProductCBO/' + selectedProductId, function (data) {
+                    if (data != null) {
+                        $("#priceInput").val(data.price);
+                        $("#colorInput").val(data.description);
+                        $("#quantityInput").val(1);
+
+                        var imageName = data.productImage;
+                        var urlImgFull = urlImg + imageName;
+                        $("#imageElement").attr("src", urlImgFull);
+                    } else {
+                        alert("Sản phẩm không tồn tại hoặc có lỗi.");
+                    }
+                });
+            });
+        });
+    </script>
     <script>
         $(document).ready(function () {
             $('#basic-datatables').DataTable({

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import vn.fs.dto.ApiProduct;
 import vn.fs.entities.Product;
 
 @Repository
@@ -72,4 +73,7 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	
 	@Query(value = "SELECT * FROM products p WHERE LOWER(p.product_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR LOWER(p.product_id) LIKE LOWER(CONCAT('%', :searchTerm, '%'))", nativeQuery = true)
 	List<Product> findbyProWithIdOrName(@Param("searchTerm") String searchTerm);
+	
+	@Query(value = "select * from products p where product_id = ?",nativeQuery = true)
+	ApiProduct findByIdProduct(Long id);
 }
