@@ -3,7 +3,7 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta charset="UTF-8" />
-	<title>Greeny - Trang quản trị</title>
+	<title>Ado - Trang quản trị</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon"/>
 	
@@ -43,7 +43,7 @@
 		<div class="content">
 			<div class="page-inner">
 				<div class="page-header">
-					<h4 class="page-title">Quản lý người dùng</h4>
+					<h4 class="page-title">Thông tin tài khoản</h4>
 					<ul class="breadcrumbs">
 						<li class="nav-home">
 							<a href="javascript:void(0);">
@@ -68,7 +68,6 @@
 						<div class="card">
 							<div class="card-header">
 								<div class="d-flex align-items-center">
-									<h4 class="card-title" style="text-decoration: underline;">Quản lý người dùng</h4>
 								</div>
 							</div>
 							<div class="card-body">
@@ -83,21 +82,10 @@
 												<th>Họ và tên</th>
 												<th>Email</th>
 												<th>Ngày đăng ký</th>
-												<th>Trạng thái</th>
-												<th>Hành động</th>
+												
 											</tr>
 										</thead>
-										<tfoot>
-											<tr>
-												<th>id</th>
-												<th>Ảnh đại diện</th>
-												<th>Họ và tên</th>
-												<th>Email</th>
-												<th>Ngày đăng ký</th>
-												<th>Trạng thái</th>
-												<th>Hành động</th>
-											</tr>
-										</tfoot>
+										
 										<tbody>
 											<tr th:each="item : ${users}">
 												<td>[[${item.userId}]]</td>
@@ -107,14 +95,7 @@
 												<td>[[${item.name}]]</td>
 												<td>[[${item.email}]]</td>
 												<td>[[${item.registerDate}]]</td>
-												<td>[[${item.status?'Đang hoạt động':'Ngừng hoạt động'}]]</td>
-												<td>
-													<div class="form-button-action">
-														<button type="button" data-toggle="tooltip" title="" class="btn btn-link btn-primary btn-lg" data-original-title="Xem">
-															<i class="fa fa-eye"></i>
-														</button>
-													</div>
-												</td>
+												
 											</tr>
 										</tbody>
 									</table>
@@ -126,27 +107,9 @@
 			</div>
 		<footer class="footer">
 			<div class="container-fluid">
-				<nav class="pull-left">
-					<ul class="nav">
-						<li class="nav-item">
-							<a class="nav-link" href="javascript:void(0);">
-								GREENY-SHOP
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="javascript:void(0);">
-								Help
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link" href="javascript:void(0);">
-								Licenses
-							</a>
-						</li>
-					</ul>
-				</nav>
+				
 				<div class="copyright ml-auto">
-					2021, made with <i class="fa fa-heart heart text-danger"></i> by <a href="javascript:void(0);">GREENY-SHOP</a>
+				2023, made with <i class="fa fa-heart heart text-danger"></i> by <a href="javascript:void(0);">ADO-SHOP</a>
 				</div>				
 			</div>
 		</footer>

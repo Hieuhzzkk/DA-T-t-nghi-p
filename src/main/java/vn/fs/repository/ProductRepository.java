@@ -40,11 +40,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	public List<Product> searchProduct(String productName);
 	
 	// count quantity by product
-	@Query(value = "SELECT c.category_id,c.category_name,\r\n"
-			+ "COUNT(*) AS SoLuong\r\n"
-			+ "FROM products p\r\n"
-			+ "JOIN categories c ON p.category_id = c.category_id\r\n"
-			+ "GROUP BY c.category_name;" , nativeQuery = true)
+	@Query(value = "SELECT c.category_id, c.category_name, COUNT(*) AS SoLuong  \r\n"
+			+ "FROM products p  \r\n"
+			+ "JOIN categories c ON p.category_id = c.category_id  \r\n"
+			+ "GROUP BY c.category_id, c.category_name;" , nativeQuery = true)
 	List<Object[]> listCategoryByProductName();
 	
 	// Top 20 product best sale
@@ -58,5 +57,20 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	
 	@Query(value = "select * from products o where product_id in :ids", nativeQuery = true)
 	List<Product> findByInventoryIds(@Param("ids") List<Integer> listProductId);
+	@Query(value = "SELECT * FROM products p JOIN hang h ON p.idhang = h.idhang JOIN categories c ON p.category_id = c.category_id WHERE " +
+	        "(:cateId IS NULL OR c.category_id = :cateId) " +
+	        "AND (:idhang IS NULL OR h.idhang = :idhang) " +
+	        "AND (:price IS NULL OR p.price <= :price)", nativeQuery = true)
+	List<Product> productByHCP(@Param("cateId") Long cateId, @Param("idhang") Long idhang, @Param("price") Double price);
+
+	@Query(value = "SELECT * FROM products WHERE idhang = ?", nativeQuery = true)
+	public List<Product> listProductByHang(Long idhang);
 	
+	@Query(value = "SELECT * FROM products p WHERE LOWER(p.product_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR LOWER(p.product_id) LIKE LOWER(CONCAT('%', :searchTerm, '%'))", nativeQuery = true)
+	List<Product> findbyProWithIdOrName(@Param("searchTerm") String searchTerm);
+	
+	@Query(value = "SELECT h.idhang, h.tenhang, COUNT(*) AS SoLuong " + "FROM products p "
+			+ "JOIN hang h ON p.idhang = h.idhang "
+			+ "GROUP BY h.idhang, h.tenhang", nativeQuery = true)
+	List<Object[]> listHangByProductName();
 }

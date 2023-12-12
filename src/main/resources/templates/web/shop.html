@@ -97,21 +97,59 @@
 					<div class="shop-widget-promo">
 						<a href="#"><img src="images/promo/shop/fv.jpg" alt="promo" /></a>
 					</div>
-					<div class="shop-widget">
-						<h6 class="shop-widget-title">Theo thể loại</h6>
+					<form action="/searchCHP" method="get">
+						<div class="shop-widget">
+							<h6 class="shop-widget-title">Theo thể loại</h6>
 							<ul class="shop-widget-list shop-widget-scroll">
-							<li th:each="item : ${coutnProductByCategory}">
-								<div class="shop-widget-content">
-									<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
-										<label for="cate1" style="color: rgb(138, 138, 138)">[[${item[1]}]]</label>
-									</a>
-								</div>
-								<span class="shop-widget-number">([[${item[2]}]])</span>
-							</li>
-						</ul>
-						
+								<li th:each="item : ${coutnProductByCategory}">
+									<div class="shop-widget-content">
+										<a href="javascript:void(0);" th:href="@{/productByCategory(id=${item[0]})}">
+											<label for="cate1" style="color: rgb(138, 138, 138)">[[${item[1]}]]</label>
+										</a>
+										<span class="shop-widget-number">([[${item[2]}]])</span>
+									</div>
+									<input class="form-check-input" type="radio" name="cateId"
+										th:value="${item[0]}">
 
-					</div>
+								</li>
+							</ul>
+
+
+						</div>
+						<div class="shop-widget">
+							<h6 class="shop-widget-title">Theo hãng</h6>
+							<ul class="shop-widget-list shop-widget-scroll">
+								<li th:each="item : ${countProductByBrand}">
+									<div class="shop-widget-content">
+										<a href="javascript:void(0);" th:href="@{/productByHang(id=${item[0]})}">
+											<label for="brand1" style="color: rgb(138, 138, 138)">[[${item[1]}]]</label>
+										</a>
+										<span class="shop-widget-number">([[${item[2]}]])</span>
+									</div>
+									<input class="form-check-input" type="radio" name="idhang"
+										th:value="${item[0]}">
+
+								</li>
+							</ul>
+						</div>
+						<div class="shop-widget">
+							<label for="customRange1" class="form-label">Giá tiền</label>
+							<input type="range" class="form-range" id="customRange1" name="price" min="0" max="10000000"
+								oninput="updateSliderValue(this.value)">
+							<span id="sliderValue">0</span> <span> VNĐ</span>
+
+							<script>
+								function updateSliderValue(value) {
+									const formattedValue = new Intl.NumberFormat('vi-VN').format(value);
+									document.getElementById("sliderValue").innerText = formattedValue;
+								}
+							</script>
+						</div>
+						<div class="shop-widget">
+							<button type="submit" class="btn btn-primary">Lọc</button>
+						</div>
+
+					</form>
 				</div>
 				<div class="col-lg-9">
 					<div class="row">

@@ -50,7 +50,9 @@ public class Product implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "categoryId")
 	private Category category;
-	
+	@ManyToOne
+	@JoinColumn (name = "idhang",referencedColumnName = "idhang")
+	private Hang hang;
 	
 	
 
@@ -172,6 +174,14 @@ public class Product implements Serializable {
 
 	public void setMaSP(int maSP) {
 		this.maSP = maSP;
+	}
+
+	public Hang getHang() {
+		return hang;
+	}
+
+	public void setHang(Hang hang) {
+		this.hang = hang;
 	}
 	
 }
