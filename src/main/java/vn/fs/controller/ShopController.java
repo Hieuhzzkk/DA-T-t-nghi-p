@@ -37,7 +37,7 @@ public class ShopController extends CommomController {
 
 	@Autowired
 	ProductRepository productRepository;
-	
+
 	@Autowired
 	FavoriteRepository favoriteRepository;
 	@Autowired
@@ -59,7 +59,10 @@ public class ShopController extends CommomController {
 			List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages).boxed().collect(Collectors.toList());
 			model.addAttribute("pageNumbers", pageNumbers);
 		}
-
+		model.addAttribute("lsCategory", categoryRepository.findAll());
+		model.addAttribute("lsByHang", categoryRepository.findAll());
+		List<Object[]> coutnProductByBrand = productRepository.listHangByProductName();
+		model.addAttribute("countProductByBrand", coutnProductByBrand);
 		commomDataService.commonData(model, user);
 		model.addAttribute("products", productPage);
 
@@ -82,17 +85,17 @@ public class ShopController extends CommomController {
 			list = productPage.subList(startItem, toIndex);
 		}
 
-		Page<Product> productPages = new PageImpl<Product>(list, PageRequest.of(currentPage, pageSize),productPage.size());
+		Page<Product> productPages = new PageImpl<Product>(list, PageRequest.of(currentPage, pageSize),
+				productPage.size());
 
 		return productPages;
 	}
-	
+
 	// search product
 	@GetMapping(value = "/searchProduct")
 	public String showsearch(Model model, Pageable pageable, @RequestParam("keyword") String keyword,
-			@RequestParam("size") Optional<Integer> size, @RequestParam("page") Optional<Integer> page,
-			User user) {
-	
+			@RequestParam("size") Optional<Integer> size, @RequestParam("page") Optional<Integer> page, User user) {
+
 		int currentPage = page.orElse(1);
 		int pageSize = size.orElse(12);
 
@@ -108,7 +111,7 @@ public class ShopController extends CommomController {
 		model.addAttribute("products", productPage);
 		return "web/shop";
 	}
-	
+
 	// search product
 	public Page<Product> findPaginatSearch(Pageable pageable, @RequestParam("keyword") String keyword) {
 
@@ -126,11 +129,12 @@ public class ShopController extends CommomController {
 			list = productPage.subList(startItem, toIndex);
 		}
 
-		Page<Product> productPages = new PageImpl<Product>(list, PageRequest.of(currentPage, pageSize),productPage.size());
+		Page<Product> productPages = new PageImpl<Product>(list, PageRequest.of(currentPage, pageSize),
+				productPage.size());
 
 		return productPages;
 	}
-	
+
 	// list books by category
 	@GetMapping(value = "/productByCategory")
 	public String listProductbyid(Model model, @RequestParam("id") Long id, User user) {
@@ -154,11 +158,42 @@ public class ShopController extends CommomController {
 			listProductNew.add(productEntity);
 
 		}
-
+		List<Object[]> coutnProductByBrand = productRepository.listHangByProductName();
+		model.addAttribute("countProductByBrand", coutnProductByBrand);
 		model.addAttribute("products", listProductNew);
 		commomDataService.commonData(model, user);
 		return "web/shop";
 	}
+
+	@GetMapping(value = "/productByHang")
+	public String listProductbyidHang(Model model, @RequestParam("id") Long id, User user) {
+		List<Product> products = productRepository.listProductByHang(id);
+
+		List<Product> listProductNew = new ArrayList<>();
+
+		for (Product product : products) {
+
+			Product productEntity = new Product();
+
+			BeanUtils.copyProperties(product, productEntity);
+
+			Favorite save = favoriteRepository.selectSaves(productEntity.getProductId(), user.getUserId());
+
+			if (save != null) {
+				productEntity.favorite = true;
+			} else {
+				productEntity.favorite = false;
+			}
+			listProductNew.add(productEntity);
+
+		}
+		List<Object[]> coutnProductByBrand = productRepository.listHangByProductName();
+		model.addAttribute("countProductByBrand", coutnProductByBrand);
+		model.addAttribute("products", listProductNew);
+		commomDataService.commonData(model, user);
+		return "web/shop";
+	}
+
 	@ModelAttribute("sizeList")
 	public List<Size> showSizes(Model model) {
 		List<Size> sizeList = sizeRepository.findAll();
@@ -166,12 +201,12 @@ public class ShopController extends CommomController {
 
 		return sizeList;
 	}
-	
-	
+
 	@GetMapping(value = "/productByMaSP")
-	public String listProductbyidSize(Model model,@RequestParam("masp") int masp,@RequestParam("sizereal") String sizeReal, User user) {
-		
-		List<Product> products = productRepository.listProductByMaSP2(masp,sizeReal);
+	public String listProductbyidSize(Model model, @RequestParam("masp") int masp,
+			@RequestParam("sizereal") String sizeReal, User user) {
+
+		List<Product> products = productRepository.listProductByMaSP2(masp, sizeReal);
 
 		List<Product> listProductNew = new ArrayList<>();
 
@@ -195,5 +230,37 @@ public class ShopController extends CommomController {
 		model.addAttribute("products", listProductNew);
 		commomDataService.commonData(model, user);
 		return "web/prodetail";
+	}
+
+	@GetMapping("searchCHP")
+	public String searchCHP(@RequestParam(name = "cateId", required = false) Long cateId,
+			@RequestParam(name = "idhang", required = false) Long idhang,
+			@RequestParam(name = "price", required = false) Double price, Model model, User user) {
+		
+		List<Product> products = productRepository.productByHCP(cateId, idhang, price);
+
+		List<Product> listProductNew = new ArrayList<>();
+
+		for (Product product : products) {
+
+			Product productEntity = new Product();
+
+			BeanUtils.copyProperties(product, productEntity);
+
+			Favorite save = favoriteRepository.selectSaves(productEntity.getProductId(), user.getUserId());
+
+			if (save != null) {
+				productEntity.favorite = true;
+			} else {
+				productEntity.favorite = false;
+			}
+			listProductNew.add(productEntity);
+
+		}
+		List<Object[]> coutnProductByBrand = productRepository.listHangByProductName();
+		model.addAttribute("countProductByBrand", coutnProductByBrand);
+		model.addAttribute("products", listProductNew);
+		commomDataService.commonData(model, user);
+		return "web/shop";
 	}
 }

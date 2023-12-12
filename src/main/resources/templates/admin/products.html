@@ -114,6 +114,19 @@
 																</select>
 															</div>
 														</div>
+														<div class="col-md-6 pr-0">
+															<div class="form-group form-group-default">
+																<label>Hãng</label>
+																<select class="form-control"
+																		name="hang" th:field="*{hang.idhang}" id="idhang">
+																	<option th:each="item : ${hangList}"
+																			th:value="${item.idhang}" th:text="${item.tenhang}"
+																			th:selected="${item.idhang == product.hang.idhang}">
+																		Tên hãng
+																	</option>
+																</select>
+															</div>
+														</div>
 														<div class="col-sm-12">
 															<div class="form-group form-group-default">
 																<label>Chất Liệu</label>
@@ -222,6 +235,7 @@
 												<th>Màu</th>
 												<th>Kích thước</th>
 												<th>Chất Liệu</th>
+												<th>Hãng</th>
 												<th>Đơn giá</th>
 												<th>Giảm giá</th>
 												<th>Số lượng</th>
@@ -242,6 +256,7 @@
 												<td>[[${item.size.nameSize}]]</td>
 												<td>[[${item.description}]]</td>
 												<td>[[${item.chatLuong}]]</td>
+												<td>[[${item.hang.tenhang}]]</td>
 												<td th:text="${#numbers.formatDecimal(item.price, 1, 'DEFAULT', 0, 'DEFAULT')}+' đ'"></td>
 												<td>[[${#numbers.formatDecimal(item?.discount, 1, 'DEFAULT', 0, 'DEFAULT')}+' %']]</td>
 												<td>[[${item.quantity}]]</td>

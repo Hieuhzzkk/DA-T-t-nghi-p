@@ -106,6 +106,19 @@
 												</div>
 												<div class="col-md-6 pr-0">
 													<div class="form-group form-group-default">
+														<label>Hãng</label>
+														<select class="form-control"
+																name="hang" th:field="*{hang.idhang}" id="idhang">
+															<option th:each="item : ${hangList}"
+																	th:value="${item.idhang}" th:text="${item.tenhang}"
+																	th:selected="${item.idhang == product.hang.idhang}">
+																Tên hãng
+															</option>
+														</select>
+													</div>
+												</div>
+												<div class="col-md-6 pr-0">
+													<div class="form-group form-group-default">
 														<label>Màu</label>
 														<select class="form-control" name="size"
 															th:field="*{size.sizeId}" id="sizeId">

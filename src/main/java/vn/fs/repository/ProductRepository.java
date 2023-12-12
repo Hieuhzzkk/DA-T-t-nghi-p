@@ -69,4 +69,9 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	
 	@Query(value = "SELECT * FROM products p WHERE LOWER(p.product_name) LIKE LOWER(CONCAT('%', :searchTerm, '%')) OR LOWER(p.product_id) LIKE LOWER(CONCAT('%', :searchTerm, '%'))", nativeQuery = true)
 	List<Product> findbyProWithIdOrName(@Param("searchTerm") String searchTerm);
+	
+	@Query(value = "SELECT h.idhang, h.tenhang, COUNT(*) AS SoLuong " + "FROM products p "
+			+ "JOIN hang h ON p.idhang = h.idhang "
+			+ "GROUP BY h.idhang, h.tenhang", nativeQuery = true)
+	List<Object[]> listHangByProductName();
 }

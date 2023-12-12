@@ -45,6 +45,7 @@
             <div class="content">
                 <div class="page-inner">
                     <div class="page-header">
+                    
                         <h4 class="page-title">Chi tiết hóa đơn</h4>
                         <ul class="breadcrumbs">
                             <li class="nav-home">
@@ -74,6 +75,7 @@
 										Thêm sản phẩm
 									</button>
 								</div>
+								
 							</div>
                             <div class="card-body">
 								<!-- Modal add -->
@@ -169,7 +171,7 @@
 
                             <div class="alert alert-success row col-12" th:if="${message}" th:text="${message}">
                             </div>
-                            <div class="table-responsive">
+                            <div class="table-responsive" >
                                 <table id="add-row" class="display table table-striped table-hover">
                                     <thead>
                                         <tr>
@@ -426,6 +428,7 @@
                 </div>
             </div>
         </footer>
+        
     </div>
 
     <!-- End Custom template -->
@@ -466,6 +469,7 @@
 			});
 		});
 </script>
+
     <script>
         $(document).ready(function () {
             $('#basic-datatables').DataTable({
