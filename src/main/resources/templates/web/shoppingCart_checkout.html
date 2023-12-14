@@ -173,7 +173,8 @@
 						</div>
 						<div class="account-content">
 							<div class="row">
-								<form class="user-form" th:action="@{/checkout}" th:object="${order}" method="post">
+								<form class="user-form" id="checkoutForm" th:action="@{/checkout}" th:object="${order}"
+									method="post">
 									<div class="form-group">
 										<input type="email" th:value="${user.email}" class="form-control"
 											placeholder="Email" readonly="readonly" />
@@ -231,12 +232,13 @@
 									</div>
 									<div class="form-check">
 										<input class="form-check-input" type="radio" name="flexRadioDefault"
-											id="flexRadioDefault2" th:field="*{loaiShip}" value="Chuyển phát nhanh" checked>
+											id="flexRadioDefault2" th:field="*{loaiShip}" value="Chuyển phát nhanh"
+											checked>
 										<label class="form-check-label" for="flexRadioDefault2">
 											Chuyển phát nhanh
 										</label>
 									</div>
-									
+
 									<div class="form-check">
 										<input class="form-check-input" type="radio" name="flexRadioDefault"
 											id="flexRadioDefault3" th:field="*{loaiShip}"
@@ -262,9 +264,28 @@
 														30000Đ)</em></strong></label>
 										</div>
 									</div>
+									<script>
+										function confirmOrder() {
+											// Hiển thị modal xác nhận
+											$('#configmationIdDATHANG').modal('show');
+										}
+									
+										function submitOrder() {
+											// Đóng modal xác nhận
+											$('#configmationIdDATHANG').modal('hide');
+									
+											// Submit form
+											document.getElementById("checkoutForm").submit();
+										}
+									</script>
+									
+
 									<div class="checkout-proced">
-										<button type="submit" id="DH" class="btn btn-inline">Đặt hàng</button>
+										<button type="button" onclick="confirmOrder()" id="DH"
+											class="btn btn-inline">Đặt
+											hàng</button>
 									</div>
+
 								</form>
 							</div>
 						</div>
@@ -464,6 +485,28 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal" id="configmationIdDATHANG">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<button class="modal-close" data-bs-dismiss="modal">
+					<i class="icofont-close"></i>
+				</button>
+				<div class="modal-form">
+					<h5 class="modal-title">Xác nhận</h5>
+					<div class="modal-body">
+						<p>
+							Bạn có muốn đặt hàng không?
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Không</button>
+						<button type="button" class="btn btn-primary" onclick="submitOrder()">Có</button>
+					</div>
+				</div>
+
+			</div>
+		</div>
+	</div>
 
 
 	<!--************************************
@@ -474,8 +517,9 @@
 	<!--************************************
 				Footer End
 		*************************************-->
-
-
+	<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+		integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+		crossorigin="anonymous"></script>
 	<script src="vendor/bootstrap/jquery-1.12.4.min.js"></script>
 	<script src="vendor/bootstrap/popper.min.js"></script>
 	<script src="vendor/bootstrap/bootstrap.min.js"></script>
