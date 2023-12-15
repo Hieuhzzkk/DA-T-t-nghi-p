@@ -40,11 +40,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 	public List<Product> searchProduct(String productName);
 	
 	// count quantity by product
-	@Query(value = "SELECT c.category_id,c.category_name,\r\n"
-			+ "COUNT(*) AS SoLuong\r\n"
-			+ "FROM products p\r\n"
-			+ "JOIN categories c ON p.category_id = c.category_id\r\n"
-			+ "GROUP BY c.category_name;" , nativeQuery = true)
+	@Query(value = "SELECT c.category_id, c.category_name, COUNT(*) AS SoLuong  \r\n"
+			+ "FROM products p  \r\n"
+			+ "JOIN categories c ON p.category_id = c.category_id  \r\n"
+			+ "GROUP BY c.category_id, c.category_name;" , nativeQuery = true)
 	List<Object[]> listCategoryByProductName();
 	
 	// Top 20 product best sale
