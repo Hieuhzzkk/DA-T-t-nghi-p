@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -81,18 +82,41 @@ public class InvoiceDetailController {
 			return "redirect:/admin/invoices/detail/" + idInvoice;
 		}
 	}
+
+	@GetMapping("/invoideDetails/updateQuantity/{id}/{quantity}")
+	public String updateInvoice(@PathVariable("id") Long id, @PathVariable("quantity") Integer quantity,
+			ModelMap model,RedirectAttributes attributes) {
+		try {
+			InvoiceDetail invoiceDetail = invoiceDetailRepository.findById(id).orElse(null);
+			Long idInvoce = invoiceDetail.getInvoice().getInvoiceId();
+			if (invoiceDetail != null) {
+				invoiceDetail.setQuantity(quantity);
+				invoiceDetailRepository.save(invoiceDetail);
+				attributes.addFlashAttribute("successadd", "Đã cập nhật số lượng thành công");
+			} 
+			return "redirect:/admin/invoices/detail/" + idInvoce;
+		} catch (Exception e) {
+			e.printStackTrace();
+			attributes.addFlashAttribute("erroradd", "Cập nhật thất bại");
+
+			return "redirect:/admin/invoices/lsInvoice";
+		}
+	}
+
 	@PostMapping("/invoiceDetails/updatePriceForInvoice")
-	public String updatePriceInvoice(@ModelAttribute("invoices") Invoice invoices,ModelMap model,RedirectAttributes attributes) {
+	public String updatePriceInvoice(@ModelAttribute("invoices") Invoice invoices, ModelMap model,
+			RedirectAttributes attributes) {
 		try {
 			Long idInvoice = invoices.getInvoiceId();
 			List<InvoiceDetail> list0 = invoiceDetailRepository.findByInvoiceDeTailByInvoiceId(idInvoice);
 			Invoice existingInvoice = invoiceRepository.findById(idInvoice).get();
 			double totalPrice = list0.stream()
-	                .mapToDouble(item -> (item.getPrice() - (item.getPrice() * item.getProducts().getDiscount() / 100)) * item.getQuantity())
-	                .sum();
+					.mapToDouble(item -> (item.getPrice() - (item.getPrice() * item.getProducts().getDiscount() / 100))
+							* item.getQuantity())
+					.sum();
 			existingInvoice.setAmount(totalPrice);
 			invoiceRepository.save(existingInvoice);
-			attributes.addFlashAttribute("successadd", "Đã cập nhật lại giá thành công");
+			attributes.addFlashAttribute("successadd", "Đã cập nhật lại giá của hóa đơn " + idInvoice + " thành công");
 
 		} catch (Exception e) {
 			attributes.addFlashAttribute("errorsadd", "Cập nhật thất bại");

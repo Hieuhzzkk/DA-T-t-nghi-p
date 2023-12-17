@@ -109,20 +109,19 @@ public class CartController extends CommomController {
 			@PathVariable("sizename") String sizename,
 			HttpServletRequest request, Model model, RedirectAttributes attributes) {
 
-		Product product = productRepository.findById(productId).orElse(null);
+		Product product = productRepository.findById(productId).orElse(null); //Tim san pham co id = productId
 		session = request.getSession();
-		Collection<CartItem> cartItems = shoppingCartService.getCartItems();
+		Collection<CartItem> cartItems = shoppingCartService.getCartItems(); //Hien thi du lieu cartItem
 		if (product != null) {
 			CartItem item = new CartItem();
-			item.setQuantity(item.getQuantity() + quantity);
-			item.setProduct(product);
-			item.setId(productId);
-			item.setSizeName(sizename);
-			shoppingCartService.add2(item, product);
+			item.setQuantity(item.getQuantity() + quantity); // lay so luong cu + voi so luong moi
+			item.setProduct(product);  // them toan bo du lieu cua product vao cartItem
+			item.setId(productId); //them id cartItem
+			item.setSizeName(sizename);//them sizename cartItem
+			shoppingCartService.add2(item, product);  // Dung serivce goi phuong thuc add de them vao gio hang
 		}
 		session.setAttribute("cartItems", cartItems);
-		model.addAttribute("totalCartItems", shoppingCartService.getCount());
-
+		model.addAttribute("totalCartItems", shoppingCartService.getCount());// Hien thi so luong tren products
 		return "redirect:/products";
 	}
 	//update checkout
@@ -132,7 +131,7 @@ public class CartController extends CommomController {
 		try {
 			//shoppingCartService.update3(id, quantity,product);
 			//shoppingCartService.update(productId, quantity);
-			shoppingCartService.update2(id, quantity1);
+			shoppingCartService.update2(id, quantity1);  //goi phuong thuc update tu service roi update theo id 
 			//shoppingCartService.update(id, quantity1, item);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -181,19 +180,19 @@ public class CartController extends CommomController {
 	}
 	// delete cartItem
 	@SuppressWarnings("unlikely-arg-type")
-	@GetMapping(value = "/remove/{id}")
+	@GetMapping(value = "/remove/{id}") // Xoa du lieu trong gio hang
 	public String remove(@PathVariable("id") Long id, HttpServletRequest request, Model model) {
 		Product product = productRepository.findById(id).orElse(null);
 
 		Collection<CartItem> cartItems = shoppingCartService.getCartItems();
 		session = request.getSession();
 		if (product != null) {
-			CartItem item = new CartItem();
-			BeanUtils.copyProperties(product, item);
-			item.setProduct(product);
-			item.setId(id);
+			CartItem item = new CartItem();  // khai bao gio hang moi
+			BeanUtils.copyProperties(product, item); // copy product cua hastmap vao gio hang moi
+			item.setProduct(product);  // them san pham vao cart moi
+			item.setId(id);  // lay id cua carttem luu vao item 
 			cartItems.remove(session);
-			shoppingCartService.remove(item);
+			shoppingCartService.remove(item);  //Xoa du lieu hastmap
 		}
 		model.addAttribute("totalCartItems", shoppingCartService.getCount());
 		return "redirect:/checkout";
@@ -264,7 +263,7 @@ public class CartController extends CommomController {
 	}
 
 	// submit checkout
-	@PostMapping(value = "/checkout")
+	@PostMapping(value = "/checkout")  // lay giu lieu cua hastmnap add vao Entity Order, OrderDetail, Tru so luong san pham trong product
 	@Transactional
 	public String checkedOut(Model model, Order order, HttpServletRequest request, User user)
 			throws MessagingException {
@@ -296,43 +295,40 @@ public class CartController extends CommomController {
 			} catch (PayPalRESTException e) {
 				log.error(e.getMessage());
 			}
-
 		}
 
 		session = request.getSession();
-		Date date = new Date();
-		
-		order.setOrderDate(date);
-		order.setStatus(0);
-		order.getOrderId();
-		order.setAmount(totalPrice);
-		order.setUser(user);
+		Date date = new Date();  
+							
+		order.setOrderDate(date);  // lay ngay hien tai
+		order.setStatus(0);     // trang thai tu (0 den 10) de 0 la chua xac nhan 
+		order.getOrderId();		
+		order.setAmount(totalPrice);  // them tong tien vao order
+		order.setUser(user);  // lay user dang nhap tu home controlller
 		order.getLoaiShip();
-		orderRepository.save(order);
+		orderRepository.save(order); // luu du lieu vua them dc vao DB order
 
-		for (CartItem cartItem : cartItems) {
+		for (CartItem cartItem : cartItems) {// Lay toan bo du lieu trong gio hang them vao orderDetail
 			OrderDetail orderDetail = new OrderDetail();
-			orderDetail.setQuantity(cartItem.getQuantity());
+			orderDetail.setQuantity(cartItem.getQuantity()); 
 			orderDetail.setOrder(order);
 			orderDetail.setProduct(cartItem.getProduct());
 			double unitPrice = cartItem.getProduct().getPrice();
 			orderDetail.setPrice(unitPrice);
-			orderDetailRepository.save(orderDetail);
+			orderDetailRepository.save(orderDetail);  // luu du lieu vua them dc vao DB orderDetail
 		}
 
 		// sendMail
 		commomDataService.sendSimpleEmail(user.getEmail(), "Ado-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
-				totalPrice, order);
+				totalPrice, order);  // lay du lieu tu gio hang roi gui den mail user dang nhap tu home controller
 
-		shoppingCartService.clear();
+		shoppingCartService.clear(); // xoa trang lai gio hang
 		session.removeAttribute("cartItems");
 		model.addAttribute("orderId", order.getOrderId());
-
 		return "redirect:/checkout_success";
 	}
-
 	// paypal
-	@GetMapping(URL_PAYPAL_SUCCESS)
+	@GetMapping(URL_PAYPAL_SUCCESS) // thanh toan bang paypal thanh cong
 	public String successPay(@RequestParam("" + "" + "") String paymentId, @RequestParam("PayerID") String payerId,
 			HttpServletRequest request, User user, Model model) throws MessagingException {
 		Collection<CartItem> cartItems = shoppingCartService.getCartItems();
@@ -373,7 +369,7 @@ public class CartController extends CommomController {
 
 				// sendMail
 				commomDataService.sendSimpleEmail(user.getEmail(), "Ado-Shop Xác Nhận Đơn hàng", "aaaa", cartItems,
-						totalPrice, orderFinal);
+						totalPrice, orderFinal); // gui mail neu khach hang thanh toan bang paypal
 
 				shoppingCartService.clear();
 				session.removeAttribute("cartItems");

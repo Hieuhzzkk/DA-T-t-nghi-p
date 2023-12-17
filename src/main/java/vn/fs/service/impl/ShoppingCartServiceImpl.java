@@ -19,7 +19,7 @@ public class ShoppingCartServiceImpl implements ShoppingCartService {
 	
 	private Map<Long, InvoiceCart> map2 = new HashMap<Long, InvoiceCart>(); // <Long, CartItem>
 
-
+	
 	@Override
 	public void add(CartItem item) {
 		CartItem existedItem = map.get(item.getId());

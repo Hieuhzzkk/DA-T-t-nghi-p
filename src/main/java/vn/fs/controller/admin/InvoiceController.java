@@ -1,6 +1,10 @@
 package vn.fs.controller.admin;
 
+
+import java.io.IOException;
 import java.security.Principal;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -9,6 +13,7 @@ import java.util.Optional;
 
 import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.transaction.Transactional;
 
@@ -29,10 +34,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.itextpdf.text.DocumentException;
+
 import vn.fs.commom.CommomDataService;
-import vn.fs.dto.ApiProduct;
 import vn.fs.dto.ProductDto;
-import vn.fs.entities.CartItem;
 import vn.fs.entities.Invoice;
 import vn.fs.entities.InvoiceCart;
 import vn.fs.entities.InvoiceDetail;
@@ -46,6 +51,7 @@ import vn.fs.repository.SizeRepository;
 import vn.fs.repository.UserRepository;
 import vn.fs.service.ProductService;
 import vn.fs.service.ShoppingCartService;
+import vn.fs.service.UserPDFExporter;
 
 @Controller
 @RequestMapping("/admin")
@@ -71,6 +77,8 @@ public class InvoiceController{
 	SizeRepository sizeRepository;
 	@Autowired
 	ProductService productService;
+	@Autowired
+	UserPDFExporter userPDFExporter;
 	
 	Invoice invoiceFinal = new Invoice();
 	
@@ -159,15 +167,17 @@ public class InvoiceController{
 	    }
 
 	    model.addAttribute("totalCartItems", shoppingCartService.getCount());
+		attributes.addFlashAttribute("successadd", "Đã thêm sản phẩm vào giỏ hàng ");
 
 	    return "redirect:/admin/invoices";
 	}
 	
 	@GetMapping("/updateInvoice/{id}/{quantity}")
-	public String updateInvoice(@PathVariable("id") Long id, @PathVariable("quantity") Integer quantity) {
+	public String updateInvoice(@PathVariable("id") Long id, @PathVariable("quantity") Integer quantity,ModelMap attributes) {
 		try {
 			shoppingCartService.updateInvoice(id, quantity);
-			
+			attributes.addAttribute("successadd", "Đã cập nhật thành công");
+
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -175,7 +185,7 @@ public class InvoiceController{
 	}
 	@SuppressWarnings("unlikely-arg-type")
 	@GetMapping(value = "/removeInvoice/{id}")
-	public String removeInvoiceCart(@PathVariable("id") Long id, HttpServletRequest request, Model model) {
+	public String removeInvoiceCart(@PathVariable("id") Long id, HttpServletRequest request, Model model,RedirectAttributes attributes) {
 		Product product = productRepository.findById(id).orElse(null);
 
 		Collection<InvoiceCart> cartItems = shoppingCartService.getInvoiceCarts();
@@ -189,6 +199,8 @@ public class InvoiceController{
 			shoppingCartService.removeCartInvoice(item);
 		}
 		model.addAttribute("totalCartItems", shoppingCartService.getCount());
+			attributes.addFlashAttribute("successadd", "Đã xóa sản phẩm khỏi giỏ hàng");
+
 	    return "redirect:/admin/invoices";
 	}
 	@GetMapping("/invoices/search")
@@ -218,7 +230,7 @@ public class InvoiceController{
 	
 	@PostMapping(value = "/invoices/addInvoide")
 	@Transactional
-	public String checkoutInvoice(Model model,@ModelAttribute("invoice") Invoice invoice,HttpServletRequest request,User user) throws MessagingException {
+	public String checkoutInvoice(Model model,@ModelAttribute("invoice") Invoice invoice,HttpServletRequest request,User user,RedirectAttributes attributes) throws MessagingException {
 		Collection<InvoiceCart> cartItems = shoppingCartService.getInvoiceCarts();
 		double totalPrice = 0;
 		for (InvoiceCart cartItem : cartItems) {
@@ -244,7 +256,8 @@ public class InvoiceController{
 		Long idInvo = invoice.getInvoiceId();
 		shoppingCartService.clearInvoice();
 		session.removeAttribute("cartItems");
-		return "redirect:/admin/invoices/detail/" + idInvo;
+		attributes.addFlashAttribute("successadd", "Hóa đơn mã " + idInvo + " đã được tạo");
+		return "redirect:/admin/invoices";
 	}
 	
 	@GetMapping("/invoices/lsInvoice")
@@ -254,7 +267,7 @@ public class InvoiceController{
 	    return "admin/lsinvoice";
 	}
 	@RequestMapping("/invoices/payForinvoice/{invoice_id}")
-	public ModelAndView payForinvoice(ModelMap model,@PathVariable("invoice_id") Long id) {
+	public ModelAndView payForinvoice(ModelMap model,@PathVariable("invoice_id") Long id,RedirectAttributes attributes) {
 		Optional<Invoice> iv = invoiceRepository.findById(id);
 		if(iv.isEmpty()) {
 			return new ModelAndView("forward:/admin/invoices", model);
@@ -269,6 +282,9 @@ public class InvoiceController{
 			p.setQuantity(p.getQuantity() - lsIv.getQuantity());
 			productRepository.save(p);
 		}
+		Long idIV = ivReal.getInvoiceId();
+		model.addAttribute("successadd", "Hóa đơn mã " +idIV+ " đã thanh toán thành công");
+
 		return new ModelAndView("forward:/admin/invoices/lsInvoice", model);
 
 	}
@@ -293,7 +309,7 @@ model.addAttribute("status",invoiceRepository.findById(id).get().getStatus());
 		return "admin/invoiceDetail";
 	}
 	@GetMapping("/invoiceDetail/delete/{id}")
-	public String invoiceDetailDelete(@PathVariable("id") Long id) {
+	public String invoiceDetailDelete(@PathVariable("id") Long id,RedirectAttributes attributes) {
 		InvoiceDetail detail = invoiceDetailRepository.findById(id).get();
 		Long idInvoice = detail.getInvoice().getInvoiceId();
 		invoiceDetailRepository.deleteById(id);
@@ -302,6 +318,8 @@ model.addAttribute("status",invoiceRepository.findById(id).get().getStatus());
 			invoiceRepository.deleteById(idInvoice);
 			return "redirect:/admin/invoices/lsInvoice";
 		}
+		attributes.addAttribute("successadd", "Đã xóa thành công sản phẩm");
+
 		return "redirect:/admin/invoices/detail/"+idInvoice;
 	}
 	@GetMapping(value = "/getProdcutApiById/{id}")
@@ -342,8 +360,25 @@ model.addAttribute("status",invoiceRepository.findById(id).get().getStatus());
 	    }
 
 	    model.addAttribute("totalCartItems", shoppingCartService.getCount());
+		attributes.addFlashAttribute("successadd", "Đã tìm thấy và thêm sản phẩm vào giỏ hàng ");
 
 	    return "redirect:/admin/invoices";
 	}
+	@GetMapping("/export/pdf/{id}")
+    public void exportToPDF(@PathVariable("id") Long id,HttpServletResponse response) throws DocumentException, IOException {
+        response.setContentType("application/pdf");
+        DateFormat dateFormatter = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss");
+        String currentDateTime = dateFormatter.format(new Date(0));
+         
+        String headerKey = "Content-Disposition";
+        String headerValue = "attachment; filename=users_" + currentDateTime + ".pdf";
+        response.setHeader(headerKey, headerValue);
+         
+        List<InvoiceDetail> details = invoiceDetailRepository.findByInvoiceDeTailByInvoiceId(id);
+        
+        UserPDFExporter exporter = new UserPDFExporter(details);
+        exporter.export(response);
+         
+    }	
 	
 }

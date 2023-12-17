@@ -26,7 +26,7 @@
 	<!-- CSS Just for demo purpose, don't include it in your project -->
 	<link rel="stylesheet" href="/assets/css/demo.css">
 	<link rel="stylesheet" href="/assets/css/bill.css">
-
+	
 	<link rel="stylesheet" href="/fonts/flaticon/flaticon.css" />
 	<link rel="stylesheet" href="/fonts/icofont/icofont.min.css" />
 
@@ -332,14 +332,11 @@
 						<div class="modal" id="configmationId">
 							<div class="modal-dialog modal-dialog-centered">
 								<div class="modal-content">
-									<button class="modal-close" data-bs-dismiss="modal">
-										<i class="icofont-close"></i>
-									</button>
 									<div class="modal-form">
 										<h5 class="modal-title">Xác nhận</h5>
 										<div class="modal-body">
 											<p>
-												Bạn có muốn xoá sản phẩm " <span style="color: #119744"
+												Bạn có muốn xoá sản phẩm " <span
 													id="productName"></span>
 												"
 												ra khỏi giỏ hàng không ?
@@ -426,7 +423,7 @@
 
 
 														</div><br>
-														<div>Đơn giá: [[${item.price}]] VNĐ</div>
+														<div id="priceOneProduct">Đơn giá: [[${#numbers.formatDecimal(item.price, 0, 'COMMA', 0, 'POINT')}]] VNĐ</div>
 													</div>
 												</div>
 
@@ -625,7 +622,8 @@
 	<!-- Your custom script -->
 	<script th:inline="javascript">
 		var totalPrice = /*[[${totalPrice}]]*/ 0;
-		document.getElementById("totalPriceInput").value = totalPrice;
+       
+    document.getElementById("totalPriceInput").value = totalPrice;
 	</script>
 	<!-- <script>
 		function createNewTab() {
