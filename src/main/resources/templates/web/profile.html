@@ -65,7 +65,7 @@
 		<meta name="title" content="greeny - Ecommerce Food Store HTML Template" />
 		<meta name="keywords"
 			content="organic, food, shop, ecommerce, store, html, bootstrap, template, agriculture, vegetables, products, farm, grocery, natural, online" />
-		<title>Web bán mũ bảo hiểm Otis</title>
+		<title>Web bán túi xách nam ADO</title>
 		<link rel="stylesheet" href="fonts/flaticon/flaticon.css" />
 		<link rel="stylesheet" href="fonts/icofont/icofont.min.css" />
 		<link rel="stylesheet" href="fonts/fontawesome/fontawesome.min.css" />
@@ -100,7 +100,7 @@
 								<h4>Thông tin tài khoản</h4>
 							</div>
 							<div class="account-content">
-								<form th:action="@{/updateUser}" method="post" th:object="${user}" class="user-form">
+								<form th:action="@{/updateUser}" method="post" th:object="${user}" class="user-form" id="myForm">
 									<div class="row">
 										<div class="col-lg-2">
 											<div class="profile-image">
@@ -133,8 +133,8 @@
 										<div class="col-md-6 col-lg-4">
 											<div class="form-group">
 												<label class="form-label">Số điện thoại</label> <input
-													class="form-control" type="text" th:value="${user.sdt}" id="sdt"
-													name="sdt" onblur="validatePhoneNumber()" />
+													class="form-control" type="text" th:value="${user.sdt}" id="phoneNumber"
+													name="sdt" />
 												<span id="badgenumber" class="badge text-white bg-danger"
 													style="padding: 8px 10px 5px 10px; margin: -15px 0 0 0; display: none;">Bạn
 													nhập sai định dạng số điện thoại hoặc không tồn tại ở
@@ -156,7 +156,7 @@
 									<div class="row">
 										<div class="col-lg-10"></div>
 										<div class="col-lg-2">
-											<button type="submit" class="btn btn-inline">Cập nhật</button>
+											<button type="button"  class="btn btn-inline" onclick="validateAndSubmitForm()">Cập nhật</button>
 										</div>
 									</div>
 								</form>
@@ -209,7 +209,7 @@
 																		<h6>[[${item.loaiShip}]]</h6>
 																	</td>
 																	<td class="table-price">
-																		<h6>[[${item.priceShip}]] đ</h6>
+																		<h6 th:text="${#numbers.formatDecimal(item.priceShip, 1, 'DEFAULT', 0, 'DEFAULT')} + ' đ'"></h6>
 																	</td>
 																	<td class="table-price">
 																		<h6>[[${#numbers.formatDecimal(item.amount,
@@ -440,6 +440,22 @@
 		<script src="js/slick.js"></script>
 		<script src="js/main.js"></script>
 		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		
+		<script>
+        function validateAndSubmitForm() {
+            var phoneNumber = document.getElementById("phoneNumber").value;
+            var phoneNumberRegex = /^(0[23456789]|1[6789])[0-9]{8}$/;
+
+            if (phoneNumberRegex.test(phoneNumber)) {
+                alert("Số điện thoại hợp lệ!");
+
+                // Nếu số điện thoại hợp lệ, thực hiện hành động submit form
+                document.getElementById("myForm").submit();
+            } else {
+                alert("Số điện thoại không hợp lệ! Vui lòng nhập theo định dạng Việt Nam.");
+            }
+        }
+    </script>
 		<script>
 			function validatePhoneNumber() {
 				var phoneNumber = document.getElementById("sdt").value;

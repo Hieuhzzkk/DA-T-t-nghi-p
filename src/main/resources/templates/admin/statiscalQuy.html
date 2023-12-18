@@ -68,7 +68,7 @@
 						<div class="card">
 							<div class="card-header">
 									<div class="d-flex align-items-center">
-										<h4 class="card-title">Thống Kê Doanh Thu Từng Quý</h4>
+										<h4 class="card-title">Thống Kê Doanh Thu Từng Quý Bán Hàng Online</h4>
 									</div>
 								</div>
 							<div class="card-body">
@@ -85,7 +85,41 @@
 										</thead>
 										
 										<tbody>
-											<tr th:each="item, iState : ${listReportCommon}">
+											<tr th:each="item, iState : ${listReportQUARTEROn}">
+												<td>[[${iState.index + 1}]]</td>
+												<td>[[${item[0]}]]</td>
+												<td>[[${item[1]}]]</td>
+												<td>[[${#numbers.formatDecimal(item[2], 1, 'DEFAULT', 0, 'DEFAULT')} + ' đ']]</td>
+												
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-12">
+						<div class="card">
+							<div class="card-header">
+									<div class="d-flex align-items-center">
+										<h4 class="card-title">Thống Kê Doanh Thu Từng Quý Bán Hàng Offline</h4>
+									</div>
+								</div>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table id="add-row" class="display table table-striped table-hover" >
+										<thead>
+											<tr>
+												<th>#</th>
+												<th>Quý</th>
+												<th>Số lượng bán ra</th>
+												<th>Doanh thu</th>
+												
+											</tr>
+										</thead>
+										
+										<tbody>
+											<tr th:each="item, iState : ${listReportQUARTEROff}">
 												<td>[[${iState.index + 1}]]</td>
 												<td>[[${item[0]}]]</td>
 												<td>[[${item[1]}]]</td>
@@ -99,6 +133,8 @@
 						</div>
 					</div>
 				</div>
+				</div>
+				
 			</div>
 		<footer class="footer">
 			<div class="container-fluid">

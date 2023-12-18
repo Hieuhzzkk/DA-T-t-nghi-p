@@ -253,4 +253,16 @@ public class ProductController{
 	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    }
 	}
+	@GetMapping(value = "/getProductCBOOO/{id}")
+	@ResponseBody
+	public ResponseEntity<ProductDto> getProductPriced(@PathVariable("id") Long id,ModelMap model) {
+	    ProductDto product = productService.getById(id);
+	    if (product != null) {
+	    	model.addAttribute("price01",product.getPrice());
+	    	System.out.println(product.getPrice());
+	        return new ResponseEntity<>(product, HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+	}
 }

@@ -18,6 +18,7 @@ import javax.transaction.Transactional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -28,12 +29,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
 
 import com.itextpdf.text.*;
 
 import vn.fs.commom.CommomDataService;
+import vn.fs.dto.ProductDto;
 import vn.fs.entities.CartItem;
 import vn.fs.entities.Category;
 import vn.fs.entities.Invoice;
@@ -47,6 +52,7 @@ import vn.fs.repository.InvoiceRepository;
 import vn.fs.repository.ProductRepository;
 import vn.fs.repository.SizeRepository;
 import vn.fs.repository.UserRepository;
+import vn.fs.service.ProductService;
 import vn.fs.service.ShoppingCartService;
 import vn.fs.service.impl.CategoryServiceImpl;
 
@@ -76,6 +82,13 @@ public class InvoiceController {
 	CategoryServiceImpl categoryServiceImpl;
 	@Autowired
 	UserPDFExporter userPDFExporter;
+	@Autowired
+	DataService dataService;
+	@Autowired
+	Dataaaaaaa dataaaaaaa;
+	@Autowired
+	ProductService productService;
+	private SpringTemplateEngine springTemplateEngine;
 	Invoice invoiceFinal = new Invoice();
 
 	@ModelAttribute(value = "user")
@@ -315,7 +328,24 @@ public class InvoiceController {
         UserPDFExporter exporter = new UserPDFExporter(details);
         exporter.export(response);
          
-    }	
+    }
+	@PostMapping("/generate/{id}")
+    public String exportToPDFhtml(@PathVariable("id") Long id,HttpServletResponse response) throws DocumentException, IOException {
+        String finalhtml = null;
+         
+        List<InvoiceDetail> details = invoiceDetailRepository.findByInvoiceDeTailByInvoiceId(id);
+        try {
+        	 Context dataContext = dataaaaaaa.setData(details);
+             finalhtml = springTemplateEngine.process("hoadon", dataContext);
+             dataService.htmltopdf(finalhtml);
+             System.out.println("finalhtml");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return finalhtml;
+    
+         
+    }
 	@GetMapping("/invoiceDetail/delete/{id}")
 	public String invoiceDetailDelete(@PathVariable("id") Long id) {
 		InvoiceDetail detail = invoiceDetailRepository.findById(id).get();
@@ -328,5 +358,45 @@ public class InvoiceController {
 		}
 		return "redirect:/admin/invoices/detail/" + idInvoice;
 	}
-	
+	@GetMapping(value = "/getProdcutApiById/{id}")
+	@ResponseBody
+	public ResponseEntity<ProductDto> getProductPrice(@PathVariable("id") Long id,ModelMap model) {
+	    ProductDto product = productService.getById(id);
+	    if (product != null) {
+	    	model.addAttribute("price0",product.getPrice());
+	    	System.out.println(product.getPrice());
+	        return new ResponseEntity<>(product, HttpStatus.OK);
+	    } else {
+	        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    }
+	}
+	@PostMapping(value = "/invoices/addToinvoiceCartVsQR")
+	public String addTocartVsQR(
+	    @RequestParam("productId") Long productId,
+	    @RequestParam("quantity") Integer quantity,
+	    @RequestParam("sizeId") Long sizeId,
+	    HttpServletRequest request,
+	    Model model,
+	    RedirectAttributes attributes
+	) {
+	    Product product = productRepository.findById(productId).orElse(null);
+	    Size size = sizeRepository.findById(sizeId).orElse(null);
+
+	    if (product != null && size != null) {
+	        InvoiceCart item = new InvoiceCart();
+	        item.setQuantity(quantity);
+	        item.setProduct(product);
+	        item.setId(productId);
+	        item.setSize(size);
+	        shoppingCartService.add3(item, product);
+
+	        // Lưu giỏ hàng vào session
+	        session = request.getSession();
+	        session.setAttribute("cartItems", shoppingCartService.getInvoiceCarts());
+	    }
+
+	    model.addAttribute("totalCartItems", shoppingCartService.getCount());
+
+	    return "redirect:/admin/invoices";
+	}
 }

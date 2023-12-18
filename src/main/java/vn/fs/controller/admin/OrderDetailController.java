@@ -1,8 +1,10 @@
 package vn.fs.controller.admin;
 import java.security.Principal;
+import java.text.NumberFormat;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -62,6 +64,7 @@ public class OrderDetailController {
 	@Autowired
 	UserRepository userRepository;
 	public Order orderFinal = new Order();
+	NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(new Locale("vi", "VN"));
 	@ModelAttribute(value = "user")
 	public User user(Model model, Principal principal, User user) {
 

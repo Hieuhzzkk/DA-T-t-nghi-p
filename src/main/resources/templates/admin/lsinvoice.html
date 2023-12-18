@@ -130,7 +130,7 @@
 											<td>[[${item.username}]]</td>
 											<td>[[${item.phonenumber}]]</td>
 											<td>[[${item.invoiceDate}]]</td>
-											<td>[[${item.amount}]]</td>
+											<td th:text="${#numbers.formatDecimal(item.amount, 1, 'DEFAULT', 0, 'DEFAULT')} + ' đ'"></td>
 											<td><a
 													th:href="@{/admin/invoices/detail/{invoiceId}(invoiceId=${item.invoiceId})}">Hóa
 													đơn chi tiết</a></td>
@@ -203,7 +203,10 @@
 														class="btn btn-link btn-danger" data-original-title="Xóa">
 														<i class="fa fa-times"></i>
 													</button>
-													<a th:if="${item.status==1}" type="button" class="btn btn-link btn-primary btn-lg" th:href="@{/admin/export/pdf/{invoiceId}(invoiceId=${item.invoiceId})}">In hóa đơn</a>
+													<a th:if="${item.status==1}" type="button" class="btn btn-link btn-primary btn-lg" 
+													th:href="@{/admin/export/pdf/{invoiceId}(invoiceId=${item.invoiceId})}">In hóa đơn</a>
+													<!--<a th:if="${item.status==1}" type="button" class="btn btn-link btn-primary btn-lg" 
+													th:href="@{/admin/genarate/{invoiceId}(invoiceId=${item.invoiceId})}">In hóa đơn2</a>-->
 												</div>
 											</td>
 										</tr>

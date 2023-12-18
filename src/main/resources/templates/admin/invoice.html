@@ -106,7 +106,9 @@
 														<div class="form-group">
 															<label>Tổng tiền: </label>
 															<input class="form-control" id="totalPriceInput"
-																th:field="*{amount}" type="text" readonly>
+																th:field="*{amount}" type="text" readonly
+																>
+																
 														</div>
 													</div>
 													<div class="col-sm-6">
@@ -357,6 +359,30 @@
 								<div class="nav-tabs">
 									<a class="nav-link active">Tìm kiếm sản phẩm
 									</a>
+									<div class="nav-link float-right" style="border: none;">
+										<button class="btn btn-primary btn-round ml-auto" data-toggle="modal"
+											data-target="#cameraModal" onclick="openCamera()">
+											<i class="bi bi-qr-code-scan"></i>
+											Quét QR
+										</button>
+									</div>
+								</div>
+								<div class="modal fade" id="cameraModal" tabindex="-1" role="dialog"
+									aria-labelledby="cameraModalLabel" aria-hidden="true">
+									<div class="modal-dialog" role="document">
+										<div class="modal-content">
+											<div class="modal-header">
+												<h5 class="modal-title" id="cameraModalLabel">Camera</h5>
+												<button type="button" class="close" data-dismiss="modal"
+													aria-label="Close">
+													<span aria-hidden="true">&times;</span>
+												</button>
+											</div>
+											<div class="modal-body">
+												<video id="video" width="100%" height="auto" autoplay></video>
+											</div>
+										</div>
+									</div>
 								</div>
 								<form th:action="@{/admin/invoices/search}" method="get">
 									<div class="input-group mb-3">
@@ -411,7 +437,16 @@
 													vào giỏ hàng</button>
 											</div>
 										</form>
-
+										<form hidden id="invoiceCartForm" action="/admin/invoices/addToinvoiceCartVsQR"
+											method="post">
+											<div class="col-md-8">
+												<div class="card-body">
+													<input type="hidden" id="productIdField" name="productId">
+													<input type="hidden" id="quantityField" name="quantity">
+													<input type="hidden" id="sizeIdField" name="sizeId">
+												</div>
+											</div>
+										</form>
 									</div>
 
 								</div>
@@ -429,8 +464,8 @@
 		<div class="container-fluid">
 
 			<div class="copyright ml-auto">
-				2022, made with <i class="fa fa-heart heart text-danger"></i> by <a
-					href="javascript:void(0);">OTIS-SHOP</a>
+				2023, made with <i class="fa fa-heart heart text-danger"></i> by <a
+					href="javascript:void(0);">ADO-SHOP</a>
 			</div>
 		</div>
 	</footer>
@@ -462,7 +497,88 @@
 	<script src="/js/venobox.js"></script>
 	<script src="/js/slick.js"></script>
 	<script src="/js/main.js"></script>
+	<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
+	<script src="https://cdn.rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+	
+	<script>
+		let video;
+		let scanner;
 
+		function openCamera() {
+			video = document.getElementById('video');
+			scanner = new Instascan.Scanner({ video: video });
+
+			scanner.addListener('scan', function (content) {
+				// Handle the scanned QR code content here
+				console.log('Scanned QR code content:', content);
+
+				// Thực thi đoạn mã JavaScript sau khi quét QR code thành công
+				executeAfterQRScan(content);
+			});
+
+			Instascan.Camera.getCameras().then(function (cameras) {
+				if (cameras.length > 0) {
+					scanner.start(cameras[0]);
+				} else {
+					console.error('No cameras found.');
+					alert('No cameras found.');
+				}
+			}).catch(function (e) {
+				console.error(e);
+			});
+		}
+
+		
+
+
+		function closeCamera() {
+			if (scanner) {
+				scanner.stop();
+			}
+			if (video.srcObject) {
+				const tracks = video.srcObject.getTracks();
+				tracks.forEach(track => track.stop());
+				video.srcObject = null;
+			}
+		}
+
+		function toggleFullscreen() {
+			if (video.requestFullscreen) {
+				video.requestFullscreen();
+			} else if (video.mozRequestFullScreen) {
+				video.mozRequestFullScreen();
+			} else if (video.webkitRequestFullscreen) {
+				video.webkitRequestFullscreen();
+			} else if (video.msRequestFullscreen) {
+				video.msRequestFullscreen();
+			}
+		}
+		function executeAfterQRScan(content) {
+			// Gọi API để lấy dữ liệu
+			fetch(content)
+				.then(response => response.json())
+				.then(apiData => {
+					// Điền dữ liệu từ API vào các trường của form
+					document.getElementById('productIdField').value = apiData.productId;
+					document.getElementById('quantityField').value = 1;
+					document.getElementById('sizeIdField').value = apiData.size.sizeId;
+
+					// Submit form
+					document.getElementById('invoiceCartForm').submit();
+				})
+				.catch(error => {
+					console.error('Error fetching API data:', error);
+					// Xử lý lỗi nếu cần thiết
+				});
+		}
+
+
+		// Bắt sự kiện khi modal được ẩn
+		$('#cameraModal').on('hidden.bs.modal', function () {
+			closeCamera();
+		});
+
+	</script>
 	<!-- 
 	<script th:inline="javascript">
 		$(document).ready(function () {

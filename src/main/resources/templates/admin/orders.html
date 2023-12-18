@@ -65,14 +65,14 @@
 					</div>
 					<div class="col-md-12">
 						<div class="card">
-							<div class="card-header">
+							<!--<div class="card-header">
 								<div class="d-flex align-items-center">
 									<a th:href="@{/admin/export}" style="padding-left: 20px;">
 										<h4 class="card-title" style="text-decoration: underline; color: green;">Xuất
 											file Excel</h4>
 									</a>
 								</div>
-							</div>
+							</div>-->
 							<div class="alert alert-success row col-12" th:if="${message}" th:text="${message}"></div>
 							<div class="card-body">
 								<div class="table-responsive">
@@ -105,7 +105,7 @@
 													th:text="${#numbers.formatDecimal(item.amount, 1, 'DEFAULT', 0, 'DEFAULT')}+' đ'">
 												</td>
 												<td>[[${item.loaiShip}]]</td>
-												<td>[[${item.priceShip}]]đ</td>
+												<td th:text="${#numbers.formatDecimal(item.priceShip, 1, 'DEFAULT', 0, 'DEFAULT')} + ' đ'"></td>
 												<td><a th:href="@{'/admin/order/detail/'+${item.orderId}}"> <i
 															class="fa fa-info-circle"> Chi tiết đơn hàng</i>
 													</a></td>

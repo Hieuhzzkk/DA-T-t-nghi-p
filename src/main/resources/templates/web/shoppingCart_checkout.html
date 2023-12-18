@@ -150,15 +150,16 @@
 											<span id="tong">[[${#numbers.formatDecimal(totalPrice, 1, 'DEFAULT', 0,
 												'DEFAULT')}+ ' đ']]</span>
 										</li>
-										
 
-										<li>	
-											<span>Tổng thanh toán(Chưa tính phí ship):</span>
+
+										<li>
+											<span>Thành tiền(Chưa tính phí ship):</span>
 											<span id=Tongtien> [[${#numbers.formatDecimal(totalPrice, 1, 'DEFAULT', 0,
 												'DEFAULT')}+ ' đ']]</span>
-											
+
 										</li>
-										<span>Đặt hàng COD phí vận chuyển sẽ được cập nhật và gửi qua mail khi shop xác nhận đơn hàng</span>
+										<span>Đặt hàng COD phí vận chuyển sẽ được cập nhật và gửi qua mail khi shop xác
+											nhận đơn hàng</span>
 									</ul>
 								</div>
 							</th:block>
@@ -173,7 +174,8 @@
 						</div>
 						<div class="account-content">
 							<div class="row">
-								<form class="user-form" th:action="@{/checkout}" th:object="${order}" method="post">
+								<form class="user-form" id="checkoutForm" th:action="@{/checkout}" th:object="${order}"
+									method="post">
 									<h6>Email</h6>
 									<div class="form-group">
 										<input type="email" th:value="${user.email}" class="form-control"
@@ -224,29 +226,30 @@
 									</div>
 									<h6>Chọn loại hình vận chuyển</h6>
 									<div class="form-check">
-										<input class="form-check-input" type="radio" name="flexRadioDefault"
+										<input class="form-check-input" type="radio" name="loaiShip"
 											id="flexRadioDefault1" th:field="*{loaiShip}" value="Ship hỏa tốc">
 										<label class="form-check-label" for="flexRadioDefault1">
 											Ship Hỏa tốc
 										</label>
 									</div>
 									<div class="form-check">
-										<input class="form-check-input" type="radio" name="flexRadioDefault"
-											id="flexRadioDefault2" th:field="*{loaiShip}" value="Chuyển phát nhanh" checked>
+										<input class="form-check-input" type="radio" name="loaiShip"
+											id="flexRadioDefault2" th:field="*{loaiShip}" value="Chuyển phát nhanh"
+											checked>
 										<label class="form-check-label" for="flexRadioDefault2">
 											Chuyển phát nhanh
 										</label>
 									</div>
-									
+
 									<div class="form-check">
-										<input class="form-check-input" type="radio" name="flexRadioDefault"
+										<input class="form-check-input" type="radio" name="loaiShip"
 											id="flexRadioDefault3" th:field="*{loaiShip}"
 											value="Chuyển phát tiết kiệm hàng hóa">
 										<label class="form-check-label" for="flexRadioDefault3">
 											Chuyển phát tiết kiệm hàng hóa
 										</label>
 									</div>
-									
+
 									<div class="form-group">
 										<div class="account-title">
 											<h4>Chọn phương thức thanh toán</h4>
@@ -263,8 +266,53 @@
 														20.000Đ)</em></strong></label>
 										</div>
 									</div>
+									<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+									<script>
+										function validateAndSubmitForm() {
+											// Kiểm tra số điện thoại
+
+											var phoneNumber = document.getElementById("phone").value;
+											var phoneNumberRegex = /^(0[23456789]|1[6789])[0-9]{8}$/;
+											var selectedPaymentMethod = document.querySelector('input[name="loaiShip"]:checked');
+											if (!phoneNumberRegex.test(phoneNumber)) {
+												alert("Số điện thoại không hợp lệ! Vui lòng nhập theo định dạng Việt Nam.");
+												return false; // Ngăn chặn việc submit form nếu số điện thoại không hợp lệ
+											} else if (!selectedPaymentMethod) {
+												alert("Vui lòng chọn phương thức vận chuyển!");
+												return false; // Ngăn chặn việc submit form nếu không có radio button nào được chọn
+											}
+											else {
+												$('#configmationIdDATHANG').modal('show');
+											}
+											// Kiểm tra radio button
+
+
+											// Nếu số điện thoại và radio button hợp lệ, tiếp tục submit form
+
+										}
+
+
+
+
+									</script>
+									<script>
+
+
+										function submitOrder() {
+											// Đóng modal xác nhận
+											$('#configmationIdDATHANG').modal('hide');
+
+											// Submit form
+
+											document.getElementById("checkoutForm").submit();
+										}
+									</script>
+
+
 									<div class="checkout-proced">
-										<button type="submit" id="DH" class="btn btn-inline">Đặt hàng</button>
+										<button type="button" id="DH" onclick="validateAndSubmitForm()"
+											class="btn btn-inline">Đặt
+											hàng</button>
 									</div>
 								</form>
 							</div>
@@ -362,6 +410,7 @@
 		  $('#tong').html(tong + ' đ');
 		} */
 	</script>
+
 	<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 	<section class="news-part" style="background: url(images/) no-repeat center">
 		<div class="container">
@@ -465,7 +514,28 @@
 			</div>
 		</div>
 	</div>
+	<div class="modal" id="configmationIdDATHANG">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<button class="modal-close" data-bs-dismiss="modal">
+					<i class="icofont-close"></i>
+				</button>
+				<div class="modal-form">
+					<h5 class="modal-title">Xác nhận</h5>
+					<div class="modal-body">
+						<p>
+							Bạn có muốn đặt hàng không?
+						</p>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-secondary" data-dismiss="modal">Không</button>
+						<button type="button" class="btn btn-primary" onclick="submitOrder()">Có</button>
+					</div>
+				</div>
 
+			</div>
+		</div>
+	</div>
 
 	<!--************************************
 				Footer Start

@@ -76,6 +76,9 @@
 									<table id="add-row" class="display table table-striped table-hover" >
 										<thead>
 											<tr>
+												<th colspan="4" style="font-size: 25px;">Thống kê doanh thu bán online</th>
+											</tr>
+											<tr>
 												<th>#</th>
 												<th>Năm</th>
 												<th>Số lượng bán ra</th>
@@ -85,12 +88,33 @@
 										</thead>
 										
 										<tbody>
-											<tr th:each="item, iState : ${listReportCommon}">
+											<tr th:each="item, iState : ${listReportYearOn}">
 												<td>[[${iState.index + 1}]]</td>
 												<td>[[${item[0]}]]</td>
 												<td>[[${item[1]}]]</td>
 												<td>[[${#numbers.formatDecimal(item[2], 1, 'DEFAULT', 0, 'DEFAULT')} + ' đ']]</td>
 												
+											</tr>
+											<tr>
+												<th colspan="4" style="font-size: 25px;">Thống kê doanh thu bán offline</th>
+											</tr>
+											<tr>
+												<th>#</th>
+												<th>Năm</th>
+												<th>Số lượng bán ra</th>
+												<th>Doanh thu</th>
+												
+											</tr>
+											<tr th:each="item, iState : ${listReportYearOff}">
+												<td>[[${iState.index + 1}]]</td>
+												<td>[[${item[0]}]]</td>
+												<td>[[${item[1]}]]</td>
+												<td>[[${#numbers.formatDecimal(item[2], 1, 'DEFAULT', 0, 'DEFAULT')} + ' đ']]</td>
+												
+											</tr>
+											<tr>
+												<td colspan="3">Tổng tiền</td>
+												<td th:text="${#numbers.formatDecimal(totalPrice, 1, 'DEFAULT', 0, 'DEFAULT')} + ' đ'"></td>
 											</tr>
 										</tbody>
 									</table>

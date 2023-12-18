@@ -42,6 +42,11 @@
             cursor: not-allowed;
         }
     </style>
+    <style>
+        .grayText {
+            color: gray;
+        }
+    </style>
 </head>
 
 <body>
@@ -123,8 +128,8 @@
 
 						<div class="mb-3 mt-3" style="margin-top: 15px;" role="toolbar"
 							aria-label="Toolbar with button groups">
-							<a type="button" class="btn size btn-outline-secondary" id="btnSizeS" onclick="selectSize('1')">[[${product.size.nameSize}]]</a> 
-								<a type="button" class="btn size btn-outline-secondary" id="btnSizeM" onclick="selectSize('2')">Nâu</a> 
+							<a type="button" class="btn size btn-outline-secondary" id="btnSizeS" th:if="${hasDataDen}"  onclick="selectSize('1')">Đen</a> 
+								<a type="button" class="btn size btn-outline-secondary" id="btnSizeM" th:if="${hasDataNau}" onclick="selectSize('2')">Nâu</a> 
 								<!--<a type="button" class="btn size btn-outline-secondary" id="btnSizeL" onclick="selectSize('3')">L</a>
 								<a type="button" class="btn size btn-outline-secondary" id="btnSizeXL" onclick="selectSize('4')">XL</a>-->
 
@@ -258,7 +263,33 @@
 			$('#quantity').val(parseFloat($('#quantity').val()).toFixed());
 		}
 	</script>
+	<script>
+    function checkAndHideButtons() {
+        var buttonDen = document.getElementById('btnSizeS');
+        var buttonNau = document.getElementById('btnSizeM');
 
+        // Thực hiện kiểm tra dữ liệu ở đây
+        var hasDataDen = true; // Thay đổi giá trị này tùy thuộc vào điều kiện của bạn
+        var hasDataNau = true; // Thay đổi giá trị này tùy thuộc vào điều kiện của bạn
+
+        // Ẩn/hiện button "Đen" dựa trên điều kiện
+        if (hasDataDen) {
+            buttonDen.style.display = 'inline-block';
+        } else {
+            buttonDen.style.display = 'none';
+        }
+
+        // Ẩn/hiện button "Nâu" dựa trên điều kiện
+        if (hasDataNau) {
+            buttonNau.style.display = 'inline-block';
+        } else {
+            buttonNau.style.display = 'none';
+        }
+    }
+
+    // Gọi hàm khi trang được tải hoặc khi bạn muốn kiểm tra lại trạng thái button
+    window.onload = checkAndHideButtons;
+</script>
 
 	<section class="section newitem-part">
 		<div class="container">
