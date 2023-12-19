@@ -128,8 +128,8 @@
 
 						<div class="mb-3 mt-3" style="margin-top: 15px;" role="toolbar"
 							aria-label="Toolbar with button groups">
-							<a type="button" class="btn size btn-outline-secondary" id="btnSizeS" th:if="${hasDataDen}"  onclick="selectSize('1')">Đen</a> 
-								<a type="button" class="btn size btn-outline-secondary" id="btnSizeM" th:if="${hasDataNau}" onclick="selectSize('2')">Nâu</a> 
+							<a type="button" class="btn size btn-outline-secondary" id="btnSizeS" th:if="${hasDataDen}" onclick="selectSize('1')">Đen</a> 
+							<a type="button" class="btn size btn-outline-secondary" id="btnSizeM" th:if="${hasDataNau}" onclick="selectSize('2')">Nâu</a> 
 								<!--<a type="button" class="btn size btn-outline-secondary" id="btnSizeL" onclick="selectSize('3')">L</a>
 								<a type="button" class="btn size btn-outline-secondary" id="btnSizeXL" onclick="selectSize('4')">XL</a>-->
 
@@ -161,16 +161,18 @@
 
 
 						<div class="details-add-group">
-							<a type="button" class="product-add1" style="background-color: #119744" title="Thêm giỏ hàng"
-								id="addtocart" onclick="getSL()" href="#"> <i style="color: white" class="fas fa-shopping-basket"></i> <span
-									style="color: white">Thêm giỏ hàng</span>
+							<a type="button" class="product-add1" style="background-color: rgb(192, 192, 192)" title="Thêm giỏ hàng"
+								id="addtocart" onclick="getSL()" href="#"> 
+								<i style="color: white" class="fas fa-shopping-basket"></i> 
+								<span style="color: white">Thêm giỏ hàng</span>
 							</a>
 
 						</div>
 						<div class="details-action-group">
-							<a class="details-wish" href="javascript:void(0);" title="Yêu thích"> <i
-									class="icofont-heart"></i> <span>Thêm
-									yêu thích</span></a>
+							<a class="details-wish" href="javascript:void(0);" title="Yêu thích"> 
+								<i class="icofont-heart"></i> 
+								<span>Thêm yêu thích</span>
+							</a>
 						</div>
 
 					</div>
@@ -267,7 +269,7 @@
     function checkAndHideButtons() {
         var buttonDen = document.getElementById('btnSizeS');
         var buttonNau = document.getElementById('btnSizeM');
-
+		var a = $('#maspSize').val();
         // Thực hiện kiểm tra dữ liệu ở đây
         var hasDataDen = true; // Thay đổi giá trị này tùy thuộc vào điều kiện của bạn
         var hasDataNau = true; // Thay đổi giá trị này tùy thuộc vào điều kiện của bạn

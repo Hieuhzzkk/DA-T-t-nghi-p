@@ -49,7 +49,7 @@ public class UserPDFExporter {
 	ProductRepository productRepository;
 	 private List<InvoiceDetail> listCate;
 	 private static final String PHONE_NUMBER = "0356879244";
-	 private static final String ADDRESS = "Số 16 Hoàng Minh Giám Cầu Giấy";
+	 private static final String ADDRESS = "Số 88 Nam Từ Liêm Hà Nội";
 	 private static final String EMAIL = "adoshop@gmail.com";
 	 private static final String BANK = "MBBank-Số tài khoản: 0002229992002";
 	 private static final String USER = "Nguyễn Trung Hiếu";
