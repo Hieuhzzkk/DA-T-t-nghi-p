@@ -1,4 +1,4 @@
-package vn.fs.controller.admin;
+	package vn.fs.controller.admin;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -229,7 +229,7 @@ public class InvoiceController {
 			attributes.addFlashAttribute("erroradd", "Có lỗi sảy ra");
 			return "redirect:/admin/invoices";
 		}
-		return "admin/invoice";
+		return "forward:admin/invoice";
 	}
 
 	@PostMapping(value = "/invoices/addInvoide")

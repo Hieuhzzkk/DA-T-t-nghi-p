@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta charset="UTF-8" />
-	<title>Otis - Trang quản trị</title>
+	<title>ADO - Trang quản trị</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon" />
 
@@ -76,7 +76,8 @@
 							<div class="card-header">
 								<section class="row">
 									<div class="col-6 offset-3 mt-4">
-										<form th:action="@{/admin/orderdetail/addOrderDetail}" method="post" th:object="${orderDetails}">
+										<form th:action="@{/admin/orderdetail/addOrderDetail}" method="post"
+											th:object="${orderDetails}">
 											<div class="modal-body">
 												<div class="form-group">
 													<label>Mã đơn hàng chi tiết</label>
@@ -93,23 +94,22 @@
 													<select th:field="*{product}" class="form-control"
 														id="productSelectInput">
 														<option value="">-- Chọn sản phẩm --</option>
-														<option th:each="item : ${cboPro}"
-															th:value="${item.productId}"
-															th:text="${item.productName}"
-															th:data-price="${item.price}"></option>
+														<option th:each="item : ${cboPro}" th:value="${item.productId}"
+															th:text="${item.productName}" th:data-price="${item.price}">
+														</option>
 													</select>
 												</div>
 												<div class="form-group">
 													<label>Đơn giá</label>
-													<input th:field="*{price}" type="text"
-														class="form-control" id="priceInput" readonly>
+													<input th:field="*{price}" type="text" class="form-control"
+														id="priceInput" readonly>
 												</div>
 												<div class="form-group">
 													<label>Số lượng</label>
-													<input th:field="*{quantity}" type="number" 
-													class="form-control" value="1" min="1" id="quantityInputput">
+													<input th:field="*{quantity}"  type="number" class="form-control"
+														value="1" min="1" id="quantityInputput">
 												</div>
-
+												
 											</div>
 											<div class="modal-footer">
 												<input type="submit" class="btn btn-primary btn-round ml-auto"
@@ -140,6 +140,27 @@
 					$('#name').text(name);
 					$('#yesOption').attr('href', '/admin/delete/' + id);
 					$('#configmationId').modal('show');
+				}
+				function getSL() {
+					var a = $('#quantityInputput').val().trim();
+					var b = $('#productQuatity').val().trim();
+					var button = document.getElementById('addtocart');
+					if (parseInt(a) > parseInt(b)) {
+						$('#quantityInputput').val($('#productQuatity').val().trim());
+					}
+					if (parseInt(a) < 1) {
+						button.classList.add('disabled');
+					}
+					else {
+						button.classList.remove('disabled');
+					}
+					if ($('#quantityInputput').val().trim() == "") {
+						button.classList.add('disabled');
+					}
+					else {
+						button.classList.remove('disabled');
+					}
+
 				}
 			</script>
 			<footer class="footer">
@@ -188,26 +209,26 @@
 
 	</script>
 	<script>
-        $(document).ready(function () {
-            $("#productSelectInput").change(function () {
-                var selectedProductId = $(this).val();
-                var urlImg = "/loadImage?imageName=";
-                $.get('/admin/getProductCBOOO/' + selectedProductId, function (data) {
-                    if (data != null) {
-                        $("#priceInput").val(data.price);
-                        $("#colorInput").val(data.description);
-                        $("#quantityInputput").val(1);
+		$(document).ready(function () {
+			$("#productSelectInput").change(function () {
+				var selectedProductId = $(this).val();
+				var urlImg = "/loadImage?imageName=";
+				$.get('/admin/getProductCBOOO/' + selectedProductId, function (data) {
+					if (data != null) {
+						$("#priceInput").val(data.price);
+						$("#colorInput").val(data.description);
+						$("#quantityInputput").val(1);
 
-                        var imageName = data.productImage;
-                        var urlImgFull = urlImg + imageName;
-                        $("#imageElement").attr("src", urlImgFull);
-                    } else {
-                        alert("Sản phẩm không tồn tại hoặc có lỗi.");
-                    }
-                });
-            });
-        });
-    </script>
+						var imageName = data.productImage;
+						var urlImgFull = urlImg + imageName;
+						$("#imageElement").attr("src", urlImgFull);
+					} else {
+						alert("Sản phẩm không tồn tại hoặc có lỗi.");
+					}
+				});
+			});
+		});
+	</script>
 	<script>
 		$(document).ready(function () {
 			$('#basic-datatables').DataTable({

@@ -94,7 +94,7 @@
 								<div class="tab-content mt-2" style="height: 550px; overflow: scroll;">
 									<div class="tab-pane fade show active">
 										<div id="yourExistingContentId">
-											<form th:action="@{/admin/invoices/addInvoide}" method="post"
+											<form th:action="@{/admin/invoices/addInvoide}" method="post" id="myForm"
 												class="col-sm-12" th:object="${invoice}">
 												<div class="row">
 													<div class="col-sm-6">
@@ -119,7 +119,7 @@
 														</div>
 														<div class="form-group">
 															<label>Số điện thoại: </label>
-															<input class="form-control" th:field="*{phonenumber}"
+															<input class="form-control" id="phonenumber" name="phonenumber" th:field="*{phonenumber}"
 																type="text" required>
 														</div>
 													</div>
@@ -264,7 +264,7 @@
 																</tr>
 															</tbody> -->
 														</table>
-														<button class="btn btn-primary" type="submit">
+														<button class="btn btn-primary" type="button" onclick="validateAndSubmitForm()">
 															Tạo hóa đơn
 														</button>
 													</div>
@@ -420,12 +420,11 @@
 															<span>Màu sắc: [[${item.size.nameSize}]]</span>
 														</div>
 														<div>Số lượng: <input name="quantity" type="number" min="1"
-																max="50" value="1">
+																id="quantityProD" th:attr="max=${item.quantity}" class="quantity-input" oninput="checkMaxValue()" value="1">
 															<span id="badgeId" class="badge text-white bg-info"
 																style="padding: 8px 10px 5px 10px; margin: 0 0 0 0px;">[[${item.quantity}]]
 																sản phẩm có sẵn</span>
-
-
+																
 														</div><br>
 														<div>Đơn giá: [[${item.price}]] VNĐ</div>
 													</div>
@@ -499,7 +498,37 @@
 	<script src="/js/main.js"></script>
 	<script src="https://cdn.rawgit.com/davidshimjs/qrcodejs/gh-pages/qrcode.min.js"></script>
 	<script src="https://cdn.rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+	<script>
+		document.addEventListener('input', function(event) {
+			if (event.target.classList.contains('quantity-input')) {
+				checkMaxValue(event.target);
+			}
+		});
 	
+		function checkMaxValue(inputElement) {
+			var maxValue = parseInt(inputElement.getAttribute('max'));
+			var currentValue = parseInt(inputElement.value);
+	
+			if (currentValue > maxValue) {
+				inputElement.value = maxValue;
+			}
+		}
+	</script>
+	<script>
+        function validateAndSubmitForm() {
+            var phoneNumber = document.getElementById("phonenumber").value;
+            var phoneNumberRegex = /^(0[23456789]|1[6789])[0-9]{8}$/;
+
+            if (phoneNumberRegex.test(phoneNumber)) {
+                
+
+                // Nếu số điện thoại hợp lệ, thực hiện hành động submit form
+                document.getElementById("myForm").submit();
+            } else {
+                alert("Số điện thoại không hợp lệ! Vui lòng nhập theo định dạng Việt Nam.");
+            }
+        }
+    </script>
 	<script>
 		let video;
 		let scanner;
