@@ -13,7 +13,8 @@ import vn.fs.entities.User;
 @Repository
 public interface OrderDetailRepository extends JpaRepository<OrderDetail, Long> {
 
-	@Query(value = "select * from order_details where order_id = ?;", nativeQuery = true)
+	@Query(value = "select MIN(order_detail_id) as order_detail_id,MIN(price)as price,MIN(order_id) as order_id,SUM(quantity) as quantity,product_id\n"
+			+ "from order_details where order_id = ? group by product_id;", nativeQuery = true)
 	List<OrderDetail> findByOrderId(Long id);
 	@Query(value = "select * from user where user_id = ?1", nativeQuery = true)
 	List<User> findByUserId(Long id);

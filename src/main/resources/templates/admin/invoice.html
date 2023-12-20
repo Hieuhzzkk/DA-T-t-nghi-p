@@ -4,7 +4,7 @@
 <head>
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 	<meta charset="UTF-8" />
-	<title>Otis - Trang quản trị</title>
+	<title>ADO - Trang quản trị</title>
 	<meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 	<link rel="icon" href="/assets/img/icon.ico" type="image/x-icon" />
 
@@ -204,65 +204,7 @@
 															</tbody>
 
 
-															<!-- <td class="table-action">
-
-																		<a class="view"
-																			th:id="'submitInvoice'+${State.index + 1}"
-																			title="Cập nhật">
-																			<i class="fa fa-edit"></i>
-																		</a>
-
-																		<a class="trash" href="javascript:void(0);"
-																			title="Xóa sản phẩm"
-																			th:data-id="${item.product.productId}"
-																			th:data-name="${item.product.productName}"
-																			onclick="showConfigModalDialogGio(this.getAttribute('data-id'), this.getAttribute('data-name'))">
-																			<i class="icofont-trash"></i>
-																		</a>
-																		<input type="text" id="quanPro"
-																			th:value="${item.product.quantity}"
-																			hidden="hidden">
-																	</td>
-																	<script>
-																		function updateInvoi(x) {
-																			var y = x.closest('tr').rowIndex;
-																			console.log(y);
-
-																			var b = $('#row_' + y + ' #quantity').val().trim();
-																			var a = $('#row_' + y + ' #idproductGio').text().trim();
-
-																			// Lấy hai số cuối cùng của productId
-
-																			var c = $('#row_' + y + ' #quanPro').val().trim();
-
-																			if (parseInt(b) > parseInt(c)) {
-																				$('#row_' + y + ' #quantity').val($('#row_' + y + ' #quanPro').val());
-																				var e = $('#row_' + y + ' #quanPro').val().trim();
-																				var d = console.log(a);
-																				$('#submitnoInvoice' + y).attr('href', '/admin/updateInvoice/' + d + '/' + e);
-																			} else if (parseInt(b) < 1) {
-																				$('#row_' + y + ' #quantity').val(1);
-																				$('#submitInvoice' + y).attr('href', '/admin/updateInvoice/' + a + '/' + 1);
-																			} else {
-																				$('#submitInvoice' + y).attr('href', '/admin/updateInvoice/' + a + '/' + b);
-																			}
-
-																			console.log(a);
-																			console.log(b);
-																		}
-
-																	</script>
-																	<script>
-																		function showConfigModalDialogGio(id, name) {
-																			$('#productName').text(name);
-																			$('#yesOption').attr('href', '/admin/removeInvoice/' + id);
-																			$('#configmationId').modal('show');
-																		}
-
-																	</script>
-
-																</tr>
-															</tbody> -->
+															
 														</table>
 														<button class="btn btn-primary" type="button" onclick="validateAndSubmitForm()">
 															Tạo hóa đơn

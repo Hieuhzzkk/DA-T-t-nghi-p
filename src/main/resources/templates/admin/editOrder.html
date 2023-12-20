@@ -76,7 +76,7 @@
 										data-target="#addRowModalSaveDetail">
 										<i class="fa fa-plus"></i> Thêm sản
 										phẩm</button>
-									<a class="btn btn-primary btn-round ml-auto" th:href="@{/admin/orders}">Quay lại</a>
+									<!--<a class="btn btn-primary btn-round ml-auto" th:href="@{/admin/orders}">Quay lại</a>-->
 								</div>
 							</div>
 							<div class="card-body">
@@ -105,6 +105,7 @@
 													<img th:src="@{'/loadImage?imageName='+${item.product.productImage}}"
 														width="80px" alt="product" />
 												</td>
+												<td id="idproductGio" hidden>[[${item.orderDetailId}]]</td>
 												<td>[[${item.product.productName}]]</td>
 												<td>[[${item.quantity}]]</td>
 
@@ -123,16 +124,18 @@
 														<i class="fa fa-edit"></i>
 													</a>
 													<a th:if="${status le 2}"
-														th:href="@{/admin/orderdetail/delete/{orderDetailId}(orderDetailId = ${item.orderDetailId})}"
+														th:data-id="${item.orderDetailId}"
+														th:data-name="${item.product.productName}"
 														type="button" data-toggle="tooltip" title=""
 														class="btn btn-link btn-primary btn-lg hidden"
-														data-original-title="Xóa sản phẩm">
+														onclick="showConfigModalDialogOr(this.getAttribute('data-id'), this.getAttribute('data-name'))"
+														data-original-title="Xóa sản phẩm" >
 														<i class="fa fa-trash"></i>
 													</a>
 												</td>
 
 											</tr>
-
+											
 											<tr>
 
 												<td colspan="5" style="font-weight: bold; font-size:15px">Tổng tiền sản
@@ -150,7 +153,34 @@
 
 										</tbody>
 									</table>
-
+									<script>
+										function showConfigModalDialogOr(id, name) {
+											$('#name').text(name);
+											$('#yesOption').attr('href', '/admin/orderdetail/delete/' + id);
+											$('#configmationId').modal('show');
+										}
+									</script>
+									<div class="modal" tabindex="-1" role="dialog" id="configmationId">
+										<div class="modal-dialog" role="document">
+											<div class="modal-content">
+												<div class="modal-header">
+													<h5 class="modal-title" style="color: black">Xác nhận</h5>
+													<button type="button" class="close" data-dismiss="modal"
+														aria-label="Close">
+														<span aria-hidden="true">&times;</span>
+													</button>
+												</div>
+												<div class="modal-body">
+													<p style="color: black">Bạn có muốn xóa  không?</p>
+												</div>
+												<div class="modal-footer">
+													<a id="yesOption" type="button" class="btn btn-primary">Có</a>
+													<button type="button" class="btn btn-danger"
+														data-dismiss="modal">Không</button>
+												</div>
+											</div>
+										</div>
+									</div>
 									<script>
 										function showConfigModalDialog(id, name) {
 											$('#name').text(name);
@@ -264,9 +294,14 @@
 															</div>
 															<div class="form-group">
 																<label>Số lượng</label>
-																<input th:field="*{quantity}" type="number"
-																	class="form-control" value="1">
+																<input th:field="*{quantity}" type="number" class="form-control" value="1"
+																	   id="quantityInput" oninput="checkMaxValue(this)">
+																<input id="badgeId" class="badge text-white bg-info"
+																style="padding: 8px 10px 5px 10px; margin: 0 0 0 0px;">
+															
+																<input type="hidden" id="hiddenItemQuantity">
 															</div>
+														
 														</div>
 														<div class="modal-footer">
 															<input type="button" class="btn btn-default"
@@ -342,6 +377,45 @@
 	<script src="/assets/js/atlantis.min.js"></script>
 	<!-- Atlantis DEMO methods, don't include it in your project! -->
 	<script src="/assets/js/setting-demo2.js"></script>
+	<script>
+		$(document).ready(function () {
+			$("#productSelect").change(function () {
+				var selectedProductId = $(this).val();
+				var urlImg = "/loadImage?imageName=";
+	
+				$.get('/admin/getProductCBO/' + selectedProductId, function (data) {
+					if (data != null) {
+						$("#priceInput").val(data.price);
+						$("#colorInput").val(data.description);
+						var imageName = data.productImage;
+						var urlImgFull = urlImg + imageName;
+						$("#imageElement").attr("src", urlImgFull);
+						
+						$("#quantityInput").val(1);
+						$("#badgeId").css("display", "inline");
+						$("#badgeId").val("Còn "  + data.quantity + " sản phẩm.");
+						$("#quantityInput").attr("max", data.quantity);
+	
+						$("#hiddenItemQuantity").val(data.quantity);
+					} else {
+						alert("Sản phẩm không tồn tại hoặc có lỗi.");
+					}
+				});
+			});
+		});
+	
+		function checkMaxValue(inputElement) {
+			var minValue = 1;
+			var maxValue = parseInt(inputElement.getAttribute('max'));
+			var currentValue = parseInt(inputElement.value);
+	
+			if (currentValue < minValue) {
+				inputElement.value = minValue;
+			} else if (currentValue > maxValue) {
+				inputElement.value = maxValue;
+			}
+		}
+	</script>
 	<script>
 		$(document).ready(function () {
 			$("#productSelect").change(function () {
