@@ -27,6 +27,7 @@ import vn.fs.commom.CommomDataService;
 import vn.fs.entities.Invoice;
 import vn.fs.entities.InvoiceDetail;
 import vn.fs.entities.Order;
+import vn.fs.entities.Product;
 import vn.fs.entities.User;
 import vn.fs.repository.InvoiceDetailRepository;
 import vn.fs.repository.InvoiceRepository;
@@ -79,8 +80,29 @@ public class InvoiceDetailController {
 	public String addInvoiceDetail(@ModelAttribute("invoiceDetails") InvoiceDetail invoiceDetails, ModelMap model,
 			RedirectAttributes attributes) {
 		Long idInvoice = invoiceDetails.getInvoice().getInvoiceId();
+		boolean productExists = false;
 		try {
-			invoiceDetailRepository.save(invoiceDetails);
+			List<InvoiceDetail> details = invoiceDetailRepository.findByInvoiceDeTailByInvoiceId(idInvoice);
+			for (InvoiceDetail inDetail : details) {
+				if (inDetail.getProducts().equals(invoiceDetails.getProducts())) {
+					int quantityDetail =  invoiceDetails.getQuantity()*2;
+					Long idProd = invoiceDetails.getProducts().getProductId();
+					Product product = productRepository.findById(idProd).get();
+					if (quantityDetail > product.getQuantity()) {
+						inDetail.setQuantity(product.getQuantity());
+						productExists = true;
+						break;
+					} else {
+						inDetail.setQuantity(inDetail.getQuantity() + invoiceDetails.getQuantity());
+						productExists = true;
+						break;
+					}
+				}
+			}
+			if (!productExists) {
+				details.add(invoiceDetails);
+			}
+			invoiceDetailRepository.saveAll(details);
 			attributes.addFlashAttribute("successadd", "Thêm sản phâm thành công");
 			System.out.println("acdckajs" + invoiceDetails.getInvoiceDetailId());
 			return "redirect:/admin/invoices/detail/" + idInvoice;

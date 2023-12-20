@@ -106,10 +106,14 @@
 												</div>
 												<div class="form-group">
 													<label>Số lượng</label>
-													<input th:field="*{quantity}"  type="number" class="form-control"
-														value="1" min="1" id="quantityInputput">
+													<input name="quantity" th:value="*{quantity}" type="number"
+														class="form-control" value="1" oninput="checkMaxValue(this)">
+													<input id="badgeId" class="badge text-white bg-info"
+														style="padding: 8px 10px 5px 10px; margin: 0 0 0 0px;">
+													<input type="hidden" id="quantitymax"
+														th:value="*{product.quantity}">
 												</div>
-												
+
 											</div>
 											<div class="modal-footer">
 												<input type="submit" class="btn btn-primary btn-round ml-auto"
@@ -161,6 +165,20 @@
 						button.classList.remove('disabled');
 					}
 
+				}
+
+			</script>
+			<script>
+				function checkMaxValue(inputElement) {
+					var minValue = 1;
+					var maxValue = document.getElementById('quantitymax').value; // Corrected line
+					var currentValue = parseInt(inputElement.value);
+
+					if (currentValue < minValue) {
+						inputElement.value = minValue;
+					} else if (currentValue > maxValue) {
+						inputElement.value = maxValue;
+					}
 				}
 			</script>
 			<footer class="footer">

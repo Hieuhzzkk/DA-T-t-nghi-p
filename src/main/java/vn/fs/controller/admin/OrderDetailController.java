@@ -85,19 +85,39 @@ public class OrderDetailController {
 		return "admin/editOrderDetail";
 	}
 	@PostMapping("/orderdetail/addOrderDetail")
-	public String addOrDetail(@Validated @ModelAttribute("orderdetail") OrderDetail orderDetail,ModelMap model,RedirectAttributes attributes) {
+	public String addOrDetail(@Validated @ModelAttribute("orderdetail") OrderDetail orderDetail, ModelMap model,
+			RedirectAttributes attributes) {
 		try {
 			Long idOrder = orderDetail.getOrder().getOrderId();
-			orderDetailRepository.save(orderDetail);
+			boolean productExists = false;
+			List<OrderDetail> details = orderDetailRepository.findByOrderId(idOrder);
+			for (OrderDetail orde : details) {
+				if (orderDetail.getProduct().equals(orde.getProduct())) {
+					int quantityDetail = orderDetail.getQuantity() * 2;
+					Long idProd = orderDetail.getProduct().getProductId();
+					Product product = productRepository.findById(idProd).get();
+					if (quantityDetail > product.getQuantity()) {
+						orde.setQuantity(product.getQuantity());
+						productExists = true;
+						break;
+					} else {
+						orde.setQuantity(orderDetail.getQuantity() + orde.getQuantity());
+						productExists = true;
+						break;
+					}
+				}
+			}
+			if (!productExists) {
+				details.add(orderDetail);
+			}
+			orderDetailRepository.saveAll(details);
 			attributes.addFlashAttribute("successadd", "Thành công");
 			System.out.println("acdckajs" + orderDetail.getOrderDetailId());
 			return "redirect:/admin/order/detail/" + idOrder;
 		} catch (Exception e) {
 			attributes.addFlashAttribute("erroradd", "Thất bại");
 			return "/admin/orders";
-
 		}
-		
 	}
 	@PostMapping("/orderdetail/updatePriceForOrder")
 	@Transactional

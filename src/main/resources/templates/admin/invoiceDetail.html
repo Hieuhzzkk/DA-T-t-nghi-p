@@ -136,10 +136,10 @@
 																<img id="imageElement" class="form-control">
 															</div>
 															<div class="form-group">
-																<label>Số lượng</label>
-																<input th:field="*{quantity}" type="number"
-																	class="form-control" value="1" min="1" id="quantityInput">
-															</div>
+                                                            <label>Số lượng</label>
+                                                            <input th:field="*{quantity}" id="quantityInput"  oninput="checkMaxValue(this)"
+                                                                type="number" class="form-control" min="1" value="1">
+                                                        </div>
 														</div>
 														<div class="modal-footer">
 															<input type="button" class="btn btn-default"
@@ -486,8 +486,9 @@
                 $.get('/admin/getProductCBO/' + selectedProductId, function (data) {
                     if (data != null) {
                         $("#priceInput").val(data.price);
-                        $("#colorInput").val(data.description);
+                        $("#colorInput").val(data.size.nameSize);
                         $("#quantityInput").val(1);
+						$("#quantityInput").attr("max", data.quantity);
 
                         var imageName = data.productImage;
                         var urlImgFull = urlImg + imageName;
@@ -498,6 +499,17 @@
                 });
             });
         });
+         function checkMaxValue(inputElement) {
+			var minValue = 1;
+			var maxValue = parseInt(inputElement.getAttribute('max'));
+			var currentValue = parseInt(inputElement.value);
+	
+			if (currentValue < minValue) {
+				inputElement.value = minValue;
+			} else if (currentValue > maxValue) {
+				inputElement.value = maxValue;
+			}
+		}
     </script>
     
 <script>
@@ -526,30 +538,21 @@
 
             var b = $('#row_' + y + ' #quantity').val().trim();
             var a = $('#row_' + y + ' #idproductGio').text().trim();
-
-            // Đếm số ký tự của chuỗi a
             var numberOfCharacters = a.length;
             console.log("Số ký tự của a: " + numberOfCharacters);
-
-            // Lấy số lượng chữ số cần cắt
             var digitsToCut = Math.floor(numberOfCharacters / 2);
-
-            // // Cắt chữ số theo quy tắc
-            // var productIdLastDigits = a.slice(-digitsToCut);
-
             var c = $('#row_' + y + ' #quanPro').val().trim();
 
             if (parseInt(b) > parseInt(c)) {
                 $('#row_' + y + ' #quantity').val($('#row_' + y + ' #quanPro').val());
-                var e = $('#row_' + y + ' #quanPro').val().trim();
-                $('#submitInvoice' + y).attr('href', '/admin/invoideDetails/updateQuantity/' + a + '/' + e);
+                $('#submitInvoice' + y).attr('href', '/admin/invoideDetails/updateQuantity/' + a + '/' + b);
             } else if (parseInt(b) < 1) {
                 $('#row_' + y + ' #quantity').val(1);
                 $('#submitInvoice' + y).attr('href', '/admin/invoideDetails/updateQuantity/' + a + '/' + 1);
             } else {
                 $('#submitInvoice' + y).attr('href', '/admin/invoideDetails/updateQuantity/' + a + '/' + b);
             }
-
+            console.log(c);
             console.log(a);
             console.log(b);
         }

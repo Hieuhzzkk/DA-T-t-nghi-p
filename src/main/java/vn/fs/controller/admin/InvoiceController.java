@@ -261,7 +261,7 @@ public class InvoiceController {
 		Long idInvo = invoice.getInvoiceId();
 		shoppingCartService.clearInvoice();
 		session.removeAttribute("cartItems");
-		return "redirect:/admin/invoices/detail/" + idInvo;
+		return "redirect:/admin/invoices";
 	}
 
 	@GetMapping("/invoices/lsInvoice")
